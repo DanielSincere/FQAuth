@@ -30,5 +30,14 @@ Future maybes handle in app purchases as well? Since mostlikely, we would want t
 - Postgres
 - Redis (maybe)
 
+## Sponsors
+
+If you learn anything or make a few bucks from this repo, please sponsor me on GitHub. https://github.com/sponsors/FullQueueDeveloper/
+
+A huge thank you to the following for keeping the dream alive! 💜🗽
+
+1. [0xLeif](https://github.com/0xLeif)
+
+
 ## License:
 MIT or equivalent
