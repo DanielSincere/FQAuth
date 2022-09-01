@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
   name: "FQAuth",
   platforms: [
-      .macOS(.v12),
+      .macOS(.v11),
   ],
   products: [
     .executable(name: "fqauth-server", targets: ["FQAuthServer"]),
@@ -39,6 +39,10 @@ let package = Package(
     .target(name: "FQAuth", dependencies: [
       .product(name: "Vapor", package: "vapor"),
       .product(name: "JWT", package: "jwt"),
-    ])
+    ]),
+    .testTarget(name: "FQAuthServerTests", dependencies: [
+      .product(name: "XCTVapor", package: "vapor"),
+      "FQAuthServer",
+    ]),
   ]
 )
