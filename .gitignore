@@ -1,5 +1,9 @@
+.env
+
 .build
 .swiftpm
-xcuserdata
 .DS_Store
+xcuserdata
 *.xcodeproj
+*.xcworkspace
+
