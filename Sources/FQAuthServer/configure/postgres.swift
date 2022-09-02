@@ -3,13 +3,11 @@ import FluentPostgresDriver
 import Redis
 
 extension Application {
-  func databases() throws {
+  func postgres() throws {
 
     switch self.environment {
 
     case .production:
-      try self.redis.configuration = .init(url: URL(string: EnvVars.redisUrl.loadOrFatal())!,
-                                          pool: .init(connectionRetryTimeout: .seconds(1)))
 
       var config = PostgresConfiguration(url: EnvVars.postgresUrl.loadOrFatal())!
       var tlsConfig = TLSConfiguration.makeClientConfiguration()
@@ -19,12 +17,10 @@ extension Application {
 
     case .development, .testing:
 
-      try self.redis.configuration = .init(url: URL(string: EnvVars.redisUrl.loadOrFatal())!)
-
       self.databases.use(.postgres(configuration: PostgresConfiguration(url: EnvVars.postgresUrl.loadOrFatal())!), as: .psql)
 
     default:
-      break
+      fatalError("unrecognized environment")
     }
   }
 }

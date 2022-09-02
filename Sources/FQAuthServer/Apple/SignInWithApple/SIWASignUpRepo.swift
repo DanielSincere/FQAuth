@@ -56,7 +56,7 @@ struct SIWASignUpRepo {
       params.registrationMethod.rawValue,
       params.email,
       params.appleUserId,
-      DB.seal(string: params.appleRefreshToken)
+      DBSeal().seal(string: params.appleRefreshToken)
     ]
 
     let sql = SQLRaw(sqlTemplate, binds)

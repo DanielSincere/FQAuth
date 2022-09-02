@@ -4,13 +4,9 @@ import Vapor
 
 final class CryptoTests: XCTestCase {
 
-    func testDbSymmetricKey() throws {
-      let app = Application(.testing)
-      defer {
-        app.shutdown()
-      }
-
-      let sealed = DB.seal(string: "hamburger")
-      XCTAssertEqual(DB.unseal(string: sealed), "hamburger")
+    func testDBSeal() throws {
+      let seal = DBSeal(base64EncodedKey: "9/Vk5Rlzctc5tyX0SCmIJaRzEg+QgwWjlTzD0LMPqNY=")
+      let sealed = seal.seal(string: "hamburger")
+      XCTAssertEqual(seal.unseal(string: sealed), "hamburger")
     }
 }

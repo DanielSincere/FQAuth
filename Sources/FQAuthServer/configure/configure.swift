@@ -6,11 +6,10 @@ extension Application {
   func configure() throws {
 
     try self.routes()
-//    try self.databases()
+    try self.redis()
+    try self.postgres()
 
     try self.jwt.apple.jwks.get(using: self.client, on: self.client.eventLoop).wait()
 
   }
 }
-
-

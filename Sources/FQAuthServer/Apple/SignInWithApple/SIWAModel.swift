@@ -58,11 +58,11 @@ final class SiwaModel: Model {
       return nil
     }
 
-    return DB.unseal(string: encryptedAppleRefreshToken)
+    return DBSeal().unseal(string: encryptedAppleRefreshToken)
   }
 
   func sealNewAppleRefreshToken(_ string: String) {
-    self.encryptedAppleRefreshToken = DB.seal(string: string)
+    self.encryptedAppleRefreshToken = DBSeal().seal(string: string)
   }
 
   func shouldAttemptRefresh(now: Date = Date()) -> Bool {

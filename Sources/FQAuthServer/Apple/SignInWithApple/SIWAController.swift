@@ -57,7 +57,7 @@ final class SIWAController {
       return req.eventLoop.makeFailedFuture(Abort(.forbidden))
     }
 
-    siwa.encryptedAppleRefreshToken = DB.seal(string: appleTokenResponse.refresh_token)
+    siwa.encryptedAppleRefreshToken = DBSeal().seal(string: appleTokenResponse.refresh_token)
     return siwa.update(on: req.db).flatMap { _ in
       return AuthHelper(req: req)
         .login(userId: userId,
