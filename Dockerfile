@@ -9,7 +9,7 @@ RUN mkdir /output
 RUN cp $(swift build -c release -Xswiftc -g --show-bin-path)/fqauth-server /output/fqauth-server
 RUN cp -R ./Resources /output/Resources
 
-FROM index.docker.io/library/swift:5.6-focal-slim as prod_base
+FROM index.docker.io/library/swift:5.6-focal-slim as prod-base
 RUN useradd --user-group --create-home --system --skel /dev/null --home-dir /app vapor
 WORKDIR /app
 COPY --from=builder --chown=vapor:vapor /output/* /app/
