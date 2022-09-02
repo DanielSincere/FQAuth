@@ -15,3 +15,4 @@ extension PostgresMigration {
     self.revert(on: database as! PostgresDatabase)
   }
 }
+
