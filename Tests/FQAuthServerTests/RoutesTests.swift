@@ -9,7 +9,7 @@ final class RoutesTests: XCTestCase {
     defer {
       app.shutdown()
     }
-    try app.routes()
+    try app.configure()
 
     let response = try app.sendRequest(.GET, "healthy")
     XCTAssertEqual(response.status, .ok)

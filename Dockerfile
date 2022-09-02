@@ -26,3 +26,6 @@ CMD /app/fqauth-server queues --env production
 
 FROM prod-base as scheduled-worker
 CMD /app/fqauth-server queues --scheduled --env production
+
+FROM prod-base as migrate
+CMD /app/fqauth-server migrate -y --env production
