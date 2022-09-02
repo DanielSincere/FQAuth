@@ -4,9 +4,13 @@ import QueuesRedisDriver
 extension Application {
 
   func configureMigrations() throws {
-    for i in AllMigrations.allCases {
-      self.migrations.add(i.migration, to: .psql)
-    }
+
+      self.migrations.add(CreateFunctionMigration(),
+                          CreateUserMigration(),
+                          CreateSiwaMigration(),
+                          CreateRefreshTokenMigration(),
+                          to: .psql)
+
 //    switch self.environment {
 //    case .testing:
 //      try self.autoRevert().wait()
