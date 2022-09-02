@@ -2,8 +2,8 @@ import FluentPostgresDriver
 
 final class CreateUserMigration: PostgresMigration {
 
-  func prepare(on database: PostgresDatabase) async throws {
-    try await database.exec(
+  func prepare(on database: PostgresDatabase) -> EventLoopFuture<Void> {
+    database.exec(
       #"CREATE TYPE user_registration_method AS ENUM ('siwa')"#,
       #"CREATE TYPE user_status AS ENUM ('active', 'deactivated')"#,
 
@@ -27,8 +27,8 @@ final class CreateUserMigration: PostgresMigration {
     )
   }
 
-  func revert(on database: PostgresDatabase) async throws {
-    try await database.exec(
+  func revert(on database: PostgresDatabase) -> EventLoopFuture<Void> {
+    database.exec(
       #"DROP TABLE "user""#,
       #"DROP TYPE user_status"#,
       #"DROP TYPE user_registration_method"#

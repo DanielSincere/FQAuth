@@ -2,8 +2,8 @@ import FluentPostgresDriver
 
 final class CreateMetaMigration: PostgresMigration {
 
-  func prepare(on database: PostgresDatabase) async throws {
-    try await database.exec(
+  func prepare(on database: PostgresDatabase) -> EventLoopFuture<Void> {
+    database.exec(
       #"CREATE EXTENSION "uuid-ossp";"#,
 
       #"""
@@ -18,8 +18,8 @@ final class CreateMetaMigration: PostgresMigration {
     )
   }
 
-  func revert(on database: PostgresDatabase) async throws {
-    try await database.exec(
+  func revert(on database: PostgresDatabase) -> EventLoopFuture<Void> {
+    database.exec(
       #"DROP EXTENSION "uuid-ossp""#,
       #"DROP FUNCTION updated_at_timestamp"#
     )

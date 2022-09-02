@@ -2,8 +2,8 @@ import FluentPostgresDriver
 
 final class CreateRefreshTokenMigration: PostgresMigration {
 
-  func prepare(on database: PostgresDatabase) async throws {
-    try await database.exec(
+  func prepare(on database: PostgresDatabase) -> EventLoopFuture<Void> {
+    database.exec(
       #"""
       CREATE TABLE "refresh_token" (
         id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
@@ -23,7 +23,7 @@ final class CreateRefreshTokenMigration: PostgresMigration {
     )
   }
 
-  func revert(on database: PostgresDatabase) async throws {
-    try await database.exec(#"DROP TABLE "refresh_token""#)
+  func revert(on database: PostgresDatabase)  -> EventLoopFuture<Void> {
+    database.exec(#"DROP TABLE "refresh_token""#)
   }
 }

@@ -2,8 +2,8 @@ import FluentPostgresDriver
 
 final class CreateSiwaMigration: PostgresMigration {
 
-  func prepare(on database: PostgresDatabase) async throws {    
-    try await database.exec(
+  func prepare(on database: PostgresDatabase)  -> EventLoopFuture<Void> {
+    database.exec(
       #"CREATE TYPE siwa_attempted_refresh_result AS ENUM ('initial', 'success', 'failure');"#,
       #"""
       CREATE TABLE "siwa" (
@@ -29,8 +29,8 @@ final class CreateSiwaMigration: PostgresMigration {
     )
   }
 
-  func revert(on database: PostgresDatabase) async throws {
-    try await database.exec(
+  func revert(on database: PostgresDatabase) -> EventLoopFuture<Void> {
+    database.exec(
       #"DROP TABLE "siwa""#,
       #"DROP TYPE siwa_attempted_refresh_result"#
     )
