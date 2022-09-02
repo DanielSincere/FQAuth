@@ -12,7 +12,7 @@ RUN cp -R ./Resources /output/Resources
 FROM index.docker.io/library/swift:5.6-focal-slim as prod_base
 RUN useradd --user-group --create-home --system --skel /dev/null --home-dir /app vapor
 WORKDIR /app
-COPY --from=builder --chown=vapor:vapor /output/* /app
+COPY --from=builder --chown=vapor:vapor /output/* /app/
 COPY --from=builder /usr/lib/swift/ /usr/lib/swift/
 USER vapor:vapor
 
