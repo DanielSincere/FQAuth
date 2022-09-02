@@ -3,17 +3,13 @@ import FluentPostgresDriver
 extension PostgresDatabase {
 
   func exec(_ strings: [String]) -> EventLoopFuture<Void> {
-    return strings
-       .map { string in
-         self.exec(string)
-       }
-       .sequencedFlatMapEach(on: self.eventLoop) { element in
-         element
-       }
-  }
-
-  func exec(_ strings: String...) -> EventLoopFuture<Void> {
-    self.exec(strings)
+    strings
+      .map { string in
+        self.exec(string)
+      }
+      .reduce(eventLoop.future()) { partial, next in
+        partial.flatMap { next }
+      }
   }
 
   func exec(_ string: String) -> EventLoopFuture<Void>{
