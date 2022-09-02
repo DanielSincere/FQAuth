@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Full Queue Developer on 9/2/22.
-//
-
 import Foundation
 
 enum AllMigrations: CaseIterable {
