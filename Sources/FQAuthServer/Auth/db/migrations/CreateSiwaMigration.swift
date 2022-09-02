@@ -32,7 +32,7 @@ final class CreateSiwaMigration: PostgresScriptMigration {
     """#
   ]
   let down = [
-    #"DROP TABLE "siwa""#,
-    #"DROP TYPE siwa_attempted_refresh_result"#
+    #"DROP TABLE IF EXISTS "siwa""#,
+    #"DROP TYPE IF EXISTS siwa_attempted_refresh_result"#
   ]
 }

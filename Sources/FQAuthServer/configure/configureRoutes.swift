@@ -3,11 +3,11 @@ import JWT
 
 extension Application {
 
-  func routes() throws {
+  func configureRoutes() throws {
     self.get("healthy") { req in
       return "healthy"
     }
-    
+
     self.get("jwks") { req in
       JWKS.public
     }

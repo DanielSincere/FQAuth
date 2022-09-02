@@ -13,6 +13,7 @@ extension PostgresDatabase {
   }
 
   func exec(_ string: String) -> EventLoopFuture<Void>{
-    self.simpleQuery(string, { _ in })
+    self.logger.log(level: .trace, .init(stringLiteral: string))
+    return self.simpleQuery(string, { _ in })
   }
 }

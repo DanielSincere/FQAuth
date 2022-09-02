@@ -10,7 +10,6 @@ final class RoutesTests: XCTestCase {
       app.shutdown()
     }
     try app.configure()
-    try app.run()
 
     let response = try app.sendRequest(.GET, "healthy")
     XCTAssertEqual(response.status, .ok)

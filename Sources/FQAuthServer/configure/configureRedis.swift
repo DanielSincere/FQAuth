@@ -3,7 +3,7 @@ import FluentPostgresDriver
 import Redis
 
 extension Application {
-  func redis() throws {
+  func configureRedis() throws {
 
     switch self.environment {
 

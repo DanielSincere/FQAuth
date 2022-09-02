@@ -24,8 +24,8 @@ final class CreateUserMigration: PostgresScriptMigration {
   ]
 
   let down = [
-    #"DROP TABLE "user""#,
-    #"DROP TYPE user_status"#,
-    #"DROP TYPE user_registration_method"#
+    #"DROP TABLE IF EXISTS "user""#,
+    #"DROP TYPE IF EXISTS user_status"#,
+    #"DROP TYPE IF EXISTS user_registration_method"#
   ]
 }

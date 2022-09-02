@@ -22,6 +22,6 @@ final class CreateRefreshTokenMigration: PostgresScriptMigration {
   ]
 
   let down = [
-    #"DROP TABLE "refresh_token""#
+    #"DROP TABLE IF EXISTS "refresh_token""#
   ]
 }

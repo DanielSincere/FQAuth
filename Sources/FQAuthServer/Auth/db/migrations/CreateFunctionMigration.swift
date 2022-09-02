@@ -1,6 +1,6 @@
 import FluentPostgresDriver
 
-final class CreateMetaMigration: PostgresScriptMigration {
+final class CreateFunctionMigration: PostgresScriptMigration {
 
   let up = [
     #"CREATE EXTENSION "uuid-ossp";"#,
@@ -16,7 +16,7 @@ final class CreateMetaMigration: PostgresScriptMigration {
   ]
 
   let down = [
-    #"DROP EXTENSION "uuid-ossp""#,
-    #"DROP FUNCTION updated_at_timestamp"#
+    #"DROP EXTENSION IF EXISTS "uuid-ossp""#,
+    #"DROP FUNCTION IF EXISTS updated_at_timestamp"#
   ]
 }
