@@ -1,6 +1,5 @@
 import XCTest
 @testable import FQAuthServer
-import Vapor
 
 final class CryptoTests: XCTestCase {
 

@@ -13,6 +13,7 @@ extension Application {
     }
 
     try self.register(collection: SIWAController())
+    try self.register(collection: RefreshTokenController())
   }
 }
 

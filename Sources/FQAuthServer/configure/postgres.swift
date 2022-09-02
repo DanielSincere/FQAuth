@@ -17,7 +17,8 @@ extension Application {
 
     case .development, .testing:
 
-      self.databases.use(.postgres(configuration: PostgresConfiguration(url: EnvVars.postgresUrl.loadOrFatal())!), as: .psql)
+      let config = PostgresConfiguration(url: EnvVars.postgresUrl.loadOrFatal())!
+      self.databases.use(.postgres(configuration: config), as: .psql)
 
     default:
       fatalError("unrecognized environment")

@@ -1,4 +1,6 @@
 .env
+.env.testing
+.env.development
 
 .build
 .swiftpm
