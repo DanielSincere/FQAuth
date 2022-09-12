@@ -7,7 +7,7 @@ let package = Package(
       .macOS(.v11),
   ],
   products: [
-    .executable(name: "fqauth-server", targets: ["FQAuthServer"]),
+    .executable(name: "FQAuthServer", targets: ["FQAuthServer"]),
     .library(name: "FQAuth", targets: ["FQAuth"]),
   ],
   dependencies: [

@@ -1,6 +1,5 @@
-.env
-.env.testing
-.env.development
+.env*
+!.env.*.sample
 
 .build
 .swiftpm
