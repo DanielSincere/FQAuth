@@ -4,7 +4,6 @@ final class RefreshTokenController {
 
   func token(req: Request) throws -> EventLoopFuture<AuthResponse> {
 
-
     let refreshTokenRequestBody = try req.content.decode(RefreshTokenRequestBody.self)
 
     return RefreshTokenModel

@@ -37,13 +37,15 @@ final class RefreshTokenModel: Model {
   }
 
   static func findBy(token: String, db: Database) -> EventLoopFuture<RefreshTokenModel?> {
-    RefreshTokenModel.query(on: db)
+    RefreshTokenModel
+      .query(on: db)
       .filter(\.$hashedToken == Self.hash(string: token))
       .filter(\.$expiresAt > Date())
       .first()
   }
 
   private static func hash(string: String) -> String {
-    SHA512.hash(data: string.data(using: .utf8)!).hexEncodedString(uppercase: true)
+    SHA512.hash(data: string.data(using: .utf8)!)
+      .hexEncodedString(uppercase: true)
   }
 }
