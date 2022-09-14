@@ -35,7 +35,9 @@ jobs:
         - os: ubuntu-20.04
     steps:
     - uses: ankane/setup-postgres@v1
-    - run: psql -U postgres -c 'CREATE EXTENSION "uuid-ossp";'
+      with:
+        database: postgres
+    - run: psql -U postgres -d postgres -c 'CREATE EXTENSION "uuid-ossp";'
     - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.7"
