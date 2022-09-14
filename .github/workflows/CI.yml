@@ -35,14 +35,13 @@ jobs:
         - os: ubuntu-20.04
     steps:
     - uses: ankane/setup-postgres@v1
-    - run: psql postgres://postgres:postgres@127.0.0.1/postgres -c 'CREATE EXTENSION "uuid-ossp";'
     - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.7"
     - run: swift --version
-    - uses: shogo82148/actions-setup-redis@v1
     - uses: actions/checkout@v2
     - run: swift run FQAuthServer migrate -y --env test
+    - uses: shogo82148/actions-setup-redis@v1
     - run: swift test
     env:
       DATABASE_URL: "postgresql://postgres:postgres@localhost/postgres"
