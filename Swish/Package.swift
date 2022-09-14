@@ -10,7 +10,11 @@ let package = Package(
   ],
   targets: [
     .executableTarget(
-      name: "Date",
+      name: "generate-jwt-key",
+      dependencies: ["Sh"]
+    ),
+    .executableTarget(
+      name: "generate-db-key",
       dependencies: ["Sh"]
     ),
   ]

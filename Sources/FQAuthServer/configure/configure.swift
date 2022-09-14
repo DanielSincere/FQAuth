@@ -10,7 +10,7 @@ extension Application {
     //    try self.configureRedis()
     try self.configureRoutes()
 
-    try self.jwt.apple.jwks.get(using: self.client, on: self.client.eventLoop).wait()
+    try self.configureSigning()
 
     self.configureCommands()
   }

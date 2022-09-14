@@ -20,6 +20,7 @@ let package = Package(
 
     .package(url: "https://github.com/vapor/redis.git", from: "4.1.3"),
     .package(url: "https://github.com/vapor/queues-redis-driver.git", from: "1.0.0"),
+
   ],
   targets: [
     .executableTarget(name: "FQAuthServer", dependencies: [

@@ -2,6 +2,7 @@ import Vapor
 
 enum EnvVars: String, CaseIterable {
 
+  // generate with `swish generate-jwt-key`
   case authPrivateKey = "AUTH_PRIVATE_KEY"
 
   case appleServicesKey = "APPLE_SERVICES_KEY"
@@ -9,6 +10,7 @@ enum EnvVars: String, CaseIterable {
   case appleTeamId = "APPLE_TEAM_ID"
   case appleAppId = "APPLE_APP_ID"
 
+  // generate with `swish generate-db-key`
   case dbSymmetricKey = "DB_SYMMETRIC_KEY"
 
   case postgresUrl = "DATABASE_URL"

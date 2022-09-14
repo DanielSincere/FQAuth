@@ -1,6 +1,6 @@
 import Vapor
 
-struct RefreshTokenRequestBody: Content {
+struct RefreshTokenRequestBody: Content, Equatable {
   let refreshToken: String
   let newDeviceName: String
 }
