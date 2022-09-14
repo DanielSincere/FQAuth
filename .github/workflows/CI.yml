@@ -34,9 +34,13 @@ jobs:
         - os: macos-11.0
         - os: ubuntu-20.04
     steps:
-    - uses: ikalnytskyi/action-setup-postgres@v3
-      id: postgres
-    - run: psql -U postgres -c 'CREATE EXTENSION "uuid-ossp";'
+    - name: Setup Postgres database
+      uses: Daniel-Marynicz/postgresql-action@master
+      with:
+        app_user: fqauth_test
+        app_user_password: test-password
+        app_db: fqauth_test
+        postgres_extensions: uuid-ossp
     - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.7"
@@ -46,7 +50,7 @@ jobs:
     - run: swift run FQAuthServer migrate -y --env test
     - run: swift test
     env:
-      DATABASE_URL: "postgresql://postgres:postgres@localhost/postgres"
+      DATABASE_URL: "postgresql://fqauth_test:test-password@localhost/fqauth_test"
       DB_SYMMETRIC_KEY: "9/Vk5Rlzctc5tyX0SCmIJaRzEg+QgwWjlTzD0LMPqNY="
       REDIS_URL: "redis://localhost"
       APPLE_SERVICES_KEY: "LS0tLS1CRUdJTiBFQyBQQVJBTUVURVJTLS0tLS0KQmdVcmdRUUFJdz09Ci0tLS0tRU5EIEVDIFBBUkFNRVRFUlMtLS0tLQotLS0tLUJFR0lOIEVDIFBSSVZBVEUgS0VZLS0tLS0KTUlIY0FnRUJCRUlCdXRBYnNFUjY1bVFnby9iKzJYcTVsaDZQTDhuRTJSRjZ0WjFDdWNmdW5UaWtyNDFwL3JhZwpYaXd6MTJVOWxoY211Y2wrWDh5MkVacUowQ0FXS0VhTHluYWdCd1lGSzRFRUFDT2hnWWtEZ1lZQUJBQm92SWc2CkNRREdkcjMxNlR6bEJXRG56SHIvWDVoSnVzbnpSY0E2WUpUS1RVMll2bXdCaHVGUFBiNit1MUttaUdkTnQ2N1EKTU16RjMxYjY0L0gwS3prQ1BnRVZicklMVkthNDlUbTdNQU1WT3dsUUxaVHBIck8xMVk2bVd5eERydEFCSXNDTApqNnBRMFhGNlZiNWNOT3RWL1BpMC9lcTIxY3UwV3h5aDNHODY2TlQ0T1E9PQotLS0tLUVORCBFQyBQUklWQVRFIEtFWS0tLS0tCg=="
