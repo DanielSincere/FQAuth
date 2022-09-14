@@ -14,7 +14,7 @@ jobs:
     name: Build on Mac
     runs-on: macos-11.0
     steps:
-    - uses: fwal/setup-swift@v1.14.0
+    - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.7"
     - run: swift --version
