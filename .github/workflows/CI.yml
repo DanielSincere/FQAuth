@@ -6,23 +6,23 @@ on:
     pull_request:
 
 jobs:
-  build-docker:
-    name: Build with Docker
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: docker build .
-
-  build-mac:
-    name: Build on Mac
-    runs-on: macos-11.0
-    steps:
-    - uses: swift-actions/setup-swift@v1
-      with:
-        swift-version: "5.7"
-    - run: swift --version
-    - uses: actions/checkout@v2
-    - run: swift build -c release
+#   build-docker:
+#     name: Build with Docker
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - run: docker build .
+#
+#   build-mac:
+#     name: Build on Mac
+#     runs-on: macos-11.0
+#     steps:
+#     - uses: swift-actions/setup-swift@v1
+#       with:
+#         swift-version: "5.7"
+#     - run: swift --version
+#     - uses: actions/checkout@v2
+#     - run: swift build -c release
 
   test:
     name: Test on ${{ matrix.os }}
@@ -32,9 +32,11 @@ jobs:
       matrix:
         include:
         - os: macos-11.0
-        - os: ubuntu-20.04
+        # - os: ubuntu-20.04
     steps:
-    - uses: ankane/setup-postgres@v1
+    - run: brew install postgresql
+    - run: brew services start postgresql
+    - run: psql "postgres://postgres:postgres@localhost/postgres" -c 'create extension "uuid-ossp";'
     - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.7"
