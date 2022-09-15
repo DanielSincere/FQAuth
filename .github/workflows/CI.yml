@@ -51,6 +51,10 @@ jobs:
     - run: swift run FQAuthServer migrate -y --env test
     - uses: shogo82148/actions-setup-redis@v1
     - run: swift test
+    - uses: actions/upload-artifact@v3
+      with:
+        name: postgres.log
+        path: ./postgres.log
     env:
       PG_BIN_PATH: "/usr/lib/postgresql/12/bin/"
       DATABASE_URL: "postgresql://postgres@127.0.0.1"
