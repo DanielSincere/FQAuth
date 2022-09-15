@@ -38,6 +38,7 @@ jobs:
       if: ${{ startsWith(matrix.os, 'ubuntu') }}
     - run: initdb -U postgres -D ./postgres
     - run: pg_ctl -D ./postgres -l ./postgres.log start
+    - run: psql $DATABASE_URL -c "select version()"
     - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.7"
