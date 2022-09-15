@@ -35,7 +35,7 @@ jobs:
         # - os: ubuntu-20.04
     steps:
     - run: brew install postgresql
-    - run: brew services start postgresql
+    - run: pg_ctl -D ./postgres -l ./postgres.log start
     - run: psql -U postgres -c 'create extension "uuid-ossp";'
     - uses: swift-actions/setup-swift@v1
       with:
