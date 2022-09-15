@@ -37,7 +37,7 @@ jobs:
     - run: initdb ./postgres
     - run: pg_ctl -D ./postgres -l ./postgres.log start
     - run: sleep 1
-    - run: psql -U postgres -c 'create extension "uuid-ossp";'
+    - run: psql -c 'create extension "uuid-ossp";'
     - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.7"
