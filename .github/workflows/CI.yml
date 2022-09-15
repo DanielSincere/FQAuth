@@ -32,15 +32,17 @@ jobs:
       matrix:
         include:
         - os: macos-11.0
+          pg_bin_path: ""
         - os: ubuntu-20.04
+          pg_bin_path: "/usr/lib/postgresql/12/bin/"
     steps:
     - run: sudo apt-get install -y postgresql
       if: ${{ startsWith(matrix.os, 'ubuntu') }}
-    - run: initdb -U postgres -D ./postgres
-      if: ${{ !startsWith(matrix.os, 'ubuntu') }}
-    - run: pg_ctl -D ./postgres -l ./postgres.log start
-      if: ${{ !startsWith(matrix.os, 'ubuntu') }}
+    - run: ${{ pg_bin_path }}initdb -U postgres -D ./postgres
+    - run: ${{ pg_bin_path }}pg_ctl -D ./postgres -l ./postgres.log start
+
     - run: psql $DATABASE_URL -c "select version()"
+
     - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.7"
@@ -50,6 +52,7 @@ jobs:
     - uses: shogo82148/actions-setup-redis@v1
     - run: swift test
     env:
+      PG_BIN_PATH: "/usr/lib/postgresql/12/bin/"
       DATABASE_URL: "postgresql://postgres@127.0.0.1"
       DB_SYMMETRIC_KEY: "9/Vk5Rlzctc5tyX0SCmIJaRzEg+QgwWjlTzD0LMPqNY="
       REDIS_URL: "redis://localhost"
