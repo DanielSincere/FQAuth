@@ -34,8 +34,7 @@ jobs:
         - os: macos-11.0
         # - os: ubuntu-20.04
     steps:
-    - run: brew install postgresql
-    - run: mkdir ./postgres
+    - run: initdb ./postgres
     - run: pg_ctl -D ./postgres -l ./postgres.log start
     - run: sleep 1
     - run: psql -U postgres -c 'create extension "uuid-ossp";'
