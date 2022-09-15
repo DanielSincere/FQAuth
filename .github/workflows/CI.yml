@@ -36,7 +36,7 @@ jobs:
     steps:
     - run: brew install postgresql
     - run: brew services start postgresql
-    - run: psql "postgres://postgres:postgres@localhost/postgres" -c 'create extension "uuid-ossp";'
+    - run: psql -U postgres -c 'create extension "uuid-ossp";'
     - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.7"
