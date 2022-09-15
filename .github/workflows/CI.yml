@@ -52,6 +52,7 @@ jobs:
     - uses: shogo82148/actions-setup-redis@v1
     - run: swift test
     - uses: actions/upload-artifact@v3
+      if: always()
       with:
         name: postgres.log
         path: ./postgres.log
