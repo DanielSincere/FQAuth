@@ -34,7 +34,7 @@ jobs:
         - os: macos-11.0
         - os: ubuntu-20.04
     steps:
-    - run: sudo apt-get install -y postgres
+    - run: sudo apt-get install -y postgresql
       if: ${{ startsWith(matrix.os, 'ubuntu') }}
     - run: initdb -U postgres -D ./postgres
     - run: pg_ctl -D ./postgres -l ./postgres.log start
