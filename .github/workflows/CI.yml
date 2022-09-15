@@ -38,8 +38,8 @@ jobs:
     steps:
     - run: sudo apt-get install -y postgresql
       if: ${{ startsWith(matrix.os, 'ubuntu') }}
-    - run: ${{ pg_bin_path }}initdb -U postgres -D ./postgres
-    - run: ${{ pg_bin_path }}pg_ctl -D ./postgres -l ./postgres.log start
+    - run: ${{ matrix.pg_bin_path }}initdb -U postgres -D ./postgres
+    - run: ${{ matrix.pg_bin_path }}pg_ctl -D ./postgres -l ./postgres.log start
 
     - run: psql $DATABASE_URL -c "select version()"
 
