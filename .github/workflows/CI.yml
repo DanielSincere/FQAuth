@@ -39,6 +39,8 @@ jobs:
     - run: sudo apt-get install -y postgresql
       if: ${{ startsWith(matrix.os, 'ubuntu') }}
     - run: ${{ matrix.pg_bin_path }}initdb -U postgres -D ./postgres
+    - run: echo "listen_addresses = '*'" > ./postgres/postgresql.conf
+    - run: echo "host  all  all 0.0.0.0/0 md5" > ./postgres/pg_hba.conf
     - run: ${{ matrix.pg_bin_path }}pg_ctl -D ./postgres -l ./postgres.log start
 
     - run: psql $DATABASE_URL -c "select version()"
