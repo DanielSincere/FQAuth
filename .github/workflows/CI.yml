@@ -24,29 +24,38 @@ jobs:
 #     - uses: actions/checkout@v2
 #     - run: swift build -c release
 
-  test:
-    name: Test on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-        - os: macos-11.0
-          pg_bin_path: ""
-        - os: ubuntu-20.04
-          pg_bin_path: "/usr/lib/postgresql/12/bin/"
+  # test-linux:
+  #   name: Test on Ubuntu
+  #   runs-on: ubuntu-22.04
+  #   - run: sudo apt-get install -y postgresql
+  #     if: ${{ startsWith(matrix.os, 'ubuntu') }}
+  #   - run: ${{ matrix.pg_bin_path }}initdb -U postgres -D ./postgres
+
+  test-mac:
+    name: Test on Mac
+    runs-on: macos-11.0
     steps:
-    - run: sudo apt-get install -y postgresql
-      if: ${{ startsWith(matrix.os, 'ubuntu') }}
-    - run: ${{ matrix.pg_bin_path }}initdb -U postgres -D ./postgres
-    - run: echo "listen_addresses = '*'" > ./postgres/postgresql.conf
-    - run: echo "host  all  all 0.0.0.0/0 md5" > ./postgres/pg_hba.conf
-
-    - run: sudo su postgres -c "${{ matrix.pg_bin_path }}pg_ctl -D ./postgres -l ./postgres.log start"
-      if: ${{ startsWith(matrix.os, 'ubuntu') }}
-    - run: pg_ctl -D ./postgres -l ./postgres.log start
-      if: ${{ startsWith(matrix.os, 'mac') }}
-
+    - run: |
+        brew services start postgresql
+        echo "Check PostgreSQL service is running"
+        i=10
+        COMMAND='pg_isready'
+        while [ $i -gt 0 ]; do
+          echo "Check PostgreSQL service status"
+          eval $COMMAND && break
+          ((i--))
+          if [ $i == 0 ]; then
+            echo "PostgreSQL service not ready, all attempts exhausted"
+            exit 1
+          fi
+          echo "PostgreSQL service not ready, wait 10 more sec, attempts left: $i"
+          sleep 10
+        done
+    - run: |
+        psql --command="CREATE USER myuser PASSWORD 'mypassword'" --command="\du" postgres
+    - run: |
+        createdb --owner=myuser mydatabase
+        PGPASSWORD=mypassword psql --username=myuser --host=localhost --list mydatabase
 
     - run: psql $DATABASE_URL -c "select version()"
 
@@ -64,8 +73,7 @@ jobs:
         name: postgres.log
         path: ./postgres.log
     env:
-      PG_BIN_PATH: "/usr/lib/postgresql/12/bin/"
-      DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1"
+      DATABASE_URL: "postgresql://myuser:mypassword@localhost/mydatabase"
       DB_SYMMETRIC_KEY: "9/Vk5Rlzctc5tyX0SCmIJaRzEg+QgwWjlTzD0LMPqNY="
       REDIS_URL: "redis://localhost"
       APPLE_SERVICES_KEY: "LS0tLS1CRUdJTiBFQyBQQVJBTUVURVJTLS0tLS0KQmdVcmdRUUFJdz09Ci0tLS0tRU5EIEVDIFBBUkFNRVRFUlMtLS0tLQotLS0tLUJFR0lOIEVDIFBSSVZBVEUgS0VZLS0tLS0KTUlIY0FnRUJCRUlCdXRBYnNFUjY1bVFnby9iKzJYcTVsaDZQTDhuRTJSRjZ0WjFDdWNmdW5UaWtyNDFwL3JhZwpYaXd6MTJVOWxoY211Y2wrWDh5MkVacUowQ0FXS0VhTHluYWdCd1lGSzRFRUFDT2hnWWtEZ1lZQUJBQm92SWc2CkNRREdkcjMxNlR6bEJXRG56SHIvWDVoSnVzbnpSY0E2WUpUS1RVMll2bXdCaHVGUFBiNit1MUttaUdkTnQ2N1EKTU16RjMxYjY0L0gwS3prQ1BnRVZicklMVkthNDlUbTdNQU1WT3dsUUxaVHBIck8xMVk2bVd5eERydEFCSXNDTApqNnBRMFhGNlZiNWNOT3RWL1BpMC9lcTIxY3UwV3h5aDNHODY2TlQ0T1E9PQotLS0tLUVORCBFQyBQUklWQVRFIEtFWS0tLS0tCg=="
