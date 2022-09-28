@@ -27,15 +27,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showgrid="false"
-     inkscape:zoom="0.56691542"
-     inkscape:cx="571.51382"
-     inkscape:cy="619.13998"
+     inkscape:zoom="1.3286092"
+     inkscape:cx="233.70303"
+     inkscape:cy="399.66605"
      inkscape:window-width="1406"
      inkscape:window-height="1052"
      inkscape:window-x="502"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer2" />
+     inkscape:current-layer="layer1" />
   <defs
      id="defs11403">
     <rect
@@ -69,7 +69,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Labels"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <rect
        style="display:inline;fill:#dadde5;fill-opacity:1;fill-rule:evenodd;stroke-width:4.28177;stroke-linejoin:bevel;paint-order:markers fill stroke"
        id="rect3323"
@@ -201,12 +202,12 @@
          id="tspan627-6-8"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#d63636;fill-opacity:1;stroke-width:4.371"
          x="260.47379"
-         y="31.157333"></tspan><tspan
+         y="31.157333" /><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#d63636;fill-opacity:1;stroke-width:4.371"
          x="260.47379"
          y="39.094833"
-         id="tspan3237"></tspan><tspan
+         id="tspan3237" /><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#d63636;fill-opacity:1;stroke-width:4.371"
          x="260.47379"
@@ -216,19 +217,18 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1"
-     sodipodi:insensitive="true">
+     id="layer1">
     <text
        xml:space="preserve"
        transform="scale(0.26458334)"
        id="text472"
        style="font-weight:bold;font-size:24px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';white-space:pre;shape-inside:url(#rect474);display:inline;fill:#363051;fill-rule:evenodd;stroke-width:16.5203;stroke-linejoin:bevel;paint-order:markers fill stroke" />
     <rect
-       style="fill:#363051;fill-rule:evenodd;stroke-width:4.5463;stroke-linejoin:bevel;paint-order:markers fill stroke"
+       style="fill:#363051;fill-rule:evenodd;stroke-width:4.56123;stroke-linejoin:bevel;paint-order:markers fill stroke"
        id="rect707"
-       width="242.17688"
+       width="243.77002"
        height="2.3812501"
-       x="22.882301"
+       x="21.289156"
        y="63.233402" />
     <rect
        style="fill:#363051;fill-rule:evenodd;stroke-width:2.5172;stroke-linejoin:bevel;paint-order:markers fill stroke"
