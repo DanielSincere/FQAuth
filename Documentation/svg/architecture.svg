@@ -9,6 +9,9 @@
    id="svg816"
    sodipodi:docname="architecture.svg"
    inkscape:version="1.2 (dc2aeda, 2022-05-15)"
+   inkscape:export-filename="architecture.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +28,7 @@
      inkscape:document-units="px"
      showgrid="false"
      inkscape:zoom="0.42298039"
-     inkscape:cx="505.93362"
+     inkscape:cx="-78.017801"
      inkscape:cy="593.40813"
      inkscape:window-width="1390"
      inkscape:window-height="1052"
@@ -422,7 +425,7 @@
        style="font-weight:bold;font-size:24px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';white-space:pre;shape-inside:url(#rect9378);display:inline;fill:#363051;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"><tspan
          x="34.685547"
          y="834.35861"
-         id="tspan11300">Sign in with Apple</tspan></text>
+         id="tspan11401">Sign in with Apple</tspan></text>
     <ellipse
        style="fill:#694be1;fill-opacity:1;fill-rule:evenodd;stroke:#7f7485;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
        id="path8566"
