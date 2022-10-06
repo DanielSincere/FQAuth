@@ -7,11 +7,13 @@ on:
 
 jobs:
   build-docker:
+    name: Build with Docker
+    runs-on: ubuntu-latest
+
     env:
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}
-    name: Build with Docker
-    runs-on: ubuntu-latest
+
     steps:
     - name: Log in to the Container registry
       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -28,8 +30,7 @@ jobs:
       uses: docker/metadata-action@v4
       with:
         images: |
-          FullQueueDeveloper/FQAuth
-          ghcr.io/FullQueueDeveloper/FQAuth
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         tags: |
           type=ref,event=tag
           type=sha,format=long
