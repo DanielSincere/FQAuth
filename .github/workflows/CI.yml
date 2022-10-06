@@ -28,7 +28,8 @@ jobs:
       uses: docker/metadata-action@v4
       with:
         images: |
-          name=,enable=true
+          FullQueueDeveloper/FQAuth
+          ghcr.io/FullQueueDeveloper/FQAuth
         tags: |
           type=ref,event=tag
           type=sha,format=long
