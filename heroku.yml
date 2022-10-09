@@ -1,13 +1,14 @@
+build:
+  web:
+    dockerfile: Deploy/Heroku/web.Dockerfile
+  worker:
+    dockerfile: Deploy/Heroku/worker.Dockerfile
+  release:
+    dockerfile: Deploy/Heroku/release.Dockerfile
 run:
   web:
-    image: ghcr.io/fullqueuedeveloper/fqauth:sha-9f33b943a946585ba449250e0f3f250482f3c623
-    command:
-      - "/app/FQAuthServer serve --env production --hostname 0.0.0.0 -p $PORT"
+    image: web
   worker:
-    image: ghcr.io/fullqueuedeveloper/fqauth:sha-9f33b943a946585ba449250e0f3f250482f3c623
-    command:
-      - "/app/FQAuthServer queues --env production"
+    image: worker
 release:
-  image: ghcr.io/fullqueuedeveloper/fqauth:sha-9f33b943a946585ba449250e0f3f250482f3c623
-  command:
-    - "/app/FQAuthServer migrate -y --env production"
+  image: release
