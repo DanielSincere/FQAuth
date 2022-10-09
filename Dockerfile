@@ -9,20 +9,20 @@ RUN mkdir /output
 RUN cp $(swift build -c release -Xswiftc -g --show-bin-path)/FQAuthServer /output/FQAuthServer
 RUN cp -R ./Resources /output/Resources
 
-FROM index.docker.io/library/swift:5.7-jammy-slim as prod-base
+FROM index.docker.io/library/swift:5.7-jammy-slim as production
 RUN useradd --user-group --create-home --system --skel /dev/null --home-dir /app vapor
 WORKDIR /app
 COPY --from=builder --chown=vapor:vapor /output/* /app/
 COPY --from=builder /usr/lib/swift/ /usr/lib/swift/
 USER vapor:vapor
 
-FROM prod-base as web
+FROM production as web
 ENV PORT 80
 EXPOSE $PORT
 CMD /app/FQAuthServer serve --env production --hostname 0.0.0.0 -p $PORT
 
-FROM prod-base as worker
+FROM production as worker
 CMD /app/FQAuthServer queues --env production
 
-FROM prod-base as release
+FROM production as release
 CMD /app/FQAuthServer migrate -y --env production
