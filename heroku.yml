@@ -1,0 +1,18 @@
+build:
+  docker:
+    web:
+      target: web
+      dockerfile: Dockerfile
+    worker:
+      target: worker
+      dockerfile: Dockerfile
+    release:
+      target: release
+      dockerfile: Dockerfile
+run:
+  web:
+    image: web
+  worker:
+    image: worker
+release:
+  image: release

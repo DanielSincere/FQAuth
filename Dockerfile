@@ -24,8 +24,5 @@ CMD /app/FQAuthServer serve --env production --hostname 0.0.0.0 -p $PORT
 FROM prod-base as worker
 CMD /app/FQAuthServer queues --env production
 
-FROM prod-base as scheduled-worker
-CMD /app/FQAuthServer queues --scheduled --env production
-
-FROM prod-base as migrate
+FROM prod-base as release
 CMD /app/FQAuthServer migrate -y --env production
