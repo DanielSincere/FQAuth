@@ -12,8 +12,8 @@ Install heroku cli tool from Homebrew
 4. Set config variables in Heroku's web portal or thru the command line
   - `AUTH_PRIVATE_KEY`: output of `swish generate-jwt-key`
   - `DB_SYMMETRIC_KEY`: output of `swish generate-db-key`
-  - `APPLE_SERVICES_KEY`: set this up in App Store Connect
-  - `APPLE_SERVICES_KEY_ID`: ID of the key in App Store Connect
+  - `APPLE_SERVICES_KEY`: create under `Certificates, Identifiers & Profiles` > `Keys` (base64)
+  - `APPLE_SERVICES_KEY_ID`: ID of the `APPLE_SERVICES_KEY`
   - `APPLE_TEAM_ID`: your Apple team ID. Looks like `ARST1234`
   - `APPLE_APP_ID`: the bundle ID of your app
 4. Clone the FQAuth repo to your local computer
