@@ -1,10 +1,11 @@
 build:
-  web:
-    dockerfile: Deploy/Heroku/web.Dockerfile
-  worker:
-    dockerfile: Deploy/Heroku/worker.Dockerfile
-  release:
-    dockerfile: Deploy/Heroku/release.Dockerfile
+  docker:
+    web:
+      dockerfile: Deploy/Heroku/web.Dockerfile
+    worker:
+      dockerfile: Deploy/Heroku/worker.Dockerfile
+    release:
+      dockerfile: Deploy/Heroku/release.Dockerfile
 run:
   web:
     image: web
