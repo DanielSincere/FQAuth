@@ -15,8 +15,8 @@ Install heroku cli tool from Homebrew
   - `APPLE_SERVICES_KEY`: create under `Certificates, Identifiers & Profiles` > `Keys` (base64)
   - `APPLE_SERVICES_KEY_ID`: ID of the `APPLE_SERVICES_KEY`
   - `APPLE_TEAM_ID`: your Apple team ID. Looks like `ARST1234`
-  - `APPLE_APP_ID`: the bundle ID of your app
+  - `APPLE_APP_ID`: the bundle ID of your app. Looks like `com.fullqueuedeveloper.FQAuthSample
 4. Clone the FQAuth repo to your local computer
-5. Choose container stack `heroku  stack:set -a fqauth-server-{name} container`
+5. Choose container stack `heroku  stack:set -a fqauth-server-{name} container` (app name is from step 2)
 6. Setup heroku remote `heroku git:remote -a fqauth-server-{name}`
 7. Push to heroku `git push heroku trunk:main`
