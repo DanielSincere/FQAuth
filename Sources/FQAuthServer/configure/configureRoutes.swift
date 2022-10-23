@@ -8,13 +8,9 @@ extension Application {
       return "healthy"
     }
 
-    self.get("jwks") { req in
-      JWKS.public
-    }
-
-    try self.register(collection: SIWAController())
-    try self.register(collection: RefreshTokenController())
+    let apiRoutes = self.grouped("api")
+    try apiRoutes.register(collection: JWKSController())
+    try apiRoutes.register(collection: SIWAController())
+    try apiRoutes.register(collection: RefreshTokenController())
   }
 }
-
-extension JWKS: Content { }

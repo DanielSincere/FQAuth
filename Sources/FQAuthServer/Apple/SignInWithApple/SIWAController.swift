@@ -6,7 +6,7 @@ import PostgresNIO
 
 final class SIWAController {
 
-  func siwa(req: Request) throws -> EventLoopFuture<AuthResponse> {
+  func authorize(req: Request) throws -> EventLoopFuture<AuthResponse> {
 
     let siwaRequestBody = try req.content.decode(SiwaRequestBody.self)
     return req.jwt.apple.verify(
@@ -93,6 +93,9 @@ final class SIWAController {
 extension SIWAController: RouteCollection {
 
   func boot(routes: RoutesBuilder) throws {
-    routes.post("siwa", use: siwa)
+    routes.group("siwa") { siwa in
+      siwa.post("authorize", use: authorize)
+    }
+    
   }
 }
