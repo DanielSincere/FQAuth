@@ -1,6 +1,6 @@
 import JWTKit
 
-public struct SiwaServerNotification: JWTPayload {
+public struct SIWAServerNotification: JWTPayload {
 
   public let iss: IssuerClaim
   public let aud: AudienceClaim

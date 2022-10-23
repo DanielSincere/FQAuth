@@ -12,5 +12,6 @@ extension Application {
     try apiRoutes.register(collection: JWKSController())
     try apiRoutes.register(collection: SIWAController())
     try apiRoutes.register(collection: RefreshTokenController())
+    try apiRoutes.register(collection: UserController())
   }
 }
