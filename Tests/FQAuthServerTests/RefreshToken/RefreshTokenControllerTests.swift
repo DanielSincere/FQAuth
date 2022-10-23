@@ -55,7 +55,7 @@ final class RefreshTokenControllerTests: XCTestCase {
 
     let requestBody = RefreshTokenRequestBody(refreshToken: "test-token", newDeviceName: "My iPhone")
 
-    try app.test(.POST, "/token") { req in
+    try app.test(.POST, "/api/token") { req in
       try req.content.encode(requestBody)
     } afterResponse: { response in
       XCTAssertEqual(response.status, .forbidden)
