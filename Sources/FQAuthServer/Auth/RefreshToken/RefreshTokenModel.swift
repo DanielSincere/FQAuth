@@ -43,6 +43,13 @@ final class RefreshTokenModel: Model {
       .filter(\.$expiresAt > Date())
       .first()
   }
+  
+  static func listBy(userID: UserModel.IDValue, db: Database) -> EventLoopFuture<[RefreshTokenModel]> {
+    RefreshTokenModel
+      .query(on: db)
+      .filter(\.$user.$id == userID)
+      .all()
+  }
 
   private static func hash(string: String) -> String {
     SHA512.hash(data: string.data(using: .utf8)!)
