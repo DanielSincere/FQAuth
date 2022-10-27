@@ -1,10 +1,17 @@
 import Vapor
+import FQAuthMiddleware
 
 final class UserController {
   
   func activeTokens(req: Request) throws -> EventLoopFuture<UserInfo> {
     guard let userID = req.parameters.get("userID", as: UUID.self) else {
       throw Abort(.badRequest)
+    }
+    
+    let token = try req.auth.require(FQAuthSessionToken.self)
+    
+    guard token.userID == userID else {
+      throw Abort(.forbidden)
     }
     
     return RefreshTokenModel
@@ -30,8 +37,10 @@ final class UserController {
  
 extension UserController: RouteCollection {
   func boot(routes: Vapor.RoutesBuilder) throws {
-    routes.group("user", ":userID") { userRoutes in
-      userRoutes.get("activeTokens", use: activeTokens(req:))
+    routes.group(FQAuthSessionToken.authenticator(), FQAuthSessionToken.guardMiddleware()) {
+      $0.group("user", ":userID") { userRoutes in
+        userRoutes.get("activeTokens", use: activeTokens(req:))
+      }
     }
   }
 }

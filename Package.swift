@@ -1,4 +1,5 @@
 // swift-tools-version:5.7
+
 import PackageDescription
 
 let package = Package(
@@ -8,7 +9,7 @@ let package = Package(
   ],
   products: [
     .executable(name: "FQAuthServer", targets: ["FQAuthServer"]),
-    .library(name: "FQAuth", targets: ["FQAuth"]),
+    .library(name: "FQAuthMiddleware", targets: ["FQAuthMiddleware"]),
   ],
   dependencies: [
     .package(url: "https://github.com/vapor/vapor.git", from: "4.65.1"),
@@ -33,11 +34,13 @@ let package = Package(
 
       .product(name: "Redis", package: "redis"),
       .product(name: "QueuesRedisDriver", package: "queues-redis-driver"),
+      
+      .target(name: "FQAuthMiddleware"),
     ],
     swiftSettings: [
         .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
     ]),
-    .target(name: "FQAuth", dependencies: [
+    .target(name: "FQAuthMiddleware", dependencies: [
       .product(name: "Vapor", package: "vapor"),
       .product(name: "JWT", package: "jwt"),
     ]),
