@@ -4,7 +4,6 @@ import Foundation
 
 public struct FQAuthSessionToken: Content, Authenticatable, JWTPayload {
   
-  public let role: FQAuthRole
   public let userID: UUID
   public var expiration: ExpirationClaim
   
