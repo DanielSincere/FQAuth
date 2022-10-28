@@ -13,14 +13,17 @@ final class RefreshTokenController {
         UserModel.find(refreshTokenModel.$user.id, on: req.db)
           .unwrap(or: Abort(.forbidden))
           .flatMap { userModel in
-
             refreshTokenModel.delete(force: true, on: req.db)
               .flatMap { _ in
-                AuthHelper(req: req)
-                  .login(userId: userModel.id!,
-                         firstName: userModel.firstName,
-                         lastName: userModel.lastName,
-                         deviceName: refreshTokenRequestBody.newDeviceName)
+                do {
+                  return AuthHelper(req: req)
+                    .login(userId: try userModel.requireID(),
+                           firstName: userModel.firstName,
+                           lastName: userModel.lastName,
+                           deviceName: refreshTokenRequestBody.newDeviceName)
+                } catch {
+                  return req.eventLoop.makeFailedFuture(Abort(.internalServerError))
+                }
               }
           }
       }

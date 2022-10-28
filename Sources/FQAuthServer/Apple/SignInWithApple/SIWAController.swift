@@ -96,6 +96,5 @@ extension SIWAController: RouteCollection {
     routes.group("siwa") { siwa in
       siwa.post("authorize", use: authorize)
     }
-    
   }
 }

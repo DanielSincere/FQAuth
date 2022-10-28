@@ -18,16 +18,9 @@ extension Application {
       throw PostgresConfigurationError()
     }
 
-    switch self.environment {
-    case .production:
-      var tlsConfig = TLSConfiguration.makeClientConfiguration()
-      tlsConfig.certificateVerification = .none
-      config.tlsConfiguration = tlsConfig
-    case .development, .testing:
-      break
-    default:
-      break
-    }
+    var tlsConfig = TLSConfiguration.makeClientConfiguration()
+    tlsConfig.certificateVerification = .none
+    config.tlsConfiguration = tlsConfig  
     
     self.databases.use(.postgres(configuration: config), as: .psql)
   }

@@ -17,7 +17,7 @@ final class RefreshTokenControllerTests: XCTestCase {
 
     let requestBody = RefreshTokenRequestBody(refreshToken: "test-token", newDeviceName: "My iPhone")
 
-    try app.test(.POST, "/token") { req in
+    try app.test(.POST, "/api/token") { req in
       try req.content.encode(requestBody)
     } afterResponse: { response in
       let decodedResponseBody = try response.content.decode(AuthResponse.self)
@@ -31,7 +31,7 @@ final class RefreshTokenControllerTests: XCTestCase {
     let requestBody = RefreshTokenRequestBody(refreshToken: "missing-token",
                                               newDeviceName: "My iPhone")
 
-    try app.test(.POST, "/token") { req in
+    try app.test(.POST, "/api/token") { req in
       try req.content.encode(requestBody)
     } afterResponse: { response in
       XCTAssertEqual(response.status, .forbidden)
@@ -53,7 +53,7 @@ final class RefreshTokenControllerTests: XCTestCase {
 
     _ = try refreshToken.create(on: app.db(.psql)).wait()
 
-    let requestBody = RefreshTokenRequestBody(refreshToken: "test-token", newDeviceName: "My iPhone")
+    let requestBody = RefreshTokenRequestBody(refreshToken: "test-token", newDeviceName: "My iPhone 3G")
 
     try app.test(.POST, "/api/token") { req in
       try req.content.encode(requestBody)
@@ -65,12 +65,13 @@ final class RefreshTokenControllerTests: XCTestCase {
   override func setUpWithError() throws {
     let app = Application(.testing)
     try app.configure()
-//    try app.autoRevert().wait()
-//    try app.autoMigrate().wait()
+    try app.autoRevert().wait()
+    try app.autoMigrate().wait()
     self.app = app
   }
 
   override func tearDownWithError() throws {
+    try app.autoRevert().wait()
     app.shutdown()
   }
 }
