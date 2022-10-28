@@ -17,11 +17,27 @@ extension Application {
       struct PostgresConfigurationError: Error { }
       throw PostgresConfigurationError()
     }
-
-    var tlsConfig = TLSConfiguration.makeClientConfiguration()
-    tlsConfig.certificateVerification = .none
-    config.tlsConfiguration = tlsConfig  
     
+    if nil != Environment.get("TEST_DATABASE_TLS") {
+    
+      
+    }
+
+    switch self.environment {
+    case .production:
+      var tlsConfig = TLSConfiguration.makeClientConfiguration()
+      tlsConfig.certificateVerification = .none
+      config.tlsConfiguration = tlsConfig
+    case .development: break
+    case .testing:
+      if nil != Environment.get("TEST_DATABASE_TLS") {
+        var tlsConfig = TLSConfiguration.makeClientConfiguration()
+        tlsConfig.certificateVerification = .none
+        config.tlsConfiguration = tlsConfig
+      }
+    default: break
+    }
+        
     self.databases.use(.postgres(configuration: config), as: .psql)
   }
 }
