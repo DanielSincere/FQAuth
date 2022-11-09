@@ -21,6 +21,7 @@ let package = Package(
 
     .package(url: "https://github.com/vapor/redis.git", from: "4.1.3"),
     .package(url: "https://github.com/vapor/queues-redis-driver.git", from: "1.0.0"),
+    .package(url: "https://github.com/FullQueueDeveloper/Sh.git", from: "1.0.2"),
 
   ],
   targets: [
@@ -36,6 +37,8 @@ let package = Package(
       .product(name: "QueuesRedisDriver", package: "queues-redis-driver"),
       
       .target(name: "FQAuthMiddleware"),
+      
+      "Sh",
     ],
     swiftSettings: [
         .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))

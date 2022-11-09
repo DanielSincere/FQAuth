@@ -18,24 +18,24 @@ extension Application {
       throw PostgresConfigurationError()
     }
     
-    if nil != Environment.get("TEST_DATABASE_TLS") {
-    
-      
-    }
-
     switch self.environment {
     case .production:
       var tlsConfig = TLSConfiguration.makeClientConfiguration()
       tlsConfig.certificateVerification = .none
       config.tlsConfiguration = tlsConfig
-    case .development: break
+      
+    case .development:
+      break
+      
     case .testing:
       if nil != Environment.get("TEST_DATABASE_TLS") {
         var tlsConfig = TLSConfiguration.makeClientConfiguration()
         tlsConfig.certificateVerification = .none
         config.tlsConfiguration = tlsConfig
       }
-    default: break
+      
+    default:
+      break
     }
         
     self.databases.use(.postgres(configuration: config), as: .psql)
