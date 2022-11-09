@@ -7,7 +7,8 @@ struct LocalDBCreateCommand: Command {
   let help: String = "Create local Postgres databases for development and testing. Install Postgres using `brew install postgresql`."
   
   func run(using context: ConsoleKit.CommandContext, signature: Signature) throws {
-    let createUserScript = #"""
+    let createUserScript =
+      #"""
       DO
       $do$
       BEGIN
@@ -20,12 +21,14 @@ struct LocalDBCreateCommand: Command {
       $do$;
       """#
     
-    try sh(.terminal, #"""
-      psql \
-        --command="$CREATE_USER_SCRIPT" \
-        --command="\du" \
-        postgres
-      """#, environment: ["CREATE_USER_SCRIPT": createUserScript])
+    try sh(.terminal,
+            #"""
+            psql \
+              --command="$CREATE_USER_SCRIPT" \
+              --command="\du" \
+              postgres
+            """#,
+           environment: ["CREATE_USER_SCRIPT": createUserScript])
     
     try sh(.terminal, #"createdb --owner=fqauth fqauth_test"#)
     try sh(.null, #"psql --username=fqauth --host=localhost fqauth_test -c "select version()""#,
@@ -35,7 +38,7 @@ struct LocalDBCreateCommand: Command {
     try sh(.null, #"psql --username=fqauth --host=localhost fqauth_dev -c "select version()""#,
            environment: ["PGPASSWORD": "FQAuthServer"])
   }
-    
+  
   struct Signature: CommandSignature {
     init() { }
   }
