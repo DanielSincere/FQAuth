@@ -1,1 +1,1 @@
-FROM ghcr.io/fullqueuedeveloper/fqauth:sha-42d68fbfdfa742da12699d9950959780ae51d256
+FROM ghcr.io/fullqueuedeveloper/fqauth:sha-edd9e4efbedfbc44f4667294fe7d5d430623d7a9
