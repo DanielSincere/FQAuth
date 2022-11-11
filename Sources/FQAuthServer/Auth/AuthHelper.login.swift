@@ -3,7 +3,7 @@ import Vapor
 struct AuthHelper {
   let req: Request
 
-  func login(userId: UUID, firstName: String, lastName: String, deviceName: String) -> EventLoopFuture<AuthResponse> {
+  func login(userId: UUID, firstName: String?, lastName: String?, deviceName: String) -> EventLoopFuture<AuthResponse> {
 
     let refreshToken: String = [UInt8].random(count: 512 / 8).hex
 

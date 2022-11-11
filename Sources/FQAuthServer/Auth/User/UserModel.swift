@@ -9,10 +9,10 @@ final class UserModel: Model {
   var id: UUID?
 
   @Field(key: "first_name")
-  var firstName: String
+  var firstName: String?
 
   @Field(key: "last_name")
-  var lastName: String
+  var lastName: String?
 
   @Field(key: "created_at")
   var createdAt: Date

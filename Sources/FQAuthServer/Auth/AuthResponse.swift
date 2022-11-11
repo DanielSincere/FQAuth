@@ -7,7 +7,7 @@ struct AuthResponse: Content, Equatable {
 
   struct User: Codable, Equatable {
     let id: UUID
-    let firstName: String
-    let lastName: String
+    let firstName: String?
+    let lastName: String?
   }
 }
