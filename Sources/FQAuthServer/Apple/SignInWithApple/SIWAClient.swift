@@ -8,6 +8,13 @@ public struct SIWAClient {
   let eventLoop: EventLoop
   let logger: Logger
 
+  public init(signers: JWTSigners, client: Client, eventLoop: EventLoop, logger: Logger) {
+    self.signers = signers
+    self.client = client
+    self.eventLoop = eventLoop
+    self.logger = logger
+  }
+  
   public init(request: Request) {
     self.signers = request.application.jwt.signers
     self.client = request.client
