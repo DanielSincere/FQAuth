@@ -1,4 +1,4 @@
-enum AppleAuthTokenResult {
+public enum AppleAuthTokenResult {
   case token(AppleTokenResponse)
   case error(AppleErrorResponse)
 }

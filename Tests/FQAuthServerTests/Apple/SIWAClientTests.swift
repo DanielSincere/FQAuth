@@ -23,7 +23,8 @@ final class SIWAClientTests: XCTestCase {
   
   func testExample() throws {
     
-    let httpClient = FakeClient(eventLoop: app.eventLoopGroup.next())
+    let stubbedResponse = ClientResponse(status: .ok, body: )
+    let httpClient = FakeClient(stubbedResponse: stubbedResponse, eventLoop: app.eventLoopGroup.next())
     let siwaClient = SIWAClient(signers: app.jwt.signers,
                                 client: httpClient,
                                 eventLoop: app.eventLoopGroup.next(),
@@ -39,8 +40,10 @@ final class SIWAClientTests: XCTestCase {
   class FakeClient: Client {
     var receivedRequest: ClientRequest?
     
+    let stubbedResponse: ClientResponse
     var eventLoop: NIOCore.EventLoop
-    init(eventLoop: NIOCore.EventLoop) {
+    init(stubbedResponse: ClientResponse = ClientResponse(status: .ok), eventLoop: NIOCore.EventLoop) {
+      self.stubbedResponse = stubbedResponse
       self.eventLoop = eventLoop
     }
     
@@ -51,7 +54,7 @@ final class SIWAClientTests: XCTestCase {
     
     func send(_ request: ClientRequest) -> EventLoopFuture<ClientResponse> {
       self.receivedRequest = request
-      return eventLoop.makeSucceededFuture(ClientResponse())
+      return eventLoop.makeSucceededFuture(stubbedResponse)
     }
   }
 }

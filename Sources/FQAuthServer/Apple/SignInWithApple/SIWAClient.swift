@@ -22,21 +22,20 @@ public struct SIWAClient {
     self.logger = request.logger
   }
 
-  public init(application: Application, eventLoop: EventLoop) {
-    self.signers = application.jwt.signers
-    self.client = application.client
-    self.logger = application.logger
-    self.eventLoop = eventLoop
-  }
-
   var clientId: String {
     EnvVars.appleAppId.loadOrFatal()
   }
 
-  var clientSecret: String {
-    let payload = ClientSecret(clientId: EnvVars.appleAppId.loadOrFatal(),
-                               teamId: EnvVars.appleTeamId.loadOrFatal())
-    return try! signers.sign(payload, kid: .appleServicesKey)
+  var clientSecret: EventLoopFuture<String> {
+    do {
+      let payload = ClientSecret(clientId: try EnvVars.appleAppId.loadOrThrow(),
+                                 teamId: try EnvVars.appleTeamId.loadOrThrow())
+      let string = try signers.sign(payload, kid: .appleServicesKey)
+      return eventLoop.makeSucceededFuture(string)
+    } catch {
+      logger.critical("Cannot sign request to Apple: \(error.localizedDescription)")
+      return eventLoop.makeFailedFuture(error)
+    }
   }
 
 
@@ -77,24 +76,40 @@ public struct SIWAClient {
       return self.eventLoop.makeFailedFuture(error)
     }
   }
+  
+  public func validateRefreshToken(token: String) -> EventLoopFuture<AppleAuthTokenResult> {
+    self.clientSecret
+      .flatMap { clientSecret in
+        let body = AppleAuthTokenBody(client_id: self.clientId,
+                                      client_secret: clientSecret,
+                                      code: nil,
+                                      grant_type: "refresh_token",
+                                      refresh_token: token,
+                                      redirect_uri: nil)
+        
+        return self.authToken(body: body)
+      }
+  }
 
   public func generateRefreshToken(code: String) -> EventLoopFuture<AppleTokenResponse> {
-
-    let body = AppleAuthTokenBody(client_id: self.clientId,
-                                  client_secret: self.clientSecret,
-                                  code: code,
-                                  grant_type: "authorization_code",
-                                  refresh_token: nil,
-                                  redirect_uri: nil)
-
-    return self.authToken(body: body)
-      .flatMap { result in
-        switch result {
-        case let .token(token):
-          return self.eventLoop.makeSucceededFuture(token)
-        case let .error(appleError):
-          return self.eventLoop.makeFailedFuture(appleError)
-        }
+    self.clientSecret
+      .flatMap { clientSecret in
+        let body = AppleAuthTokenBody(client_id: self.clientId,
+                                      client_secret: clientSecret,
+                                      code: code,
+                                      grant_type: "authorization_code",
+                                      refresh_token: nil,
+                                      redirect_uri: nil)
+        
+        return self.authToken(body: body)
+          .flatMap { result in
+            switch result {
+            case let .token(token):
+              return self.eventLoop.makeSucceededFuture(token)
+            case let .error(appleError):
+              return self.eventLoop.makeFailedFuture(appleError)
+            }
+          }
       }
   }
 }
