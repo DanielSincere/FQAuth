@@ -37,45 +37,6 @@ public struct SIWAClient {
       return eventLoop.makeFailedFuture(error)
     }
   }
-
-
-  // https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api/verifying_a_user
-  // https://developer.apple.com/documentation/sign_in_with_apple/generate_and_validate_tokens
-
-  internal func authToken(body: AppleAuthTokenBody) -> EventLoopFuture<AppleAuthTokenResult> {
-    self.buildRequest(body)
-      .flatMap(self.postRequest)
-      .flatMap(self.interpretResponse)
-  }
-
-  private func postRequest(_ clientRequest: ClientRequest) -> EventLoopFuture<ClientResponse> {
-    self.client.send(clientRequest)
-  }
-
-  private func interpretResponse(_ clientResponse: ClientResponse) -> EventLoopFuture<AppleAuthTokenResult> {
-    do {
-      if clientResponse.status == .ok {
-        let tokenResponse = try clientResponse.content.decode(AppleTokenResponse.self)
-        return self.eventLoop.makeSucceededFuture(.token(tokenResponse))
-      } else {
-        let appleError = try clientResponse.content.decode(AppleErrorResponse.self)
-        return self.eventLoop.makeSucceededFuture(.error(appleError))
-      }
-    } catch {
-      return self.eventLoop.makeFailedFuture(error)
-    }
-  }
-
-  private func buildRequest(_ body: AppleAuthTokenBody) -> EventLoopFuture<ClientRequest> {
-    do {
-      let uri = URI(scheme: "https", host: "appleid.apple.com", path: "/auth/token")
-      var clientRequest = ClientRequest(method: .POST, url: uri)
-      try clientRequest.content.encode(body, as: .urlEncodedForm)
-      return self.eventLoop.makeSucceededFuture(clientRequest)
-    } catch {
-      return self.eventLoop.makeFailedFuture(error)
-    }
-  }
   
   public func validateRefreshToken(token: String) -> EventLoopFuture<AppleAuthTokenResult> {
     self.clientSecret
@@ -111,5 +72,45 @@ public struct SIWAClient {
             }
           }
       }
+  }
+}
+
+private extension SIWAClient {
+  // https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api/verifying_a_user
+  // https://developer.apple.com/documentation/sign_in_with_apple/generate_and_validate_tokens
+  
+  func authToken(body: AppleAuthTokenBody) -> EventLoopFuture<AppleAuthTokenResult> {
+    self.buildRequest(body)
+      .flatMap(self.sendRequest)
+      .flatMap(self.interpretResponse)// { AppleAuthTokenResult.interpret(clientResponse: $0, on: self.eventLoop) }
+  }
+  
+  private func sendRequest(_ clientRequest: ClientRequest) -> EventLoopFuture<ClientResponse> {
+    self.client.send(clientRequest)
+  }
+  
+  private func interpretResponse(_ clientResponse: ClientResponse) -> EventLoopFuture<AppleAuthTokenResult> {
+    do {
+      if clientResponse.status == .ok {
+        let tokenResponse = try clientResponse.content.decode(AppleTokenResponse.self)
+        return self.eventLoop.makeSucceededFuture(.token(tokenResponse))
+      } else {
+        let appleError = try clientResponse.content.decode(AppleErrorResponse.self)
+        return self.eventLoop.makeSucceededFuture(.error(appleError))
+      }
+    } catch {
+      return self.eventLoop.makeFailedFuture(error)
+    }
+  }
+  
+  private func buildRequest(_ body: AppleAuthTokenBody) -> EventLoopFuture<ClientRequest> {
+    do {
+      let uri = URI(scheme: "https", host: "appleid.apple.com", path: "/auth/token")
+      var clientRequest = ClientRequest(method: .POST, url: uri)
+      try clientRequest.content.encode(body, as: .urlEncodedForm)
+      return self.eventLoop.makeSucceededFuture(clientRequest)
+    } catch {
+      return self.eventLoop.makeFailedFuture(error)
+    }
   }
 }
