@@ -14,7 +14,7 @@ final class SIWAClientTests: XCTestCase {
     app.shutdown()
   }
   
-  func testExample() throws {
+  func testRequestSentToApple() throws {
     let httpClient = FakeClient(stubbedResponse: AppleFixtures.successfulSiwaResponse, eventLoop: app.eventLoopGroup.next())
     let siwaClient = SIWAClient(signers: app.jwt.signers,
                                 client: httpClient,
@@ -30,10 +30,20 @@ final class SIWAClientTests: XCTestCase {
     let urlEncodedFormString = try XCTUnwrap(request.body?.string)
     let body = try URLEncodedFormDecoder().decode(AppleAuthTokenBody.self, from: urlEncodedFormString)
     XCTAssertEqual(body.grant_type, "authorization_code")
-    XCTAssertEqual(body.client_id, "com.fullqueuedeveloper.FQAuthSampleiOSApp")
+    XCTAssertEqual(body.client_id, try EnvVars.appleAppId.loadOrThrow())
     XCTAssertEqual(body.code, "code123")
     XCTAssertNil(body.redirect_uri)
     XCTAssertNil(body.refresh_token)
+    
+    let clientSecret = try app.jwt.signers.verify(body.client_secret, as: SIWAClient.ClientSecret.self)
+    XCTAssertEqual(clientSecret.iss.value, try EnvVars.appleTeamId.loadOrThrow())
+    XCTAssertEqual(clientSecret.iat.value.timeIntervalSinceReferenceDate, Date().timeIntervalSinceReferenceDate, accuracy: 10)
+    XCTAssertEqual(clientSecret.exp.value.timeIntervalSinceReferenceDate, Date(timeIntervalSinceNow: .oneDay).timeIntervalSinceReferenceDate, accuracy: 10)
+    XCTAssertEqual(clientSecret.aud.value.count, 1)
+    
+    let firstAudience = try XCTUnwrap(clientSecret.aud.value.first)
+    XCTAssertEqual(firstAudience, "https://appleid.apple.com")
+    XCTAssertEqual(clientSecret.sub.value, try EnvVars.appleAppId.loadOrThrow())
   }
   
   class FakeClient: Client {

@@ -25,6 +25,8 @@ extension SIWAClient {
      "sub": "com.mytest.app"
      */
 
-    func verify(using signer: JWTSigner) throws { }
+    func verify(using signer: JWTSigner) throws {
+      try self.exp.verifyNotExpired()
+    }
   }
 }
