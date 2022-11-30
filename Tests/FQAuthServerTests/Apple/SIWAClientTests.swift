@@ -14,6 +14,20 @@ final class SIWAClientTests: XCTestCase {
     app.shutdown()
   }
   
+  func testClientSecret() throws {
+    let clientSecret = SIWAClient.ClientSecret(clientId: try EnvVars.appleAppId.loadOrThrow(), teamId: try EnvVars.appleTeamId.loadOrThrow())
+    XCTAssertEqual(clientSecret.iss.value, try EnvVars.appleTeamId.loadOrThrow())
+    XCTAssertEqual(clientSecret.iat.value.timeIntervalSinceReferenceDate, Date().timeIntervalSinceReferenceDate, accuracy: 10)
+    XCTAssertEqual(clientSecret.exp.value.timeIntervalSinceReferenceDate, Date(timeIntervalSinceNow: .oneDay).timeIntervalSinceReferenceDate, accuracy: 10)
+    XCTAssertEqual(clientSecret.aud.value.count, 1)
+    
+    let firstAudience = try XCTUnwrap(clientSecret.aud.value.first)
+    XCTAssertEqual(firstAudience, "https://appleid.apple.com")
+    XCTAssertEqual(clientSecret.sub.value, try EnvVars.appleAppId.loadOrThrow())
+    
+    try clientSecret.verify(using: try app.jwt.signers.require(kid: .appleServicesKey))
+  }
+  
   func testRequestSentToApple() throws {
     let httpClient = FakeClient(stubbedResponse: AppleFixtures.successfulSiwaResponse, eventLoop: app.eventLoopGroup.next())
     let siwaClient = SIWAClient(signers: app.jwt.signers,
