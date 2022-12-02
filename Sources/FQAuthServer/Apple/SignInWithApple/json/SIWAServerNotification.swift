@@ -1,12 +1,14 @@
 import JWTKit
 
+
+
 public struct SIWAServerNotification: JWTPayload {
 
   public let iss: IssuerClaim
   public let aud: AudienceClaim
   public let iat: IssuedAtClaim
   public let jti: IDClaim
-  public let events: [Event]
+  public let events: Event
 
   public func verify(using signer: JWTSigner) throws {
     try aud.verifyIntendedAudience(includes: EnvVars.appleAppId.loadOrFatal())

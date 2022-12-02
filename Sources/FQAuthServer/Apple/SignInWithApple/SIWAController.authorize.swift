@@ -11,18 +11,18 @@ extension SIWAController {
     let lastName: String
   }
 
-  func authorize(req: Request) -> EventLoopFuture<AuthResponse> {
+  func authorize(request: Request) -> EventLoopFuture<AuthResponse> {
 
-    return self.decodeRequestBody(req: req)
+    return RequestBody.decodeRequest(request)
       .flatMap { requestBody in
-        return req.jwt.apple.verify(
+        return request.jwt.apple.verify(
           requestBody.appleIdentityToken,
           applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
         )
         .flatMap { (appleIdentityToken: AppleIdentityToken) in
-          return self.generateAppleRefreshToken(authorizationCode: requestBody.authorizationCode, req: req)
+          return self.generateAppleRefreshToken(authorizationCode: requestBody.authorizationCode, request: request)
             .flatMap { appleTokenResponse in
-              return UserModel.findByAppleUserId(appleIdentityToken.subject.value, db: req.db)
+              return UserModel.findByAppleUserId(appleIdentityToken.subject.value, db: request.db)
                 .flatMap { maybeUser in
                   if let userModel = maybeUser {
                     return self.signIn(
@@ -30,13 +30,13 @@ extension SIWAController {
                       requestBody: requestBody,
                       appleIdentityToken: appleIdentityToken,
                       appleTokenResponse: appleTokenResponse,
-                      req: req)
+                      request: request)
                   } else {
                     return self.signUp(
                       requestBody: requestBody,
                       appleIdentityToken: appleIdentityToken,
                       appleTokenResponse: appleTokenResponse,
-                      req: req)
+                      request: request)
                   }
                 }
             }
@@ -44,17 +44,8 @@ extension SIWAController {
       }
   }
   
-  private func decodeRequestBody(req: Request) -> EventLoopFuture<RequestBody> {
-    do {
-      let requestBody = try req.content.decode(RequestBody.self)
-      return req.eventLoop.makeSucceededFuture(requestBody)
-    } catch {
-      return req.eventLoop.makeFailedFuture(error)
-    }
-  }
-
-  private func generateAppleRefreshToken(authorizationCode: String, req: Request) -> EventLoopFuture<AppleTokenResponse> {
-    SIWAClient(request: req)
+  private func generateAppleRefreshToken(authorizationCode: String, request: Request) -> EventLoopFuture<AppleTokenResponse> {
+    SIWAClient(request: request)
       .generateRefreshToken(code: authorizationCode)
   }
 
@@ -76,14 +67,14 @@ extension SIWAController {
                       requestBody: RequestBody,
                       appleIdentityToken: AppleIdentityToken,
                       appleTokenResponse: AppleTokenResponse,
-                      req: Request) -> EventLoopFuture<AuthResponse> {
+                      request: Request) -> EventLoopFuture<AuthResponse> {
     guard let siwa = userModel.$siwa.wrappedValue, let userId = userModel.id else {
-      return req.eventLoop.makeFailedFuture(Abort(.forbidden))
+      return request.eventLoop.makeFailedFuture(Abort(.forbidden))
     }
 
     siwa.encryptedAppleRefreshToken = DBSeal().seal(string: appleTokenResponse.refresh_token)
-    return siwa.update(on: req.db).flatMap { _ in
-      return AuthHelper(req: req)
+    return siwa.update(on: request.db).flatMap { _ in
+      return AuthHelper(request: request)
         .login(userId: userId,
                firstName: requestBody.firstName,
                lastName: requestBody.lastName,
@@ -94,11 +85,11 @@ extension SIWAController {
   private func signUp(requestBody: RequestBody,
                       appleIdentityToken: AppleIdentityToken,
                       appleTokenResponse: AppleTokenResponse,
-                      req: Request) -> EventLoopFuture<AuthResponse> {
+                      request: Request) -> EventLoopFuture<AuthResponse> {
     
-    self.requireEmail(appleIdentityToken: appleIdentityToken, eventLoop: req.eventLoop)
+    self.requireEmail(appleIdentityToken: appleIdentityToken, eventLoop: request.eventLoop)
       .flatMap { email in
-        return SIWASignUpRepo(request: req)
+        return SIWASignUpRepo(request: request)
           .signUp(.init(email: email,
                         firstName: requestBody.firstName,
                         lastName: requestBody.lastName,
@@ -107,7 +98,7 @@ extension SIWAController {
                         appleUserId: appleIdentityToken.subject.value,
                         appleRefreshToken: appleTokenResponse.refresh_token))
           .flatMap { userId in
-            AuthHelper(req: req)
+            AuthHelper(request: request)
               .login(userId: userId,
                      firstName: requestBody.firstName,
                      lastName: requestBody.lastName,

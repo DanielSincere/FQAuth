@@ -1,7 +1,7 @@
 import Vapor
 
 struct AuthHelper {
-  let req: Request
+  let request: Request
 
   func login(userId: UUID, firstName: String?, lastName: String?, deviceName: String) -> EventLoopFuture<AuthResponse> {
 
@@ -10,11 +10,11 @@ struct AuthHelper {
     return RefreshTokenModel(userId: userId,
                              deviceName: deviceName,
                              token: refreshToken)
-    .create(on: req.db)
+    .create(on: request.db)
     .flatMapThrowing { _ in
       let accessJWT = AuthJWT(userId: userId, deviceName: deviceName)
 
-      let accessToken = try req.jwt.sign(accessJWT, kid: .authPrivateKey)
+      let accessToken = try request.jwt.sign(accessJWT, kid: .authPrivateKey)
 
       return AuthResponse(user: .init(id: userId,
                                       firstName: firstName,

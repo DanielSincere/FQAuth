@@ -16,7 +16,7 @@ final class RefreshTokenController {
             refreshTokenModel.delete(force: true, on: req.db)
               .flatMap { _ in
                 do {
-                  return AuthHelper(req: req)
+                  return AuthHelper(request: req)
                     .login(userId: try userModel.requireID(),
                            firstName: userModel.firstName,
                            lastName: userModel.lastName,
