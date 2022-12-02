@@ -6,36 +6,47 @@ import PostgresNIO
 
 final class SIWAController {
 
-  func authorize(req: Request) throws -> EventLoopFuture<AuthResponse> {
+  func authorize(req: Request) -> EventLoopFuture<AuthResponse> {
 
-    let siwaRequestBody = try req.content.decode(SiwaRequestBody.self)
-    return req.jwt.apple.verify(
-      siwaRequestBody.appleIdentityToken,
-      applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
-    )
-    .flatMap { (appleIdentityToken: AppleIdentityToken) in
-      self.generateAppleRefreshToken(authorizationCode: siwaRequestBody.authorizationCode, req: req)
-        .flatMap { appleTokenResponse in
-          return UserModel.findByAppleUserId(appleIdentityToken.subject.value, db: req.db)
-            .flatMap { maybeUser in
-              if let userModel = maybeUser {
-                return self.signIn(
-                  userModel: userModel,
-                  siwaRequestBody: siwaRequestBody,
-                  appleIdentityToken: appleIdentityToken,
-                  appleTokenResponse: appleTokenResponse,
-                  req: req
-                )
-              } else {
-                return self.signUp(
-                  siwaRequestBody: siwaRequestBody,
-                  appleIdentityToken: appleIdentityToken,
-                  appleTokenResponse: appleTokenResponse,
-                  req: req
-                )
-              }
+    return self.decodeSiwaRequestBody(req: req)
+      .flatMap { siwaRequestBody in
+        return req.jwt.apple.verify(
+          siwaRequestBody.appleIdentityToken,
+          applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
+        )
+        .flatMap { (appleIdentityToken: AppleIdentityToken) in
+          return self.generateAppleRefreshToken(authorizationCode: siwaRequestBody.authorizationCode, req: req)
+            .flatMap { appleTokenResponse in
+              return UserModel.findByAppleUserId(appleIdentityToken.subject.value, db: req.db)
+                .flatMap { maybeUser in
+                  if let userModel = maybeUser {
+                    return self.signIn(
+                      userModel: userModel,
+                      siwaRequestBody: siwaRequestBody,
+                      appleIdentityToken: appleIdentityToken,
+                      appleTokenResponse: appleTokenResponse,
+                      req: req
+                    )
+                  } else {
+                    return self.signUp(
+                      siwaRequestBody: siwaRequestBody,
+                      appleIdentityToken: appleIdentityToken,
+                      appleTokenResponse: appleTokenResponse,
+                      req: req
+                    )
+                  }
+                }
             }
         }
+      }
+  }
+  
+  private func decodeSiwaRequestBody(req: Request) -> EventLoopFuture<SiwaRequestBody> {
+    do {
+      let siwaRequestBody = try req.content.decode(SiwaRequestBody.self)
+      return req.eventLoop.makeSucceededFuture(siwaRequestBody)
+    } catch {
+      return req.eventLoop.makeFailedFuture(error)
     }
   }
 
@@ -88,6 +99,10 @@ final class SIWAController {
         }
     }
   }
+  
+  func notify(req: Request) -> EventLoopFuture<HTTPStatus> {
+    req.eventLoop.makeSucceededFuture(.ok)
+  }
 }
 
 extension SIWAController: RouteCollection {
@@ -95,6 +110,7 @@ extension SIWAController: RouteCollection {
   func boot(routes: RoutesBuilder) throws {
     routes.group("siwa") { siwa in
       siwa.post("authorize", use: authorize)
+      siwa.post("notify", use: notify)
     }
   }
 }
