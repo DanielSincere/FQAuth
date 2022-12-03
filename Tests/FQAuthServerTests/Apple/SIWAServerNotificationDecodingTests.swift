@@ -3,18 +3,7 @@ import Vapor
 @testable import FQAuthServer
 
 final class SIWAServerNotificationDecodingTests: XCTestCase {
-  
-  var app: Application!
-  override func setUpWithError() throws {
-    self.app = Application(.testing)
-    try app.configure()
-  }
-  
-  override func tearDownWithError() throws {
-    app.shutdown()
-  }
-  
-  
+    
   func testDocumentationExample() throws {
     // The example in the documentation does not match JSON posted to my server from Apple. The example has been adjusted
     
@@ -43,7 +32,13 @@ final class SIWAServerNotificationDecodingTests: XCTestCase {
   }
   
   func testFixture() throws {
-
+    let app: Application = Application(.testing)
+    try app.useAppleJWKS()
+    
+    defer {
+      app.shutdown()
+    }
+    
     let body = try JSONDecoder().decode(SIWAController.NotifyBody.self, from: AppleFixtures.siwaNotificationBody.data(using: .utf8)!)
     let notification = try app.jwt.signers.verify(body.payload, as: SIWAServerNotification.self) // TODO: use verify
     
