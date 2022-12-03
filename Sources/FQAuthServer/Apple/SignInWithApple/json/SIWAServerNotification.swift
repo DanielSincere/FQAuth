@@ -26,6 +26,8 @@ public struct SIWAServerNotification: JWTPayload {
     case emailEnabled = "email-enabled"
     case accountDelete = "account-delete"
     case consentRevoked = "consent-revoked"
+    
+    
   }
 
   public enum Event: Codable {
@@ -33,6 +35,34 @@ public struct SIWAServerNotification: JWTPayload {
     case emailDisabled(EmailDisabled)
     case consentRevoked(ConsentRevoked)
     case accountDelete(AccountDelete)
+    
+    public var accountDelete: AccountDelete? {
+      switch self {
+      case .accountDelete(let accountDelete): return accountDelete
+      case .emailEnabled, .emailDisabled, .consentRevoked: return nil
+      }
+    }
+    
+    public var emailEnabled: EmailEnabled? {
+      switch self {
+      case .emailEnabled(let emailEnabled): return emailEnabled
+      case .accountDelete, .emailDisabled, .consentRevoked: return nil
+      }
+    }
+    
+    public var emailDisabled: EmailDisabled? {
+      switch self {
+      case .emailDisabled(let emailDisabled): return emailDisabled
+      case .accountDelete, .emailEnabled, .consentRevoked: return nil
+      }
+    }
+    
+    public var consentRevoked: ConsentRevoked? {
+      switch self {
+      case .consentRevoked(let consentRevoked): return consentRevoked
+      case .accountDelete, .emailEnabled, .emailDisabled: return nil
+      }
+    }
 
     public struct EmailEnabled: Codable {
       let sub: SubjectClaim
