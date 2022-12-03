@@ -1,7 +1,7 @@
 import Vapor
 import JWTKit
 
-public struct SIWAClient {
+public struct SIWAClient { //https://appleid.apple.com/.well-known/openid-configuration
 
   let signers: JWTSigners
   let client: Client

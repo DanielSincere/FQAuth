@@ -1,17 +1,16 @@
 import JWTKit
 
-
-
 public struct SIWAServerNotification: JWTPayload {
 
   public let iss: IssuerClaim
   public let aud: AudienceClaim
   public let iat: IssuedAtClaim
   public let jti: IDClaim
-  public let events: Event
+  public let events: String
 
   public func verify(using signer: JWTSigner) throws {
-    try aud.verifyIntendedAudience(includes: EnvVars.appleAppId.loadOrFatal())
+    let appleAppId = try EnvVars.appleAppId.loadOrThrow()
+    try aud.verifyIntendedAudience(includes: appleAppId)
 
     guard iss.value == "https://appleid.apple.com" else {
       throw JWTError.generic(identifier: "iss", reason: "not from Apple")

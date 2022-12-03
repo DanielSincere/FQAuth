@@ -1,6 +1,6 @@
 import Foundation
 
-public enum AppleSingleOrArray<Element: Decodable>: Decodable {
+public enum AppleSingleOrArray<Element: Codable>: Codable {
   case single(Element)
   case array([Element])
   
@@ -11,6 +11,35 @@ public enum AppleSingleOrArray<Element: Decodable>: Decodable {
       self = .array(array)
     } else {
       throw Nope()
+    }
+  }
+  
+  public var single: Element? {
+    switch self {
+    case .single(let element):
+      return element
+    case .array:
+      return nil
+    }
+  }
+  
+  public var array: [Element]? {
+    switch self {
+    case .single:
+      return nil
+    case .array(let array):
+      return array
+    }
+  }
+    
+  public func encode(to encoder: Encoder) throws {
+    switch self {
+    case .array(let array):
+      var container = encoder.unkeyedContainer()
+      try container.encode(array)
+    case .single(let single):
+      var container = encoder.singleValueContainer()
+      try container.encode(single)
     }
   }
   

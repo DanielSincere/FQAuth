@@ -15,7 +15,7 @@ extension SIWAController {
       }
   }
   
-  private struct NotifyBody: Content {
+  struct NotifyBody: Content {
     let payload: String
   }
 }
