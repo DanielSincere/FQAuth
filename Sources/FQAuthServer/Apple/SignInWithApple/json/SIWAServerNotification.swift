@@ -6,7 +6,7 @@ public struct SIWAServerNotification: JWTPayload {
   public let aud: AudienceClaim
   public let iat: IssuedAtClaim
   public let jti: IDClaim
-  public let events: String
+  public let events: AppleStringWrapped<Event>
 
   public func verify(using signer: JWTSigner) throws {
     let appleAppId = try EnvVars.appleAppId.loadOrThrow()
@@ -98,29 +98,3 @@ public struct SIWAServerNotification: JWTPayload {
     }
   }
 }
-
-/*
- {
-   "iss": "https://appleid.apple.com",
-   "aud": "com.mytest.app",
-   "iat": 1508184845,
-   "jti": "abede...67890",
-   "events": [
-     {
-       "type": "email-enabled",
-       "sub": "820417.faa325acbc78e1be1668ba852d492d8a.0219",
-       "email": "ep9ks2tnph@privaterelay.appleid.com",
-       "is_private_email": "true"
-       "event_time": 1508184845
-     }
-   ]
- }
- */
-
-/*
- {
-   "type": "consent-revoked",
-   "sub": "820417.faa325acbc78e1be1668ba852d492d8a.0219",
-   "event_time": 1508184845
- }
- */
