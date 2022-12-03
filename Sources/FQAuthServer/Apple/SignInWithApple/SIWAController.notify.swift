@@ -10,7 +10,17 @@ extension SIWAController {
         
         let notification = try request.jwt.verify(notifyBody.payload, as: SIWAServerNotification.self)
         
-        print(notification.events)
+        switch notification.events.wrapped {
+        case .accountDelete(let accountDelete):
+          _ = SiwaModel.findBy(appleUserId: accountDelete.sub.value, db: request.db(.psql))
+          
+        case .emailEnabled(let emailEnabled):
+          break
+        case .emailDisabled(let emailDisabled):
+          break
+        case .consentRevoked(let consentRevoked):
+          break
+        }
         return .ok
       }
   }

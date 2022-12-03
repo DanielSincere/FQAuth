@@ -79,4 +79,11 @@ final class SiwaModel: Model {
       return Date(timeInterval: .oneDay, since: attemptedRefreshAt) < now
     }
   }
+  
+  static func findBy(appleUserId: String, db: Database) -> EventLoopFuture<SiwaModel?> {
+    SiwaModel
+      .query(on: db)
+      .filter(\.$appleUserId, .equal, appleUserId)
+      .first()
+  }
 }
