@@ -28,8 +28,8 @@ public struct SIWAClient { //https://appleid.apple.com/.well-known/openid-config
 
   var clientSecret: EventLoopFuture<String> {
     do {
-      let payload = ClientSecret(clientId: try EnvVars.appleAppId.loadOrThrow(),
-                                 teamId: try EnvVars.appleTeamId.loadOrThrow())
+      let payload = SIWAClientSecret(clientId: try EnvVars.appleAppId.loadOrThrow(),
+                                     teamId: try EnvVars.appleTeamId.loadOrThrow())
       let string = try signers.sign(payload, kid: .appleServicesKey)
       return eventLoop.makeSucceededFuture(string)
     } catch {
@@ -82,7 +82,7 @@ private extension SIWAClient {
   func authToken(body: AppleAuthTokenBody) -> EventLoopFuture<AppleAuthTokenResult> {
     self.buildRequest(body)
       .flatMap(self.sendRequest)
-      .flatMap(self.interpretResponse)// { AppleAuthTokenResult.interpret(clientResponse: $0, on: self.eventLoop) }
+      .flatMap(self.interpretResponse)
   }
   
   private func sendRequest(_ clientRequest: ClientRequest) -> EventLoopFuture<ClientResponse> {

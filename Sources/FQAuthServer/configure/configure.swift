@@ -11,10 +11,7 @@ extension Application {
     try self.configureRoutes()
 
     try self.configureSigning()
-
+    
     self.configureCommands()
   }
 }
-
-
-

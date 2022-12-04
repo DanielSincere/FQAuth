@@ -2,7 +2,7 @@ import Vapor
 import JWTKit
 
 extension SIWAController {
-   
+  
   struct AuthorizeBody: Content {
     let appleIdentityToken: String
     let authorizationCode: String
@@ -10,9 +10,9 @@ extension SIWAController {
     let firstName: String?
     let lastName: String?
   }
-
+  
   func authorize(request: Request) -> EventLoopFuture<AuthResponse> {
-
+    
     return AuthorizeBody.decodeRequest(request)
       .flatMap { authorizeBody in
         return request.jwt.apple.verify(
@@ -20,7 +20,8 @@ extension SIWAController {
           applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
         )
         .flatMap { (appleIdentityToken: AppleIdentityToken) in
-          return self.generateAppleRefreshToken(authorizationCode: authorizeBody.authorizationCode, request: request)
+          return request.siwaClient
+            .generateRefreshToken(code: authorizeBody.authorizationCode)
             .flatMap { appleTokenResponse in
               return UserModel.findByAppleUserId(appleIdentityToken.subject.value, db: request.db)
                 .flatMap { maybeUser in
@@ -43,24 +44,19 @@ extension SIWAController {
         }
       }
   }
-  
-  private func generateAppleRefreshToken(authorizationCode: String, request: Request) -> EventLoopFuture<AppleTokenResponse> {
-    SIWAClient(request: request)
-      .generateRefreshToken(code: authorizationCode)
-  }
-
+    
   private func requireEmail(appleIdentityToken: AppleIdentityToken, eventLoop: EventLoop) -> EventLoopFuture<String> {
     if let email = appleIdentityToken.email {
       return eventLoop.makeSucceededFuture(email)
     }
-
+    
     return eventLoop.makeFailedFuture(Abort(.badRequest,
                                             headers: HTTPHeaders(),
                                             reason: "Email missing from Apple token",
                                             identifier: "email.missing",
                                             suggestedFixes: ["Visit https://appleid.apple.com and sign out of our app. Then try again."]))
   }
-
+  
   private func signIn(authorizeBody: AuthorizeBody,
                       userModel: UserModel,
                       appleIdentityToken: AppleIdentityToken,
@@ -69,7 +65,7 @@ extension SIWAController {
     guard let siwa = userModel.$siwa.wrappedValue, let userId = userModel.id else {
       return request.eventLoop.makeFailedFuture(Abort(.forbidden))
     }
-
+    
     siwa.encryptedAppleRefreshToken = DBSeal().seal(string: appleTokenResponse.refresh_token)
     return siwa.update(on: request.db).flatMap { _ in
       return AuthHelper(request: request)
@@ -79,7 +75,7 @@ extension SIWAController {
                deviceName: authorizeBody.deviceName)
     }
   }
-
+  
   private func signUp(authorizeBody: AuthorizeBody,
                       appleIdentityToken: AppleIdentityToken,
                       appleTokenResponse: AppleTokenResponse,

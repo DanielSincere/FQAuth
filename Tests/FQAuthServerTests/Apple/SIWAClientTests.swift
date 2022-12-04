@@ -15,7 +15,7 @@ final class SIWAClientTests: XCTestCase {
   }
   
   func testClientSecret() throws {
-    let clientSecret = SIWAClient.ClientSecret(clientId: try EnvVars.appleAppId.loadOrThrow(), teamId: try EnvVars.appleTeamId.loadOrThrow())
+    let clientSecret = SIWAClientSecret(clientId: try EnvVars.appleAppId.loadOrThrow(), teamId: try EnvVars.appleTeamId.loadOrThrow())
     XCTAssertEqual(clientSecret.iss.value, try EnvVars.appleTeamId.loadOrThrow())
     XCTAssertEqual(clientSecret.iat.value.timeIntervalSinceReferenceDate, Date().timeIntervalSinceReferenceDate, accuracy: 10)
     XCTAssertEqual(clientSecret.exp.value.timeIntervalSinceReferenceDate, Date(timeIntervalSinceNow: .oneDay).timeIntervalSinceReferenceDate, accuracy: 10)
@@ -49,7 +49,7 @@ final class SIWAClientTests: XCTestCase {
     XCTAssertNil(body.redirect_uri)
     XCTAssertNil(body.refresh_token)
     
-    let clientSecret = try app.jwt.signers.verify(body.client_secret, as: SIWAClient.ClientSecret.self)
+    let clientSecret = try app.jwt.signers.verify(body.client_secret, as: SIWAClientSecret.self)
     XCTAssertEqual(clientSecret.iss.value, try EnvVars.appleTeamId.loadOrThrow())
     XCTAssertEqual(clientSecret.iat.value.timeIntervalSinceReferenceDate, Date().timeIntervalSinceReferenceDate, accuracy: 10)
     XCTAssertEqual(clientSecret.exp.value.timeIntervalSinceReferenceDate, Date(timeIntervalSinceNow: .oneDay).timeIntervalSinceReferenceDate, accuracy: 10)
