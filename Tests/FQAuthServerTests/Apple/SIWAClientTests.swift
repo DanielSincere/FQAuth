@@ -29,7 +29,7 @@ final class SIWAClientTests: XCTestCase {
   }
   
   func testRequestSentToApple() throws {
-    let httpClient = FakeClient(stubbedResponse: AppleFixtures.successfulSiwaResponse, eventLoop: app.eventLoopGroup.next())
+    let httpClient = FakeClient(stubbedResponse: AppleFixtures.successfulSiwaSignUpResponse, eventLoop: app.eventLoopGroup.next())
     let siwaClient = SIWAClient(signers: app.jwt.signers,
                                 client: httpClient,
                                 eventLoop: app.eventLoopGroup.next(),
