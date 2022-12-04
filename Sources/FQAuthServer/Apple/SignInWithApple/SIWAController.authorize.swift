@@ -2,38 +2,38 @@ import Vapor
 import JWTKit
 
 extension SIWAController {
-  
-  private struct RequestBody: Content {
+   
+  struct AuthorizeBody: Content {
     let appleIdentityToken: String
     let authorizationCode: String
     let deviceName: String
-    let firstName: String
-    let lastName: String
+    let firstName: String?
+    let lastName: String?
   }
 
   func authorize(request: Request) -> EventLoopFuture<AuthResponse> {
 
-    return RequestBody.decodeRequest(request)
-      .flatMap { requestBody in
+    return AuthorizeBody.decodeRequest(request)
+      .flatMap { authorizeBody in
         return request.jwt.apple.verify(
-          requestBody.appleIdentityToken,
+          authorizeBody.appleIdentityToken,
           applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
         )
         .flatMap { (appleIdentityToken: AppleIdentityToken) in
-          return self.generateAppleRefreshToken(authorizationCode: requestBody.authorizationCode, request: request)
+          return self.generateAppleRefreshToken(authorizationCode: authorizeBody.authorizationCode, request: request)
             .flatMap { appleTokenResponse in
               return UserModel.findByAppleUserId(appleIdentityToken.subject.value, db: request.db)
                 .flatMap { maybeUser in
                   if let userModel = maybeUser {
                     return self.signIn(
+                      authorizeBody: authorizeBody,
                       userModel: userModel,
-                      requestBody: requestBody,
                       appleIdentityToken: appleIdentityToken,
                       appleTokenResponse: appleTokenResponse,
                       request: request)
                   } else {
                     return self.signUp(
-                      requestBody: requestBody,
+                      authorizeBody: authorizeBody,
                       appleIdentityToken: appleIdentityToken,
                       appleTokenResponse: appleTokenResponse,
                       request: request)
@@ -54,17 +54,15 @@ extension SIWAController {
       return eventLoop.makeSucceededFuture(email)
     }
 
-    return eventLoop.makeFailedFuture(Abort(.failedDependency,
+    return eventLoop.makeFailedFuture(Abort(.badRequest,
                                             headers: HTTPHeaders(),
                                             reason: "Email missing from Apple token",
                                             identifier: "email.missing",
-                                            suggestedFixes: ["On appleid.apple.com, sign out of our app. Then try again."],
-                                            range: nil,
-                                            stackTrace: nil))
+                                            suggestedFixes: ["Visit https://appleid.apple.com and sign out of our app. Then try again."]))
   }
 
-  private func signIn(userModel: UserModel,
-                      requestBody: RequestBody,
+  private func signIn(authorizeBody: AuthorizeBody,
+                      userModel: UserModel,
                       appleIdentityToken: AppleIdentityToken,
                       appleTokenResponse: AppleTokenResponse,
                       request: Request) -> EventLoopFuture<AuthResponse> {
@@ -76,33 +74,41 @@ extension SIWAController {
     return siwa.update(on: request.db).flatMap { _ in
       return AuthHelper(request: request)
         .login(userId: userId,
-               firstName: requestBody.firstName,
-               lastName: requestBody.lastName,
-               deviceName: requestBody.deviceName)
+               firstName: userModel.firstName,
+               lastName: userModel.lastName,
+               deviceName: authorizeBody.deviceName)
     }
   }
 
-  private func signUp(requestBody: RequestBody,
+  private func signUp(authorizeBody: AuthorizeBody,
                       appleIdentityToken: AppleIdentityToken,
                       appleTokenResponse: AppleTokenResponse,
                       request: Request) -> EventLoopFuture<AuthResponse> {
     
     self.requireEmail(appleIdentityToken: appleIdentityToken, eventLoop: request.eventLoop)
       .flatMap { email in
+        guard let firstName = authorizeBody.firstName, let lastName = authorizeBody.lastName else {
+          return request.eventLoop.makeFailedFuture(Abort(.badRequest,
+                                                          headers: HTTPHeaders(),
+                                                          reason: "Name missing",
+                                                          identifier: "name.missing",
+                                                          suggestedFixes: ["Visit https://appleid.apple.com and sign out of our app. Then try again."]))
+        }
+        
         return SIWASignUpRepo(request: request)
           .signUp(.init(email: email,
-                        firstName: requestBody.firstName,
-                        lastName: requestBody.lastName,
-                        deviceName: requestBody.deviceName,
+                        firstName: firstName,
+                        lastName: lastName,
+                        deviceName: authorizeBody.deviceName,
                         registrationMethod: .siwa,
                         appleUserId: appleIdentityToken.subject.value,
                         appleRefreshToken: appleTokenResponse.refresh_token))
           .flatMap { userId in
             AuthHelper(request: request)
               .login(userId: userId,
-                     firstName: requestBody.firstName,
-                     lastName: requestBody.lastName,
-                     deviceName: requestBody.deviceName)
+                     firstName: firstName,
+                     lastName: lastName,
+                     deviceName: authorizeBody.deviceName)
           }
       }
   }

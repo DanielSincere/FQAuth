@@ -26,8 +26,6 @@ public struct SIWAServerNotification: JWTPayload {
     case emailEnabled = "email-enabled"
     case accountDelete = "account-delete"
     case consentRevoked = "consent-revoked"
-    
-    
   }
 
   public enum Event: Codable {
