@@ -30,9 +30,8 @@ final class SIWAClientTests: XCTestCase {
   
   func testRequestSentToApple() throws {
     let httpClient = FakeClient(stubbedResponse: AppleFixtures.successfulSiwaSignUpResponse, eventLoop: app.eventLoopGroup.next())
-    let siwaClient = SIWAClient(signers: app.jwt.signers,
+    let siwaClient = LiveSIWAClient(signers: app.jwt.signers,
                                 client: httpClient,
-                                eventLoop: app.eventLoopGroup.next(),
                                 logger: app.logger)
     
     let _ = try siwaClient.generateRefreshToken(code: "code123").wait()

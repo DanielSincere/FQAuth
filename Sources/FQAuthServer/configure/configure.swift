@@ -13,5 +13,9 @@ extension Application {
     try self.configureSigning()
     
     self.configureCommands()
+    
+    self.services.siwaClient.use { application in
+      LiveSIWAClient(application: application)
+    }
   }
 }

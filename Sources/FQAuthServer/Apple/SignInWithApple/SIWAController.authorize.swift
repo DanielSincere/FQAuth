@@ -20,7 +20,7 @@ extension SIWAController {
           applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
         )
         .flatMap { (appleIdentityToken: AppleIdentityToken) in
-          return request.siwaClient
+          return request.services.siwaClient
             .generateRefreshToken(code: authorizeBody.authorizationCode)
             .flatMap { appleTokenResponse in
               return UserModel.findByAppleUserId(appleIdentityToken.subject.value, db: request.db)

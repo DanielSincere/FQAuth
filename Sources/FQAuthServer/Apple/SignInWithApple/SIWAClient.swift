@@ -1,25 +1,38 @@
 import Vapor
 import JWTKit
 
-public struct SIWAClient { //https://appleid.apple.com/.well-known/openid-configuration
+public protocol SIWAClient {
+  func validateRefreshToken(token: String) -> EventLoopFuture<AppleAuthTokenResult>
+  func generateRefreshToken(code: String) -> EventLoopFuture<AppleTokenResponse>
+}
+
+public struct LiveSIWAClient: SIWAClient {
+  //https://appleid.apple.com/.well-known/openid-configuration
 
   let signers: JWTSigners
   let client: Client
-  let eventLoop: EventLoop
   let logger: Logger
 
-  public init(signers: JWTSigners, client: Client, eventLoop: EventLoop, logger: Logger) {
+  public init(signers: JWTSigners, client: Client, logger: Logger) {
     self.signers = signers
     self.client = client
-    self.eventLoop = eventLoop
     self.logger = logger
+  }
+  
+  public init(application: Application) {
+    self.signers = application.jwt.signers
+    self.client = application.client
+    self.logger = application.logger
   }
   
   public init(request: Request) {
     self.signers = request.application.jwt.signers
     self.client = request.client
-    self.eventLoop = request.eventLoop
     self.logger = request.logger
+  }
+  
+  var eventLoop: EventLoop {
+    client.eventLoop
   }
 
   var clientId: String {
@@ -75,7 +88,7 @@ public struct SIWAClient { //https://appleid.apple.com/.well-known/openid-config
   }
 }
 
-private extension SIWAClient {
+private extension LiveSIWAClient {
   // https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api/verifying_a_user
   // https://developer.apple.com/documentation/sign_in_with_apple/generate_and_validate_tokens
   
