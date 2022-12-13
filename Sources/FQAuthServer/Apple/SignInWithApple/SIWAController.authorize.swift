@@ -15,10 +15,11 @@ extension SIWAController {
     
     return AuthorizeBody.decodeRequest(request)
       .flatMap { authorizeBody in
-        return request.jwt.apple.verify(
-          authorizeBody.appleIdentityToken,
-          applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
-        )
+        return request.services.siwaVerifier.verify(authorizeBody.appleIdentityToken)
+//        return request.jwt.apple.verify(
+//          authorizeBody.appleIdentityToken,
+//          applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
+//        )
         .flatMap { (appleIdentityToken: AppleIdentityToken) in
           return request.services.siwaClient
             .generateRefreshToken(code: authorizeBody.authorizationCode)
