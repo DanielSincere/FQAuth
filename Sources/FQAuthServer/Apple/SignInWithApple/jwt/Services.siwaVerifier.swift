@@ -8,7 +8,7 @@ extension Application.Services {
 }
 
 extension Request.Services {
-  var siwaVerifier: SIWAVerifier {
+  var siwaVerifier: any SIWAVerifier {
     self.request.application.services.siwaVerifier.service.for(request)
   }
 }

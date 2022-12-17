@@ -7,7 +7,7 @@ protocol SIWAVerifier {
 }
 
 final class LiveSIWAVerifier: SIWAVerifier {
- 
+  
   let apple: Request.JWT.Apple
   init(request: Request) {
     self.apple = request.jwt.apple
@@ -17,7 +17,7 @@ final class LiveSIWAVerifier: SIWAVerifier {
     apple.verify(string)
   }
   
-  func `for`(_ request: Vapor.Request) -> SIWAVerifier {
+  func `for`(_ request: Vapor.Request) -> SIWAVerifier  {
     LiveSIWAVerifier(request: request)
   }
 }

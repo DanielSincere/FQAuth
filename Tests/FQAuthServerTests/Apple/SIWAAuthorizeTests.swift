@@ -18,7 +18,11 @@ final class SIWAAuthorizeTests: XCTestCase {
     }
     app.services.siwaVerifier.use { application in
       var fake = FakeSIWAVerifier(eventLoop: application.eventLoopGroup.next())
-      fake.verifyStub = try! JSONDecoder().decode(AppleIdentityToken.self, from: ByteBuffer(string: AppleFixtures.successfulSiwaSignInBody))
+      
+      let tokenResponse = try! JSONDecoder().decode(AppleTokenResponse.self, from: ByteBuffer(string: AppleFixtures.successfulSiwaSignInBody))
+      
+      let stub = try! JWTSigners().unverified(tokenResponse.id_token,as: AppleIdentityToken.self)
+      fake.verifyStub = stub
       return fake
     }
     try app.configure()

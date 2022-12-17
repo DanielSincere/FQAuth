@@ -15,39 +15,34 @@ extension SIWAController {
     
     return AuthorizeBody.decodeRequest(request)
       .flatMap { authorizeBody in
-//        request.services.siwaVerifier.verify(authorizeBody.appleIdentityToken)
         let verifier = request.services.siwaVerifier
         return verifier.verify(authorizeBody.appleIdentityToken)
-//        return request.jwt.apple.verify(
-//          authorizeBody.appleIdentityToken,
-//          applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
-//        )
-        .flatMap { (appleIdentityToken: AppleIdentityToken) in
-          return request.services.siwaClient
-            .generateRefreshToken(code: authorizeBody.authorizationCode)
-            .flatMap { appleTokenResponse in
-              return UserModel.findByAppleUserId(appleIdentityToken.subject.value, db: request.db)
-                .flatMap { maybeUser in
-                  if let userModel = maybeUser {
-                    return self.signIn(
-                      authorizeBody: authorizeBody,
-                      userModel: userModel,
-                      appleIdentityToken: appleIdentityToken,
-                      appleTokenResponse: appleTokenResponse,
-                      request: request)
-                  } else {
-                    return self.signUp(
-                      authorizeBody: authorizeBody,
-                      appleIdentityToken: appleIdentityToken,
-                      appleTokenResponse: appleTokenResponse,
-                      request: request)
+          .flatMap { (appleIdentityToken: AppleIdentityToken) in
+            return request.services.siwaClient
+              .generateRefreshToken(code: authorizeBody.authorizationCode)
+              .flatMap { appleTokenResponse in
+                return UserModel.findByAppleUserId(appleIdentityToken.subject.value, db: request.db)
+                  .flatMap { maybeUser in
+                    if let userModel = maybeUser {
+                      return self.signIn(
+                        authorizeBody: authorizeBody,
+                        userModel: userModel,
+                        appleIdentityToken: appleIdentityToken,
+                        appleTokenResponse: appleTokenResponse,
+                        request: request)
+                    } else {
+                      return self.signUp(
+                        authorizeBody: authorizeBody,
+                        appleIdentityToken: appleIdentityToken,
+                        appleTokenResponse: appleTokenResponse,
+                        request: request)
+                    }
                   }
-                }
-            }
-        }
+              }
+          }
       }
   }
-    
+  
   private func requireEmail(appleIdentityToken: AppleIdentityToken, eventLoop: EventLoop) -> EventLoopFuture<String> {
     if let email = appleIdentityToken.email {
       return eventLoop.makeSucceededFuture(email)
