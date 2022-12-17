@@ -27,6 +27,6 @@ struct FakeSIWAClient: SIWAClient {
   }
   
   func `for`(_ request: Vapor.Request) -> FQAuthServer.SIWAClient {
-    Self.init(eventLoop: request.eventLoop)
+    self
   }
 }

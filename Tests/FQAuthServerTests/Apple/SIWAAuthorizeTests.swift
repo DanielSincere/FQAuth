@@ -28,6 +28,16 @@ final class SIWAAuthorizeTests: XCTestCase {
     try app.configure()
   }
   
+//  lazy var verifierFake: SIWAVerifier = {
+//    var fake = FakeSIWAVerifier(eventLoop: app.eventLoopGroup.next())
+//
+//    let tokenResponse = try! JSONDecoder().decode(AppleTokenResponse.self, from: ByteBuffer(string: AppleFixtures.successfulSiwaSignInBody))
+//
+//    let stub = try! JWTSigners().unverified(tokenResponse.id_token,as: AppleIdentityToken.self)
+//    fake.verifyStub = stub
+//    return fake
+//  }()
+  
   override func tearDownWithError() throws {
     app.shutdown()
   }

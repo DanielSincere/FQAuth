@@ -18,6 +18,6 @@ struct FakeSIWAVerifier: SIWAVerifier {
   }
   
   func `for`(_ request: Vapor.Request) -> SIWAVerifier {
-    Self.init(eventLoop: request.eventLoop)
+    self
   }
 }
