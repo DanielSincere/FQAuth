@@ -8,6 +8,6 @@ extension Application.Services {
 
 extension Request.Services {
   var siwaClient: SIWAClient {
-    LiveSIWAClient(request: request)
+    self.request.application.services.siwaClient.service.for(request)
   }
 }
