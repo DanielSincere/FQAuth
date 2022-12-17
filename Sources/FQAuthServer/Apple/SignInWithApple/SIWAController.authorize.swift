@@ -15,7 +15,8 @@ extension SIWAController {
     
     return AuthorizeBody.decodeRequest(request)
       .flatMap { authorizeBody in
-        return request.services.siwaVerifier.verify(authorizeBody.appleIdentityToken)
+        let verifier = request.services.request.application.services.siwaVerifier.service
+        return verifier.verify(authorizeBody.appleIdentityToken)
 //        return request.jwt.apple.verify(
 //          authorizeBody.appleIdentityToken,
 //          applicationIdentifier: EnvVars.appleAppId.loadOrFatal()
