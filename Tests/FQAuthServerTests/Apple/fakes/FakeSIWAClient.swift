@@ -3,6 +3,7 @@ import Vapor
 @testable import FQAuthServer
 
 struct FakeSIWAClient: SIWAClient {
+  
   let eventLoop: EventLoop
   
   struct StubMissing: Error { }
@@ -23,5 +24,9 @@ struct FakeSIWAClient: SIWAClient {
     } else {
       return eventLoop.makeFailedFuture(StubMissing())
     }
+  }
+  
+  func `for`(_ request: Vapor.Request) -> FQAuthServer.SIWAClient {
+    Self.init(eventLoop: request.eventLoop)
   }
 }

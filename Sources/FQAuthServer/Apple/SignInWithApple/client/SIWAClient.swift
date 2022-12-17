@@ -2,6 +2,7 @@ import Vapor
 import JWTKit
 
 public protocol SIWAClient {
+  func `for`(_ request: Request) -> SIWAClient
   func validateRefreshToken(token: String) -> EventLoopFuture<AppleAuthTokenResult>
   func generateRefreshToken(code: String) -> EventLoopFuture<AppleTokenResponse>
 }
@@ -29,6 +30,10 @@ public struct LiveSIWAClient: SIWAClient {
     self.signers = request.application.jwt.signers
     self.client = request.client
     self.logger = request.logger
+  }
+  
+  public func `for`(_ request: Request) -> SIWAClient {
+    Self.init(request: request)
   }
   
   var eventLoop: EventLoop {
