@@ -10,6 +10,11 @@ final class SIWAAuthorizeTests: XCTestCase {
   override func setUpWithError() throws {
     self.app = Application(.testing)
     try app.configure()
+    
+    try app.autoRevert().wait()
+    try app.autoMigrate().wait()
+    
+    
     app.services.siwaVerifier.use { application in
       var fake = FakeSIWAVerifier(eventLoop: application.eventLoopGroup.next())
       
@@ -25,10 +30,6 @@ final class SIWAAuthorizeTests: XCTestCase {
       fake.generateRefreshTokenStub = AppleTokenResponse(access_token: "token", expires_in: 3600, id_token: "id_token", refresh_token: "refresh_token", token_type: "bearer")
       return fake
     }
-    
-
-    
-
   }
   
   override func tearDownWithError() throws {
