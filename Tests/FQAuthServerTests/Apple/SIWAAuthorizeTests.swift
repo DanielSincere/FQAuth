@@ -61,6 +61,15 @@ final class SIWAAuthorizeTests: XCTestCase {
       XCTAssertEqual(user.firstName, "Nimesh")
       XCTAssertEqual(user.lastName, "Patel")
       
+      let maybeSiwa = try SiwaModel.findBy(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949", db: app.db(.psql)).wait()
+      let siwa = try XCTUnwrap(maybeSiwa)
+      let email = try XCTUnwrap(siwa.email)
+      XCTAssertTrue(email.starts(with: "fullqueue"))
+      
+      XCTAssertEqual(siwa.createdAt.timeIntervalSinceReferenceDate,
+                     Date().timeIntervalSinceReferenceDate,
+                     accuracy: 2)
+      
       let refreshTokens = try RefreshTokenModel.listBy(userID: try user.requireID(), db: app.db(.psql)).wait()
       XCTAssertEqual(refreshTokens.count, 1)
       
@@ -73,7 +82,7 @@ final class SIWAAuthorizeTests: XCTestCase {
 
       XCTAssertEqual(refreshToken.expiresAt.timeIntervalSinceReferenceDate,
                      Date().addingTimeInterval(AuthConstant.refreshTokenLifetime).timeIntervalSinceReferenceDate,
-                     accuracy: 3)
+                     accuracy: 2)
     }
   }
 }
