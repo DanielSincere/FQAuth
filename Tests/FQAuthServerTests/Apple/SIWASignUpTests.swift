@@ -4,9 +4,10 @@ import Vapor
 import JWTKit
 import Foundation
 
-final class SIWAAuthorizeTests: XCTestCase {
+final class SIWASignUpTests: XCTestCase {
 
   var app: Application!
+  
   override func setUpWithError() throws {
     self.app = Application(.testing)
     try app.configure()
@@ -65,12 +66,13 @@ final class SIWAAuthorizeTests: XCTestCase {
       let siwa = try XCTUnwrap(maybeSiwa)
       let email = try XCTUnwrap(siwa.email)
       XCTAssertTrue(email.starts(with: "fullqueue"))
-      
+      XCTAssertTrue(siwa.isActive)
       XCTAssertEqual(siwa.createdAt.timeIntervalSinceReferenceDate,
                      Date().timeIntervalSinceReferenceDate,
                      accuracy: 2)
       
-      let refreshTokens = try RefreshTokenModel.listBy(userID: try user.requireID(), db: app.db(.psql)).wait()
+      let refreshTokens = try RefreshTokenModel.listBy(userID: try user.requireID(),
+                                                       db: app.db(.psql)).wait()
       XCTAssertEqual(refreshTokens.count, 1)
       
       let refreshToken = try XCTUnwrap(refreshTokens.first)
