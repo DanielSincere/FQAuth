@@ -4,7 +4,7 @@ import Vapor
 import JWTKit
 import Foundation
 
-final class SIWASignUpTests: XCTestCase {
+final class SIWASignUpRequestTests: XCTestCase {
 
   var app: Application!
   
