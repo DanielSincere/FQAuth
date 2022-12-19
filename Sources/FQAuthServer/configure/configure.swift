@@ -14,8 +14,6 @@ extension Application {
     
     self.configureCommands()
     
-    self.services.siwaClient.use { application in
-      LiveSIWAClient(application: application)
-    }
+    self.configureServices()
   }
 }
