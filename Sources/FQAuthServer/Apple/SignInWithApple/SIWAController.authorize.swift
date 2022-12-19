@@ -81,7 +81,8 @@ extension SIWAController {
     
     self.requireEmail(appleIdentityToken: appleIdentityToken, eventLoop: request.eventLoop)
       .flatMap { email in
-        guard let firstName = authorizeBody.firstName, let lastName = authorizeBody.lastName else {
+        guard let firstName = authorizeBody.firstName,
+              let lastName = authorizeBody.lastName else {
           return request.eventLoop.makeFailedFuture(Abort(.badRequest,
                                                           headers: HTTPHeaders(),
                                                           reason: "Name missing",
@@ -94,9 +95,10 @@ extension SIWAController {
                         firstName: firstName,
                         lastName: lastName,
                         deviceName: authorizeBody.deviceName,
-                        registrationMethod: .siwa,
-                        appleUserId: appleIdentityToken.subject.value,
-                        appleRefreshToken: appleTokenResponse.refresh_token))
+                        method: .siwa(
+                          appleUserId: appleIdentityToken.subject.value,
+                          appleRefreshToken: appleTokenResponse.refresh_token)
+                       ))
           .flatMap { userId in
             AuthHelper(request: request)
               .login(userId: userId,

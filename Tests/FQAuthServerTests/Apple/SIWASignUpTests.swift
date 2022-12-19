@@ -61,6 +61,7 @@ final class SIWASignUpTests: XCTestCase {
       let user = try XCTUnwrap(maybeUser)
       XCTAssertEqual(user.firstName, "Nimesh")
       XCTAssertEqual(user.lastName, "Patel")
+      XCTAssertEqual(user.registrationMethod, .siwa)
       
       let maybeSiwa = try SiwaModel.findBy(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949", db: app.db(.psql)).wait()
       let siwa = try XCTUnwrap(maybeSiwa)
