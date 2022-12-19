@@ -7,8 +7,8 @@ extension Application {
       LiveSIWAClient(application: application)
     }
     
-//    self.services.siwaVerifier.use { application in
-//      LiveSIWAVerifier(application: application)
-//    }
+    self.services.siwaVerifierProvider.use { application in
+      LiveSIWAVerifierProvider()
+    }
   }
 }

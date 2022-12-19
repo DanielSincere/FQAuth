@@ -15,7 +15,7 @@ final class SIWASignUpTests: XCTestCase {
     try app.autoRevert().wait()
     try app.autoMigrate().wait()
     
-    app.services.siwaVerifier.use { application in
+    app.services.siwaVerifierProvider.use { application in
       var fake = FakeSIWAVerifier(eventLoop: application.eventLoopGroup.next())
       
       let tokenResponse = try! JSONDecoder().decode(AppleTokenResponse.self, from: ByteBuffer(string: AppleFixtures.successfulSiwaSignInBody))

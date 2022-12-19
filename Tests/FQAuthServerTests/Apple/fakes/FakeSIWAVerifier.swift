@@ -3,7 +3,7 @@ import Vapor
 @testable import FQAuthServer
 import JWT
 
-struct FakeSIWAVerifier: SIWAVerifier {
+struct FakeSIWAVerifier: SIWAVerifier, SIWAVerifierProvider {
   let eventLoop: EventLoop
   
   struct StubMissing: Error { }
