@@ -1,10 +1,14 @@
 import Vapor
 import FluentPostgresDriver
-import Redis
 
 extension Application {
   func configurePostgres() throws {
+    self.databases.use(.postgres(configuration: try .for(self.environment)), as: .psql)
+  }
+}
 
+extension PostgresConfiguration {
+  static func `for`(_ environment: Environment) throws -> PostgresConfiguration {
     let urlString = try EnvVars.postgresUrl.loadOrThrow()
     guard let url = URL(string: urlString) else {
       struct NotAnURLError: Error {
@@ -12,13 +16,13 @@ extension Application {
       }
       throw NotAnURLError(string: urlString)
     }
-
+    
     guard var config = PostgresConfiguration(url: url) else {
       struct PostgresConfigurationError: Error { }
       throw PostgresConfigurationError()
     }
     
-    switch self.environment {
+    switch environment {
     case .production:
       var tlsConfig = TLSConfiguration.makeClientConfiguration()
       tlsConfig.certificateVerification = .none
@@ -37,7 +41,6 @@ extension Application {
     default:
       break
     }
-        
-    self.databases.use(.postgres(configuration: config), as: .psql)
+    return config
   }
 }
