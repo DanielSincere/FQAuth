@@ -1,40 +1,39 @@
 import XCTest
+import Vapor
 @testable import FQAuthServer
 import FluentPostgresDriver
 
 final class SIWASignUpRepoTests: XCTestCase {
   
-  var repo: SIWASignUpRepo!
-  var eventLoopGroup: EventLoopGroup!
-  var threadPool: NIOThreadPool!
+  var app: Application!
   
   override func setUpWithError() throws {
-    let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-    let threadPool = NIOThreadPool(numberOfThreads: 1)
-    threadPool.start()
+    self.app = Application(.testing)
+    try app.configure()
     
-    let eventLoop = eventLoopGroup.next()
-    
-    let config = try PostgresConfiguration.for(.testing)
-    let databases = Databases(threadPool: threadPool, on: eventLoopGroup)
-    databases.use(.postgres(configuration: config), as: .psql)
-    
-    let logger = Logger(label: "test")
-    let database = databases.database(.psql, logger: logger, on: eventLoop)
-    let repo = SIWASignUpRepo(logger: logger, eventLoop: eventLoop, database: database as! SQLDatabase)
-    
-    self.repo = repo
-    self.eventLoopGroup = eventLoopGroup
-    self.threadPool = threadPool
+    try app.autoRevert().wait()
+    try app.autoMigrate().wait()
   }
-  
+    
   override func tearDownWithError() throws {
-    try eventLoopGroup?.syncShutdownGracefully()
-    try threadPool?.syncShutdownGracefully()
+    app.shutdown()
   }
   
+  var db: Database {
+    app.databases.database(.psql, logger: app.logger, on: app.eventLoopGroup.next())!
+  }
   
   func testSignUp() throws {
-    print("eeeeeee")
+    let repo = SIWASignUpRepo(logger: app.logger, eventLoop: app.eventLoopGroup.next(), database: db as! SQLDatabase)
+    let userID = try repo.signUp(.init(email: "tomato@example.com", firstName: "First", lastName: "Last", deviceName: "device", method: .siwa(appleUserId: "AppleUserId", appleRefreshToken: "AppleRefresh"))).wait()
+    
+    let siwa = try XCTUnwrap(SIWAModel.findBy(appleUserId: "AppleUserId", db: self.db).wait())
+    let user = try XCTUnwrap(UserModel.find(userID, on: self.db).wait())
+    
+    XCTAssertEqual(user.firstName, "First")
+    XCTAssertEqual(user.lastName, "Last")
+    XCTAssertEqual(user.registrationMethod, .siwa)
+    
+    XCTAssertEqual(siwa.email, "tomato@example.com")
   }
 }
