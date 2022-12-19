@@ -4,6 +4,14 @@ import SQLKit
 
 struct SIWASignUpRepo {
 
+  struct Params {
+    let email: String
+    let firstName: String
+    let lastName: String
+    let deviceName: String
+    let method: Method
+  }
+  
   enum Method {
     case siwa(appleUserId: String, appleRefreshToken: String)
     
@@ -12,14 +20,6 @@ struct SIWASignUpRepo {
       case .siwa: return .siwa
       }
     }
-  }
-  
-  struct Params {
-    let email: String
-    let firstName: String
-    let lastName: String
-    let deviceName: String
-    let method: Method
   }
 
   let logger: Logger
