@@ -18,6 +18,10 @@ struct LocalDBCreateCommand: Command {
                            password: "FQAuthServer")
   }
 
+  private func createDB(name: String, owner: String) throws {
+    try sh(.terminal, "createdb -U postgres --owner=\(owner) \(name)")
+  }
+
   private func ensureDBConnection(name: String, owner: String, password: String) throws {
     try sh(.null,
            """
@@ -27,10 +31,6 @@ struct LocalDBCreateCommand: Command {
              -c "select version()"
            """,
            environment: ["PGPASSWORD": password])
-  }
-
-  private func createDB(name: String, owner: String) throws {
-    try sh(.terminal, "createdb -U postgres --owner=\(owner) \(name)")
   }
 
   private func createRole(name: String, password: String) throws {
