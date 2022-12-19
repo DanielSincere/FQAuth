@@ -10,20 +10,22 @@ struct LocalDBCreateCommand: Command {
     try createRole(name: "fqauth", password: "FQAuthServer")
 
     try createDB(name: "fqauth_test", owner: "fqauth")
-    try ensureDBExists(name: "fqauth_test", owner: "fqauth", password: "FQAuthServer")
+    try ensureDBConnection(name: "fqauth_test", owner: "fqauth",
+                           password: "FQAuthServer")
 
     try createDB(name: "fqauth_dev", owner: "fqauth")
-    try ensureDBExists(name: "fqauth_dev", owner: "fqauth", password: "FQAuthServer")
+    try ensureDBConnection(name: "fqauth_dev", owner: "fqauth",
+                           password: "FQAuthServer")
   }
 
-  private func ensureDBExists(name: String, owner: String, password: String) throws {
+  private func ensureDBConnection(name: String, owner: String, password: String) throws {
     try sh(.null,
-      """
-      psql \
-        --username=\(owner) \
-        --host=localhost \(name) \
-        -c "select version()"
-      """,
+           """
+           psql \
+             --username=\(owner) \
+             --host=localhost \(name) \
+             -c "select version()"
+           """,
            environment: ["PGPASSWORD": password])
   }
 
@@ -37,7 +39,7 @@ struct LocalDBCreateCommand: Command {
       DO
       $do$
       BEGIN
-        IF EXISTS ( SELECT FROM pg_catalog.pg_roles WHERE rolname = '\(name)') THEN
+        IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = '\(name)') THEN
           RAISE NOTICE 'User "\(name)" already exists. Skipping.';
         ELSE
           CREATE ROLE \(name) LOGIN PASSWORD '\(password)';
