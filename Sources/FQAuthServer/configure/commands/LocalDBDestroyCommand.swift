@@ -8,11 +8,12 @@ struct LocalDBDestroyCommand: Command {
   
   func run(using context: ConsoleKit.CommandContext, signature: Signature) throws {
     
-    try sh(.terminal, #"dropdb --if-exists fqauth_dev"#)
-    try sh(.terminal, #"dropdb --if-exists fqauth_test"#)
+    try sh(.terminal, #"dropdb -U postgres --if-exists fqauth_dev"#)
+    try sh(.terminal, #"dropdb -U postgres --if-exists fqauth_test"#)
     
     try sh(.terminal, #"""
       psql \
+        -U postgres \
         --command="DROP USER IF EXISTS fqauth" \
         --command="\du" \
         postgres
