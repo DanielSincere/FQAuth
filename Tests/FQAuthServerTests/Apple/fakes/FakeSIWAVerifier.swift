@@ -17,7 +17,7 @@ struct FakeSIWAVerifier: SIWAVerifier {
     return eventLoop.makeSucceededFuture(stub)
   }
   
-  func `for`(_ request: Vapor.Request) -> SIWAVerifier {
-    self
+  func `for`(_ request: Vapor.Request) -> FQAuthServer.SIWAVerifier {
+    FakeSIWAVerifier(eventLoop: request.eventLoop, verifyStub: verifyStub)
   }
 }

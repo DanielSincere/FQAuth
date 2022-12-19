@@ -17,7 +17,7 @@ final class LiveSIWAVerifier: SIWAVerifier {
     apple.verify(string)
   }
   
-  func `for`(_ request: Vapor.Request) -> SIWAVerifier  {
+  func `for`(_ request: Vapor.Request) -> SIWAVerifier {
     LiveSIWAVerifier(request: request)
   }
 }
