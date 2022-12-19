@@ -7,16 +7,16 @@ extension UserModel {
     case .siwa:
       return UserModel.query(on: db)
         .filter(\UserModel.$registrationMethod == registrationMethod)
-        .join(SiwaModel.self, on: \SiwaModel.$user.$id == \UserModel.$id)
-        .filter(SiwaModel.self, \SiwaModel.$email == email)
+        .join(SIWAModel.self, on: \SIWAModel.$user.$id == \UserModel.$id)
+        .filter(SIWAModel.self, \SIWAModel.$email == email)
         .first()
     }
   }
 
   static func findByAppleUserId(_ identifier: String, db: Database) -> EventLoopFuture<UserModel?> {
     UserModel.query(on: db)
-      .join(SiwaModel.self, on: \SiwaModel.$user.$id == \UserModel.$id)
-      .filter(SiwaModel.self, \SiwaModel.$appleUserId == identifier)
+      .join(SIWAModel.self, on: \SIWAModel.$user.$id == \UserModel.$id)
+      .filter(SIWAModel.self, \SIWAModel.$appleUserId == identifier)
       .with(\UserModel.$siwa)
       .first()
   }

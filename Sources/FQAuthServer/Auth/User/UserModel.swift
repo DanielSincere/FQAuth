@@ -27,7 +27,7 @@ final class UserModel: Model {
   var status: Status
 
   @OptionalChild(for: \.$user)
-  var siwa: SiwaModel?
+  var siwa: SIWAModel?
 
   init() { }
 

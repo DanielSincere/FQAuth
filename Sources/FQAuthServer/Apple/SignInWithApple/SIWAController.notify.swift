@@ -12,7 +12,7 @@ extension SIWAController {
         
         switch notification.events.wrapped {
         case .accountDelete(let accountDelete):
-          _ = SiwaModel.findBy(appleUserId: accountDelete.sub.value, db: request.db(.psql))
+          _ = SIWAModel.findBy(appleUserId: accountDelete.sub.value, db: request.db(.psql))
           
         case .emailEnabled(let emailEnabled):
           break

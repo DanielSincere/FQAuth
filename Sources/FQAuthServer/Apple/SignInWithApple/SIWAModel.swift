@@ -3,7 +3,7 @@ import FluentPostgresDriver
 import Crypto
 import Foundation
 
-final class SiwaModel: Model {
+final class SIWAModel: Model {
   static let schema = "siwa"
 
   @ID(key: .id)
@@ -80,8 +80,8 @@ final class SiwaModel: Model {
     }
   }
   
-  static func findBy(appleUserId: String, db: Database) -> EventLoopFuture<SiwaModel?> {
-    SiwaModel
+  static func findBy(appleUserId: String, db: Database) -> EventLoopFuture<SIWAModel?> {
+    SIWAModel
       .query(on: db)
       .filter(\.$appleUserId, .equal, appleUserId)
       .first()
