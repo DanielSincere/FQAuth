@@ -25,7 +25,13 @@ final class SIWASignUpRepoTests: XCTestCase {
   
   func testSignUp() throws {
     let repo = SIWASignUpRepo(logger: app.logger, eventLoop: app.eventLoopGroup.next(), database: db as! SQLDatabase)
-    let userID = try repo.signUp(.init(email: "tomato@example.com", firstName: "First", lastName: "Last", deviceName: "device", method: .siwa(appleUserId: "AppleUserId", appleRefreshToken: "AppleRefresh"))).wait()
+    let userID = try repo.signUp(.init(email: "tomato@example.com",
+                                       firstName: "First",
+                                       lastName: "Last",
+                                       deviceName: "device",
+                                       method: .siwa(appleUserId: "AppleUserId",
+                                                     appleRefreshToken: "AppleRefresh")
+                                      )).wait()
     
     let siwa = try XCTUnwrap(SIWAModel.findBy(appleUserId: "AppleUserId", db: self.db).wait())
     let user = try XCTUnwrap(UserModel.find(userID, on: self.db).wait())
