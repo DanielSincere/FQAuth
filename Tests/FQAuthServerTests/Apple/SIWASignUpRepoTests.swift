@@ -39,7 +39,23 @@ final class SIWASignUpRepoTests: XCTestCase {
     XCTAssertEqual(user.firstName, "First")
     XCTAssertEqual(user.lastName, "Last")
     XCTAssertEqual(user.registrationMethod, .siwa)
+    XCTAssertEqual(user.status, .active)
+    XCTAssertEqual(user.createdAt.timeIntervalSinceReferenceDate,
+                   Date().timeIntervalSinceReferenceDate,
+                   accuracy: 3)
+    XCTAssertEqual(user.updatedAt.timeIntervalSinceReferenceDate,
+                   Date().timeIntervalSinceReferenceDate,
+                   accuracy: 3)
     
     XCTAssertEqual(siwa.email, "tomato@example.com")
+    XCTAssertEqual(siwa.createdAt.timeIntervalSinceReferenceDate,
+                   Date().timeIntervalSinceReferenceDate,
+                   accuracy: 3)
+    XCTAssertEqual(siwa.updatedAt.timeIntervalSinceReferenceDate,
+                   Date().timeIntervalSinceReferenceDate,
+                   accuracy: 3)
+    XCTAssertEqual(siwa.attemptedRefreshAt, nil)
+    XCTAssertEqual(siwa.appleUserId, "AppleUserId")
+    XCTAssertEqual(siwa.unsealedAppleRefreshToken(), "AppleRefresh")
   }
 }

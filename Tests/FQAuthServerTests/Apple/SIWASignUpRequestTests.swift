@@ -17,9 +17,9 @@ final class SIWASignUpRequestTests: XCTestCase {
     
     app.services.siwaVerifierProvider.use { application in
       var fake = FakeSIWAVerifier(eventLoop: application.eventLoopGroup.next())
-      
+
       let tokenResponse = try! JSONDecoder().decode(AppleTokenResponse.self, from: ByteBuffer(string: AppleFixtures.successfulSiwaSignInBody))
-      
+
       let stub = try! JWTSigners().unverified(tokenResponse.id_token,as: AppleIdentityToken.self)
       fake.verifyStub = stub
       return fake
@@ -27,7 +27,7 @@ final class SIWASignUpRequestTests: XCTestCase {
     
     app.services.siwaClient.use { application in
       var fake = FakeSIWAClient(eventLoop: application.eventLoopGroup.next())
-      fake.generateRefreshTokenStub = AppleTokenResponse(access_token: "token",
+      fake.generateRefreshTokenStub = AppleTokenResponse(access_token: "access_token",
                                                          expires_in: 3600,
                                                          id_token: "id_token",
                                                          refresh_token: "refresh_token",
