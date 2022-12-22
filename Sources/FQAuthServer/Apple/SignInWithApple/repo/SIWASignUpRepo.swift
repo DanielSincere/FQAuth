@@ -72,7 +72,7 @@ struct SIWASignUpRepo {
       let sql = SQLRaw(sqlTemplate, binds)
       
       var userIdResult: Result<UUID, Error>? = nil
-      
+
       let insert = self.database.execute(sql: sql) { row in
         userIdResult = Result { try row.decode(column: "user_id", inferringAs: UUID.self) }
       }

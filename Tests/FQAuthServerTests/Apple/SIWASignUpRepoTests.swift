@@ -24,7 +24,9 @@ final class SIWASignUpRepoTests: XCTestCase {
   }
   
   func testSignUp() throws {
-    let repo = SIWASignUpRepo(logger: app.logger, eventLoop: app.eventLoopGroup.next(), database: db as! SQLDatabase)
+    let repo = SIWASignUpRepo(logger: app.logger,
+                              eventLoop: app.eventLoopGroup.next(),
+                              database: db as! SQLDatabase)
     let userID = try repo.signUp(.init(email: "tomato@example.com",
                                        firstName: "First",
                                        lastName: "Last",
@@ -40,22 +42,27 @@ final class SIWASignUpRepoTests: XCTestCase {
     XCTAssertEqual(user.lastName, "Last")
     XCTAssertEqual(user.registrationMethod, .siwa)
     XCTAssertEqual(user.status, .active)
-    XCTAssertEqual(user.createdAt.timeIntervalSinceReferenceDate,
-                   Date().timeIntervalSinceReferenceDate,
-                   accuracy: 3)
-    XCTAssertEqual(user.updatedAt.timeIntervalSinceReferenceDate,
-                   Date().timeIntervalSinceReferenceDate,
-                   accuracy: 3)
+    XCAssertDateNowish(user.createdAt)
+    XCAssertDateNowish(user.updatedAt)
     
     XCTAssertEqual(siwa.email, "tomato@example.com")
-    XCTAssertEqual(siwa.createdAt.timeIntervalSinceReferenceDate,
-                   Date().timeIntervalSinceReferenceDate,
-                   accuracy: 3)
-    XCTAssertEqual(siwa.updatedAt.timeIntervalSinceReferenceDate,
-                   Date().timeIntervalSinceReferenceDate,
-                   accuracy: 3)
+    XCAssertDateNowish(siwa.createdAt)
+    XCAssertDateNowish(siwa.updatedAt)
     XCTAssertEqual(siwa.attemptedRefreshAt, nil)
     XCTAssertEqual(siwa.appleUserId, "AppleUserId")
     XCTAssertEqual(siwa.unsealedAppleRefreshToken(), "AppleRefresh")
   }
 }
+
+func XCAssertDateNowish(_ a: Date, file: StaticString = #filePath, line: UInt = #line) {
+  XCTAssertEqual(a.timeIntervalSinceReferenceDate,
+                 Date().timeIntervalSinceReferenceDate,
+                 accuracy: 3)
+}
+
+func XCAssertDatesClose(_ a: Date, _ b: Date, file: StaticString = #filePath, line: UInt = #line) {
+  XCTAssertEqual(a.timeIntervalSinceReferenceDate,
+                 b.timeIntervalSinceReferenceDate,
+                 accuracy: 3)
+}
+
