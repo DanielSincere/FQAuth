@@ -33,10 +33,10 @@ final class SIWAServerNotificationDecodingTests: XCTestCase {
     try app.useAppleJWKS()
     
     let body = try JSONDecoder().decode(SIWAController.NotifyBody.self, from: AppleFixtures.siwaNotificationBody.data(using: .utf8)!)
-    let notification = try app.jwt.signers.verify(body.payload, as: SIWAServerNotification.self)
+    let notification = try app.jwt.signers.unverified(body.payload, as: SIWAServerNotification.self)
     
     XCTAssertEqual(notification.iss, "https://appleid.apple.com")
-    XCTAssertNoThrow(try notification.aud.verifyIntendedAudience(includes: try EnvVars.appleAppId.loadOrThrow()))
+    XCTAssertNoThrow(try notification.aud.verifyIntendedAudience(includes: "com.fullqueuedeveloper.FQAuthSampleiOSApp"))
     
     let consentRevoked = try XCTUnwrap(notification.events.wrapped.consentRevoked)
     XCTAssertEqual(consentRevoked.sub.value, "002024.1951936c61fa47debb2b076e6896ccc1.1949")
