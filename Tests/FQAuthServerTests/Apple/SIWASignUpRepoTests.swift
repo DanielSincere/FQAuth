@@ -54,15 +54,7 @@ final class SIWASignUpRepoTests: XCTestCase {
   }
 }
 
-func XCAssertDateNowish(_ a: Date, file: StaticString = #filePath, line: UInt = #line) {
-  XCTAssertEqual(a.timeIntervalSinceReferenceDate,
-                 Date().timeIntervalSinceReferenceDate,
-                 accuracy: 3)
-}
 
-func XCAssertDatesClose(_ a: Date, _ b: Date, file: StaticString = #filePath, line: UInt = #line) {
-  XCTAssertEqual(a.timeIntervalSinceReferenceDate,
-                 b.timeIntervalSinceReferenceDate,
-                 accuracy: 3)
-}
+
+
 

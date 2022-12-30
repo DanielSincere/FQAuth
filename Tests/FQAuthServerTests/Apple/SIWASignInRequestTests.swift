@@ -7,6 +7,8 @@ import Foundation
 final class SIWASignInRequestTests: XCTestCase {
   
   var app: Application!
+  var existingUserID: UserModel.IDValue!
+  var existingUser: UserModel!
   
   override func setUpWithError() throws {
     self.app = Application(.testing)
@@ -22,8 +24,10 @@ final class SIWASignInRequestTests: XCTestCase {
                                              method: .siwa(appleUserId: "AppleUserId",
                                                            appleRefreshToken: "AppleRefreshToken"))
     
-    let existingUser = try SIWASignUpRepo(application: app)
-      .signUp(signUpParams).wait()
+    self.existingUserID = try SIWASignUpRepo(application: app).signUp(signUpParams)
+      .wait()
+    self.existingUser = try UserModel.find(existingUserID, on: app.db(.psql))
+      .wait()
   }
   
   override func tearDownWithError() throws {
@@ -44,11 +48,13 @@ final class SIWASignInRequestTests: XCTestCase {
                  body: ByteBuffer(string: requestBody)) { response in
       XCTAssertEqual(response.status, .ok)
       
-      let maybeUser = try UserModel.findByAppleUserId("002024.1951936c61fa47debb2b076e6896ccc1.1949",
+      let maybeUser = try UserModel.findByAppleUserId("AppleUserId",
                                                       db: app.db(.psql)).wait()
+      
       let user = try XCTUnwrap(maybeUser)
-      XCTAssertEqual(user.firstName, "Nimesh")
-      XCTAssertEqual(user.lastName, "Patel")
+      XCTAssertEqual(existingUser.firstName, user.firstName)
+      XCTAssertEqual(user.firstName, "First")
+      XCTAssertEqual(user.lastName, "Last")
       XCTAssertEqual(user.registrationMethod, .siwa)
       
       let refreshTokens = try RefreshTokenModel.listBy(userID: try user.requireID(),
