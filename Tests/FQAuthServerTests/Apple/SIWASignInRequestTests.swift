@@ -9,6 +9,7 @@ final class SIWASignInRequestTests: XCTestCase {
   var app: Application!
   var existingUserID: UserModel.IDValue!
   var existingUser: UserModel!
+  let existingAppleID: String = "002024.1951936c61fa47debb2b076e6896ccc1.1949"
   
   override func setUpWithError() throws {
     self.app = Application(.testing)
@@ -21,13 +22,33 @@ final class SIWASignInRequestTests: XCTestCase {
                                              firstName: "First",
                                              lastName: "Last",
                                              deviceName: "iPhone",
-                                             method: .siwa(appleUserId: "AppleUserId",
+                                             method: .siwa(appleUserId: existingAppleID,
                                                            appleRefreshToken: "AppleRefreshToken"))
     
     self.existingUserID = try SIWASignUpRepo(application: app).signUp(signUpParams)
       .wait()
     self.existingUser = try UserModel.find(existingUserID, on: app.db(.psql))
       .wait()
+
+    app.services.siwaVerifierProvider.use { application in
+      var fake = FakeSIWAVerifier(eventLoop: application.eventLoopGroup.next())
+
+      let tokenResponse = try! JSONDecoder().decode(AppleTokenResponse.self, from: ByteBuffer(string: AppleFixtures.successfulSiwaSignInBody))
+
+      let stub = try! JWTSigners().unverified(tokenResponse.id_token,as: AppleIdentityToken.self)
+      fake.verifyStub = stub
+      return fake
+    }
+
+    app.services.siwaClient.use { application in
+      var fake = FakeSIWAClient(eventLoop: application.eventLoopGroup.next())
+      fake.generateRefreshTokenStub = AppleTokenResponse(access_token: "access_token",
+                                                         expires_in: 3600,
+                                                         id_token: "id_token",
+                                                         refresh_token: "refresh_token",
+                                                         token_type: "bearer")
+      return fake
+    }
   }
   
   override func tearDownWithError() throws {
@@ -48,7 +69,7 @@ final class SIWASignInRequestTests: XCTestCase {
                  body: ByteBuffer(string: requestBody)) { response in
       XCTAssertEqual(response.status, .ok)
       
-      let maybeUser = try UserModel.findByAppleUserId("AppleUserId",
+      let maybeUser = try UserModel.findByAppleUserId(existingAppleID,
                                                       db: app.db(.psql)).wait()
       
       let user = try XCTUnwrap(maybeUser)
@@ -59,7 +80,7 @@ final class SIWASignInRequestTests: XCTestCase {
       
       let refreshTokens = try RefreshTokenModel.listBy(userID: try user.requireID(),
                                                        db: app.db(.psql)).wait()
-      XCTAssertEqual(refreshTokens.count, 2)
+      XCTAssertEqual(refreshTokens.count, 1)
     }
   }
 }

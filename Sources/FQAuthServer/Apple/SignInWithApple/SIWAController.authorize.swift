@@ -65,7 +65,7 @@ extension SIWAController {
     }
     
     siwa.encryptedAppleRefreshToken = DBSeal().seal(string: appleTokenResponse.refresh_token)
-    return siwa.update(on: request.db).flatMap { _ in
+    return siwa.update(on: request.db(.psql)).flatMap { _ in
       return AuthHelper(request: request)
         .login(userId: userId,
                firstName: userModel.firstName,
