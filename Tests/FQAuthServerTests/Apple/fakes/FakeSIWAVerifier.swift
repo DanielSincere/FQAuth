@@ -21,3 +21,14 @@ struct FakeSIWAVerifier: SIWAVerifier, SIWAVerifierProvider {
     FakeSIWAVerifier(eventLoop: request.eventLoop, verifyStub: verifyStub)
   }
 }
+
+extension FakeSIWAVerifier {
+
+  init(eventLoop: EventLoop, appleTokenResponse: String) throws {
+    self.eventLoop = eventLoop
+    let tokenResponse = try JSONDecoder().decode(AppleTokenResponse.self, from: ByteBuffer(string: AppleFixtures.successfulSiwaSignInBody))
+
+    let stub = try JWTSigners().unverified(tokenResponse.id_token,as: AppleIdentityToken.self)
+    self.verifyStub = stub
+  }
+}

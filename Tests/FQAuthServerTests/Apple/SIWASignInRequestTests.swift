@@ -31,13 +31,7 @@ final class SIWASignInRequestTests: XCTestCase {
       .wait()
 
     app.services.siwaVerifierProvider.use { application in
-      var fake = FakeSIWAVerifier(eventLoop: application.eventLoopGroup.next())
-
-      let tokenResponse = try! JSONDecoder().decode(AppleTokenResponse.self, from: ByteBuffer(string: AppleFixtures.successfulSiwaSignInBody))
-
-      let stub = try! JWTSigners().unverified(tokenResponse.id_token,as: AppleIdentityToken.self)
-      fake.verifyStub = stub
-      return fake
+      try! FakeSIWAVerifier(eventLoop: application.eventLoopGroup.next(), appleTokenResponse: AppleFixtures.successfulSiwaSignInBody)
     }
 
     app.services.siwaClient.use { application in
@@ -82,9 +76,9 @@ final class SIWASignInRequestTests: XCTestCase {
                                                        db: app.db(.psql)).wait()
       XCTAssertEqual(refreshTokens.count, 1)
       let refreshToken = try XCTUnwrap(refreshTokens.first)
-      XCTAssertNearlyNow(refreshToken.createdAt)
       XCTAssertEqual(refreshToken.$user.id, user.id)
       XCTAssertEqual(refreshToken.deviceName, "iPhone")
+      XCTAssertNearlyNow(refreshToken.createdAt)
       XCTAssertNearlyEqual(refreshToken.expiresAt,
                            Date(timeIntervalSinceNow: AuthConstant.refreshTokenLifetime))
     }
