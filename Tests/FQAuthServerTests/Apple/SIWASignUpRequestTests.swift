@@ -12,8 +12,7 @@ final class SIWASignUpRequestTests: XCTestCase {
     self.app = Application(.testing)
     try app.configure()
     
-    try app.autoRevert().wait()
-    try app.autoMigrate().wait()
+    try app.resetDatabase()
     
     app.services.siwaVerifierProvider.use { application in
       try! FakeSIWAVerifier(eventLoop: application.eventLoopGroup.next(), appleTokenResponse: AppleFixtures.successfulSiwaSignInBody)

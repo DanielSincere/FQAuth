@@ -65,8 +65,7 @@ final class RefreshTokenControllerTests: XCTestCase {
   override func setUpWithError() throws {
     let app = Application(.testing)
     try app.configure()
-    try app.autoRevert().wait()
-    try app.autoMigrate().wait()
+    try app.resetDatabase()
     self.app = app
   }
 

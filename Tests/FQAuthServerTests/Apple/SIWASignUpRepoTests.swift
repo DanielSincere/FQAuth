@@ -11,8 +11,7 @@ final class SIWASignUpRepoTests: XCTestCase {
     self.app = Application(.testing)
     try app.configure()
     
-    try app.autoRevert().wait()
-    try app.autoMigrate().wait()
+    try app.resetDatabase()
   }
     
   override func tearDownWithError() throws {

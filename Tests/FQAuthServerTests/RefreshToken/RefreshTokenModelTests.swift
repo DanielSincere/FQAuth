@@ -24,13 +24,11 @@ final class RefreshTokenModelTests: XCTestCase {
   override func setUpWithError() throws {
     let app = Application(.testing)
     try app.configure()
-    try app.autoRevert().wait()
-    try app.autoMigrate().wait()
+    try app.resetDatabase()
     self.app = app
   }
   
   override func tearDownWithError() throws {
-    try app.autoRevert().wait()
     app.shutdown()
   }
 }

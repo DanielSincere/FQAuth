@@ -15,8 +15,7 @@ final class SIWASignInRequestTests: XCTestCase {
     self.app = Application(.testing)
     try app.configure()
     
-    try app.autoRevert().wait()
-    try app.autoMigrate().wait()
+    try app.resetDatabase()
     
     let signUpParams = SIWASignUpRepo.Params(email: "test@example.com",
                                              firstName: "First",
