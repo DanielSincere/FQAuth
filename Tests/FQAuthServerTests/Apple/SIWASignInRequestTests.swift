@@ -35,13 +35,8 @@ final class SIWASignInRequestTests: XCTestCase {
     }
 
     app.services.siwaClient.use { application in
-      var fake = FakeSIWAClient(eventLoop: application.eventLoopGroup.next())
-      fake.generateRefreshTokenStub = AppleTokenResponse(access_token: "access_token",
-                                                         expires_in: 3600,
-                                                         id_token: "id_token",
-                                                         refresh_token: "refresh_token",
-                                                         token_type: "bearer")
-      return fake
+      FakeSIWAClient(eventLoop: application.eventLoopGroup.next(),
+                     generateRefreshTokenStub: .meaninglessStub)
     }
   }
   

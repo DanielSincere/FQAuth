@@ -20,16 +20,11 @@ final class SIWASignUpRequestTests: XCTestCase {
     }
     
     app.services.siwaClient.use { application in
-      var fake = FakeSIWAClient(eventLoop: application.eventLoopGroup.next())
-      fake.generateRefreshTokenStub = AppleTokenResponse(access_token: "access_token",
-                                                         expires_in: 3600,
-                                                         id_token: "id_token",
-                                                         refresh_token: "refresh_token",
-                                                         token_type: "bearer")
-      return fake
+     FakeSIWAClient(eventLoop: application.eventLoopGroup.next(),
+                    generateRefreshTokenStub: .meaninglessStub)
     }
   }
-  
+
   override func tearDownWithError() throws {
     app.shutdown()
   }
@@ -62,9 +57,7 @@ final class SIWASignUpRequestTests: XCTestCase {
       let email = try XCTUnwrap(siwa.email)
       XCTAssertTrue(email.starts(with: "fullqueue"))
       XCTAssertTrue(siwa.isActive)
-      XCTAssertEqual(siwa.createdAt.timeIntervalSinceReferenceDate,
-                     Date().timeIntervalSinceReferenceDate,
-                     accuracy: 2)
+      XCTAssertNearlyNow(siwa.createdAt)
       
       let refreshTokens = try RefreshTokenModel.listBy(userID: try user.requireID(),
                                                        db: app.db(.psql)).wait()
@@ -72,14 +65,10 @@ final class SIWASignUpRequestTests: XCTestCase {
       
       let refreshToken = try XCTUnwrap(refreshTokens.first)
       XCTAssertEqual(refreshToken.deviceName, "iPhone")
-      
-      XCTAssertEqual(refreshToken.createdAt.timeIntervalSinceReferenceDate,
-                     Date().timeIntervalSinceReferenceDate,
-                     accuracy: 3)
-
-      XCTAssertEqual(refreshToken.expiresAt.timeIntervalSinceReferenceDate,
-                     Date().addingTimeInterval(AuthConstant.refreshTokenLifetime).timeIntervalSinceReferenceDate,
-                     accuracy: 2)
+      XCTAssertEqual(refreshToken.$user.id, try user.requireID())
+      XCTAssertNearlyNow(refreshToken.createdAt)
+      XCTAssertNearlyEqual(refreshToken.expiresAt,
+                     Date(timeIntervalSinceNow: AuthConstant.refreshTokenLifetime))
     }
   }
 }
