@@ -81,6 +81,12 @@ final class SIWASignInRequestTests: XCTestCase {
       let refreshTokens = try RefreshTokenModel.listBy(userID: try user.requireID(),
                                                        db: app.db(.psql)).wait()
       XCTAssertEqual(refreshTokens.count, 1)
+      let refreshToken = try XCTUnwrap(refreshTokens.first)
+      XCTAssertNearlyNow(refreshToken.createdAt)
+      XCTAssertEqual(refreshToken.$user.id, user.id)
+      XCTAssertEqual(refreshToken.deviceName, "iPhone")
+      XCTAssertNearlyEqual(refreshToken.expiresAt,
+                           Date(timeIntervalSinceNow: AuthConstant.refreshTokenLifetime))
     }
   }
 }
