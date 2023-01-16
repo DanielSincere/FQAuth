@@ -20,7 +20,7 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
 
   func testConsentRevoked() throws {
 
-    let userID = try SIWASignUpRepo(application: app).signUp(.init(
+    _ = try SIWASignUpRepo(application: app).signUp(.init(
       email: "email@example.com",
       firstName: "First",
       lastName: "Last",
