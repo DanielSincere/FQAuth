@@ -19,16 +19,6 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
   }
 
   func testConsentRevoked() throws {
-//    let payloadJson = #"""
-//        {
-//            "iss": "https://appleid.apple.com",
-//            "aud": "com.mytest.app",
-//            "iat": 1508184845,
-//            "jti": "abede67890",
-//            "events": "{\"type\":\"consent-revoked\",\"sub\":\"820417.faa325acbc78e1be1668ba852d492d8a.0219\",\"event_time\":1670016125295}"
-//        }
-//        """#
-
 
     let notification = SIWAServerNotification(
       iss: IssuerClaim(value: "https://appleid.apple.com"),
