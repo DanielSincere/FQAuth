@@ -63,12 +63,14 @@ public struct SIWAServerNotification: JWTPayload {
     }
 
     public struct EmailEnabled: Codable {
-      let sub: SubjectClaim
-      let eventTime: IssuedAtClaim
-      let email: String
-      let isPrivateEmail: AppleJsonBool
+      public let type: EventType = .emailEnabled
+      public let sub: SubjectClaim
+      public let eventTime: IssuedAtClaim
+      public let email: String
+      public let isPrivateEmail: AppleJsonBool
 
       public enum CodingKeys: String, CodingKey {
+        case type
         case sub
         case eventTime = "event_time"
         case email
@@ -77,30 +79,36 @@ public struct SIWAServerNotification: JWTPayload {
     }
 
     public struct EmailDisabled: Codable {
+      public let type: EventType = .emailDisabled
       public let sub: SubjectClaim
       public let eventTime: IssuedAtClaim
 
       public enum CodingKeys: String, CodingKey {
+        case type
         case sub
         case eventTime = "event_time"
       }
     }
 
     public struct ConsentRevoked: Codable {
+      public let type: EventType = .consentRevoked
       public let sub: SubjectClaim
       public let eventTime: IssuedAtClaim
 
       public enum CodingKeys: String, CodingKey {
+        case type
         case sub
         case eventTime = "event_time"
       }
     }
 
     public struct AccountDelete: Codable {
+      public let type: EventType = .accountDelete
       public let sub: SubjectClaim
       public let eventTime: IssuedAtClaim
 
       public enum CodingKeys: String, CodingKey {
+        case type
         case sub
         case eventTime = "event_time"
       }
@@ -122,6 +130,19 @@ public struct SIWAServerNotification: JWTPayload {
         self = .accountDelete(try AccountDelete(from: decoder))
       case .consentRevoked:
         self = .consentRevoked(try ConsentRevoked(from: decoder))
+      }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+      switch self {
+      case .accountDelete(let accountDelete):
+        try accountDelete.encode(to: encoder)
+      case .emailEnabled(let emailEnabled):
+        try emailEnabled.encode(to: encoder)
+      case .emailDisabled(let emailDisabled):
+        try emailDisabled.encode(to: encoder)
+      case .consentRevoked(let consentRevoked):
+        try consentRevoked.encode(to: encoder)
       }
     }
   }

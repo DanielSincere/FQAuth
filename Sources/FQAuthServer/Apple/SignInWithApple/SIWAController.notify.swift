@@ -7,8 +7,9 @@ extension SIWAController {
     
     NotifyBody.decodeRequest(request)
       .flatMapThrowing { notifyBody in
-        
-        let notification = try request.jwt.verify(notifyBody.payload, as: SIWAServerNotification.self)
+
+        let payload = notifyBody.payload
+        let notification = try request.jwt.verify(payload, as: SIWAServerNotification.self)
         
         switch notification.events.wrapped {
         case .accountDelete(let accountDelete):

@@ -21,6 +21,7 @@ final class SIWAServerNotificationDecodingTests: XCTestCase {
     XCTAssertNoThrow(try notification.aud.verifyIntendedAudience(includes: "com.mytest.app"))
     
     let consentRevoked = try XCTUnwrap(notification.events.wrapped.consentRevoked)
+
     XCTAssertEqual(consentRevoked.sub.value, "820417.faa325acbc78e1be1668ba852d492d8a.0219")
   }
   

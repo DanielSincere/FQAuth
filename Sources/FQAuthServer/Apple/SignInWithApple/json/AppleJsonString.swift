@@ -17,4 +17,13 @@ public struct AppleStringWrapped<Wrapped: Codable>: Codable {
     var stringContainer = encoder.singleValueContainer()
     try stringContainer.encode(string)
   }
+
+  public init(wrapped: Wrapped) {
+    self.wrapped = wrapped
+  }
+
+  public init(string: String) throws {
+    let wrapped = try JSONDecoder().decode(Wrapped.self, from: string.data(using: .utf8)!)
+    self.wrapped = wrapped
+  }
 }
