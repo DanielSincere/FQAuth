@@ -74,6 +74,26 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
     }
   }
 
+  func testEmailDisabled() throws {
+    let notification = try buildNotification(for: """
+      {
+        \"type\":\"email-disabled\",
+        \"sub\":\"\(appleUserId)\",
+        \"event_time\":1673016125295,
+        \"email\": "disabled@example.nyc",
+        \"is_private_email\": "true"
+      }
+      """)
+
+    try postNotification(notification) { (jobData: JobData,
+                                          payload: EmailDisabledJob.Payload) in
+
+      XCTAssertEqual(jobData.jobName, "EmailDisabledJob")
+      XCTAssertEqual(payload.appleUserID, appleUserId)
+      XCTAssertEqual(payload.email, "disabled@example.nyc")
+    }
+  }
+
   private func postNotification<T: Decodable>(_ notification: SIWAServerNotification,
                                               file: StaticString = #filePath,
                                               line: UInt = #line,

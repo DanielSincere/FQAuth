@@ -18,7 +18,6 @@ final class EmailEnabledJobTest: XCTestCase {
 
     try app.resetDatabase()
 
-
     self.existingUserID = try SIWASignUpRepo(application: app)
       .createTestUser(appleUserId: existingAppleID)
 
@@ -39,7 +38,8 @@ final class EmailEnabledJobTest: XCTestCase {
       logger: Logger(label: String(describing: self)),
       db: app.db(.psql)).wait()
 
-    let updatedSiwa = try XCTUnwrap(SIWAModel.findBy(appleUserId: existingAppleID, db: app.db(.psql)).wait())
+    let updatedSiwa = try XCTUnwrap(SIWAModel.findBy(appleUserId: existingAppleID,
+                                                     db: app.db(.psql)).wait())
 
     XCTAssertEqual(updatedSiwa.email, "newEmail@example.nyc")
   }

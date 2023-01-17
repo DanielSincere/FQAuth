@@ -82,11 +82,15 @@ public struct SIWAServerNotification: JWTPayload {
       public let type: EventType = .emailDisabled
       public let sub: SubjectClaim
       public let eventTime: IssuedAtClaim
+      public let email: String
+      public let isPrivateEmail: AppleJsonBool
 
       public enum CodingKeys: String, CodingKey {
         case type
         case sub
         case eventTime = "event_time"
+        case email
+        case isPrivateEmail = "is_private_email"
       }
     }
 
