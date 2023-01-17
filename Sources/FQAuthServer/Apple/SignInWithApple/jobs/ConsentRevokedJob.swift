@@ -25,7 +25,7 @@ struct ConsentRevokedJob: Job {
       .filter(\SIWAModel.$id, .equal, siwaID)
       .with(\.$user)
       .first()
-      .flatMap({ maybeSiwa in
+      .flatMap { maybeSiwa in
         guard let siwa = maybeSiwa else {
           return db.eventLoop.makeFailedFuture(SIWAMissingError())
         }
@@ -33,7 +33,7 @@ struct ConsentRevokedJob: Job {
         siwa.user.status = .deactivated
         return siwa.save(on: db).and(siwa.user.save(on: db))
           .transform(to: ())
-      })
+      }
   }
 
   struct SIWAMissingError: Error { }
