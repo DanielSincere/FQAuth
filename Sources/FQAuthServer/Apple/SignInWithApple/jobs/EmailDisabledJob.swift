@@ -17,6 +17,23 @@ struct EmailDisabledJob: Job {
   }
 
   static func removeEmail(for payload: Payload, logger: Logger, db: Database) -> EventLoopFuture<Void> {
-    db.eventLoop.future()
+
+    SIWAModel
+      .findBy(appleUserId: payload.appleUserID, db: db)
+      .flatMap { maybeSiwa in
+        guard let siwa = maybeSiwa else {
+
+          logger.info("Received 'email-disabled' for `\(payload.appleUserID)`, but we don't have that user")
+          return db.eventLoop.future()
+        }
+
+        guard siwa.email == payload.email else {
+          logger.info("Received 'email-disabled' for `\(payload.appleUserID)`, but we don't have that email")
+          return db.eventLoop.future()
+        }
+
+        siwa.email = nil
+        return siwa.save(on: db)
+      }
   }
 }

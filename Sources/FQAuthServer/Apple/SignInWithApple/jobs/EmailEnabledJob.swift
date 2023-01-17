@@ -22,7 +22,7 @@ struct EmailEnabledJob: Job {
       .findBy(appleUserId: payload.appleUserID, db: db)
       .flatMap { maybeSiwa in
         guard let siwa = maybeSiwa else {
-          logger.info("Received 'email-enabled' for `\(payload.appleUserID)`, but we don't have it")
+          logger.info("Received 'email-enabled' for `\(payload.appleUserID)`, but we don't have that user")
           return db.eventLoop.future()
         }
 

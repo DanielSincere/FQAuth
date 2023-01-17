@@ -9,7 +9,6 @@ final class EmailEnabledJobTest: XCTestCase {
 
   var app: Application!
   var existingUserID: UserModel.IDValue!
-  var existingSIWAModel: SIWAModel!
   let existingAppleID: String = "002024.1951936c61fa47debb2b076e6896ccc1.1949"
 
   override func setUpWithError() throws {
@@ -20,10 +19,6 @@ final class EmailEnabledJobTest: XCTestCase {
 
     self.existingUserID = try SIWASignUpRepo(application: app)
       .createTestUser(appleUserId: existingAppleID)
-
-    self.existingSIWAModel = try SIWAModel
-      .findBy(appleUserId: existingAppleID, db: app.db(.psql))
-      .wait()
   }
 
   override func tearDownWithError() throws {
