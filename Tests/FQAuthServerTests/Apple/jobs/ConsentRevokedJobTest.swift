@@ -41,7 +41,7 @@ final class ConsentRevokedJobTest: XCTestCase {
 
   func testJobDeactivatesUser() throws {
 
-    try ConsentRevokedJob.go(payload: try existingSIWAModel.requireID(),
+    try ConsentRevokedJob.deactivateUser(with: try existingSIWAModel.requireID(),
                              db: app.db(.psql))
       .wait()
 

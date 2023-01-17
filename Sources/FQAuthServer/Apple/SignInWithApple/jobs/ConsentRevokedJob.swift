@@ -8,7 +8,7 @@ struct ConsentRevokedJob: Job {
 
   func dequeue(_ context: QueueContext, _ payload: SIWAModel.IDValue) -> EventLoopFuture<Void> {
 
-    return Self.go(payload: payload,
+    return Self.deactivateUser(with: payload,
                    db: context.application.db(.psql))
   }
 
@@ -18,7 +18,7 @@ struct ConsentRevokedJob: Job {
     return context.eventLoop.future()
   }
 
-  static func go(payload siwaID: SIWAModel.IDValue, db: Database) -> EventLoopFuture<Void> {
+  static func deactivateUser(with siwaID: SIWAModel.IDValue, db: Database) -> EventLoopFuture<Void> {
 
     return SIWAModel
       .query(on: db)
