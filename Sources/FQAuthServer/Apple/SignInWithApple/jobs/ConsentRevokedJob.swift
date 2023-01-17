@@ -1,16 +1,27 @@
 import Queues
+import PostgresKit
 
 struct ConsentRevokedJob: Job {
 
   typealias Payload = SIWAModel.IDValue
 
    func dequeue(_ context: QueueContext, _ payload: SIWAModel.IDValue) -> EventLoopFuture<Void> {
-       // This is where you would send the email
-       return context.eventLoop.future()
+
+     return Self.go(payload: payload,
+                    db: context.application.db(.psql) as! SQLDatabase)
    }
 
    func error(_ context: QueueContext, _ error: Error, _ payload: SIWAModel.IDValue) -> EventLoopFuture<Void> {
-       // If you don't want to handle errors you can simply return a future. You can also omit this function entirely.
-       return context.eventLoop.future()
+
+     context.logger.critical("got an error while run ConsentRevokedJob: \(error)")
+     return context.eventLoop.future()
    }
+
+  static func go(payload: SIWAModel.IDValue, db: SQLDatabase) -> EventLoopFuture<Void> {
+
+    
+
+
+    return db.eventLoop.future()
+  }
 }
