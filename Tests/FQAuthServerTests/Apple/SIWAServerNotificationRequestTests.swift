@@ -38,7 +38,6 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
           """))
 
     let jwt: String = try app.jwt.signers.sign(notification)
-
     let notifyBody = SIWAController.NotifyBody(payload: jwt)
     let notificationBodyJson = try JSONEncoder().encode(notifyBody)
 
@@ -57,7 +56,34 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
   }
 
   func testAccountDelete() throws {
+    let notification = SIWAServerNotification(
+      iss: IssuerClaim(value: "https://appleid.apple.com"),
+      aud: AudienceClaim(stringLiteral: "com.fullqueuedeveloper.FQAuth"),
+      iat: IssuedAtClaim(value: Date()),
+      jti: IDClaim(value: "abede67890"),
+      events: try .init(string: """
+          {
+            \"type\":\"account-delete\",
+            \"sub\":\"\(appleUserId)\",
+            \"event_time\":1670016125295
+          }
+          """))
 
+    let jwt: String = try app.jwt.signers.sign(notification)
+    let notifyBody = SIWAController.NotifyBody(payload: jwt)
+    let notificationBodyJson = try JSONEncoder().encode(notifyBody)
 
+    try app.test(.POST, "/api/siwa/notify",
+                 headers: HTTPHeaders([("content-type", "application/json")]),
+                 body: ByteBuffer(data: notificationBodyJson)) { response in
+
+      XCTAssertEqual(response.status, .ok)
+
+      let nextJobId = try XCTUnwrap(app.queues.queue.pop().wait())
+      let nextJob = try app.queues.queue.get(nextJobId).wait()
+      let payload: String = try JSONDecoder().decode(String.self, from: ByteBuffer(bytes: nextJob.payload))
+      XCTAssertEqual(nextJob.jobName, "SIWAAccountDeletedJob")
+      XCTAssertEqual(payload, appleUserId)
+    }
   }
 }
