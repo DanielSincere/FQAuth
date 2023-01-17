@@ -8,10 +8,14 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
 
   var app: Application!
 
+  let appleUserId = "820417.faa325acbc78e1be1668ba852d492d8a.0219"
+
   override func setUpWithError() throws {
     self.app = Application(.testing)
     try app.configure()
     try app.resetDatabase()
+
+    try SIWASignUpRepo(application: app).createTestUser(appleUserId: appleUserId)
   }
 
   override func tearDownWithError() throws {
@@ -19,18 +23,6 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
   }
 
   func testConsentRevoked() throws {
-
-    _ = try SIWASignUpRepo(application: app).signUp(.init(
-      email: "email@example.com",
-      firstName: "First",
-      lastName: "Last",
-      deviceName: "TomatoDevice",
-      method: .siwa(
-        appleUserId: "820417.faa325acbc78e1be1668ba852d492d8a.0219",
-        appleRefreshToken: "fakeToken"))
-    ).wait()
-
-    let _ = try SIWAModel.findBy(appleUserId: "820417.faa325acbc78e1be1668ba852d492d8a.0219", db: app.db(.psql)).wait()!
 
     let notification = SIWAServerNotification(
       iss: IssuerClaim(value: "https://appleid.apple.com"),
@@ -54,7 +46,12 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
       let nextJob = try app.queues.queue.get(nextJobId).wait()
       let payload: String = try JSONDecoder().decode(String.self, from: ByteBuffer(bytes: nextJob.payload))
       XCTAssertEqual(nextJob.jobName, "ConsentRevokedJob")
-      XCTAssertEqual(payload, "820417.faa325acbc78e1be1668ba852d492d8a.0219")
+      XCTAssertEqual(payload, appleUserId)
     }
+  }
+
+  func testAccountDelete() throws {
+
+    
   }
 }

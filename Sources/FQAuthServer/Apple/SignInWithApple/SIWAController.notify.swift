@@ -19,25 +19,18 @@ extension SIWAController {
   private func handle(notification: SIWAServerNotification, request: Request) -> EventLoopFuture<HTTPStatus> {
     switch notification.events.wrapped {
     case .accountDelete(let accountDelete):
-      return request.eventLoop.future(.notImplemented)
+      return request.queue.dispatch(SIWAAccountDeletedJob.self, accountDelete.sub.value)
+      .map { HTTPStatus.ok }
     case .emailEnabled(let emailEnabled):
       return request.eventLoop.future(.notImplemented)
     case .emailDisabled(let emailDisabled):
       return request.eventLoop.future(.notImplemented)
     case .consentRevoked(let consentRevoked):
-      return self.handle(consentRevoked: consentRevoked, request: request)
+      return request.queue.dispatch(ConsentRevokedJob.self, consentRevoked.sub.value)
+      .map { HTTPStatus.ok }
     }
   }
 
-  func handle(consentRevoked: SIWAServerNotification.Event.ConsentRevoked, request: Request) -> EventLoopFuture<HTTPStatus> {
-
-    request.queue
-      .dispatch(
-        ConsentRevokedJob.self,
-        consentRevoked.sub.value
-      ).map { HTTPStatus.ok }
-  }
-  
   struct NotifyBody: Content {
     let payload: String
   }
