@@ -29,7 +29,13 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
       aud: AudienceClaim(stringLiteral: "com.fullqueuedeveloper.FQAuth"),
       iat: IssuedAtClaim(value: Date()),
       jti: IDClaim(value: "abede67890"),
-      events: try .init(string: #"{"type":"consent-revoked","sub":"820417.faa325acbc78e1be1668ba852d492d8a.0219","event_time":1670016125295}"#))
+      events: try .init(string: """
+          {
+            \"type\":\"consent-revoked\",
+            \"sub\":\"\(appleUserId)\",
+            \"event_time\":1670016125295
+          }
+          """))
 
     let jwt: String = try app.jwt.signers.sign(notification)
 
@@ -52,6 +58,6 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
 
   func testAccountDelete() throws {
 
-    
+
   }
 }
