@@ -20,14 +20,18 @@ extension SIWAController {
     switch notification.events.wrapped {
     case .accountDelete(let accountDelete):
       return request.queue.dispatch(SIWAAccountDeletedJob.self, accountDelete.sub.value)
-      .map { HTTPStatus.ok }
+      .map { .ok }
     case .emailEnabled(let emailEnabled):
-      return request.eventLoop.future(.notImplemented)
+      return request.queue.dispatch(EmailEnabledJob.self,
+                                    EmailEnabledJob.Payload(
+                                      newEmail: emailEnabled.email,
+                                      appleUserID: emailEnabled.sub.value))
+      .map { .ok }
     case .emailDisabled(let emailDisabled):
       return request.eventLoop.future(.notImplemented)
     case .consentRevoked(let consentRevoked):
       return request.queue.dispatch(ConsentRevokedJob.self, consentRevoked.sub.value)
-      .map { HTTPStatus.ok }
+      .map { .ok }
     }
   }
 

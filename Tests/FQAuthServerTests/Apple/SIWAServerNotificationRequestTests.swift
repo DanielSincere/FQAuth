@@ -86,4 +86,39 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
       XCTAssertEqual(payload, appleUserId)
     }
   }
+
+  func testEmailEnabled() throws {
+    let notification = SIWAServerNotification(
+      iss: IssuerClaim(value: "https://appleid.apple.com"),
+      aud: AudienceClaim(stringLiteral: "com.fullqueuedeveloper.FQAuth"),
+      iat: IssuedAtClaim(value: Date()),
+      jti: IDClaim(value: "abede67890"),
+      events: try .init(string: """
+          {
+            \"type\":\"email-enabled\",
+            \"sub\":\"\(appleUserId)\",
+            \"event_time\":1673016125295,
+            \"email\": "new@example.nyc",
+            \"is_private_email\": "true"
+          }
+          """))
+
+    let jwt: String = try app.jwt.signers.sign(notification)
+    let notifyBody = SIWAController.NotifyBody(payload: jwt)
+    let notificationBodyJson = try JSONEncoder().encode(notifyBody)
+
+    try app.test(.POST, "/api/siwa/notify",
+                 headers: HTTPHeaders([("content-type", "application/json")]),
+                 body: ByteBuffer(data: notificationBodyJson)) { response in
+      
+      XCTAssertEqual(response.status, .ok)
+      
+      let nextJobId = try XCTUnwrap(app.queues.queue.pop().wait())
+      let nextJob = try app.queues.queue.get(nextJobId).wait()
+      let payload: EmailEnabledJob.Payload = try JSONDecoder().decode(EmailEnabledJob.Payload.self, from: ByteBuffer(bytes: nextJob.payload))
+      XCTAssertEqual(nextJob.jobName, "EmailEnabledJob")
+      XCTAssertEqual(payload, .init(newEmail: "new@example.nyc",
+                                    appleUserID: appleUserId))
+    }
+  }
 }
