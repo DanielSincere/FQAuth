@@ -20,19 +20,20 @@ struct ConsentRevokedJob: Job {
 
   static func go(payload siwaID: SIWAModel.IDValue, db: Database) -> EventLoopFuture<Void> {
 
-    return SIWAModel.find(siwaID, on: db)
-      .flatMap { maybeSiwa in
+    return SIWAModel
+      .query(on: db)
+      .filter(\SIWAModel.$id, .equal, siwaID)
+      .with(\.$user)
+      .first()
+      .flatMap({ maybeSiwa in
         guard let siwa = maybeSiwa else {
           return db.eventLoop.makeFailedFuture(SIWAMissingError())
         }
-
-        return siwa.$user.load(on: db).flatMap { _ in
-          siwa.encryptedAppleRefreshToken = nil
-          siwa.user.status = .deactivated
-          return siwa.save(on: db).and(siwa.user.save(on: db))
-            .transform(to: ())
-        }
-      }
+        siwa.encryptedAppleRefreshToken = nil
+        siwa.user.status = .deactivated
+        return siwa.save(on: db).and(siwa.user.save(on: db))
+          .transform(to: ())
+      })
   }
 
   struct SIWAMissingError: Error { }
