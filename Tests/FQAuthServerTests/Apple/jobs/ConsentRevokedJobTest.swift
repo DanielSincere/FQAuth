@@ -9,7 +9,6 @@ final class ConsentRevokedJobTest: XCTestCase {
 
   var app: Application!
   var existingUserID: UserModel.IDValue!
-  var existingUser: UserModel!
   var existingSIWAModel: SIWAModel!
   let existingAppleID: String = "002024.1951936c61fa47debb2b076e6896ccc1.1949"
 
@@ -19,16 +18,9 @@ final class ConsentRevokedJobTest: XCTestCase {
 
     try app.resetDatabase()
 
-    let signUpParams = SIWASignUpRepo.Params(email: "test@example.com",
-                                             firstName: "First",
-                                             lastName: "Last",
-                                             deviceName: "iPhone",
-                                             method: .siwa(appleUserId: existingAppleID,
-                                                           appleRefreshToken: "AppleRefreshToken"))
 
     self.existingUserID = try SIWASignUpRepo(application: app)
-      .signUp(signUpParams)
-      .wait()
+      .createTestUser(appleUserId: existingAppleID)
 
     self.existingSIWAModel = try SIWAModel
       .findBy(appleUserId: existingAppleID, db: app.db(.psql))
