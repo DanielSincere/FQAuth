@@ -35,17 +35,15 @@ final class ConsentRevokedJobTest: XCTestCase {
       .wait()
   }
 
-  var db: SQLDatabase {
-    app.db(.psql) as! SQLDatabase
-  }
-
   override func tearDownWithError() throws {
     app.shutdown()
   }
 
   func testJobDeactivatesUser() throws {
 
-    try ConsentRevokedJob.go(payload: try existingSIWAModel.requireID(), db: db).wait()
+    try ConsentRevokedJob.go(payload: try existingSIWAModel.requireID(),
+                             db: app.db(.psql))
+      .wait()
 
     let modifiedUser = try XCTUnwrap(UserModel
       .findByAppleUserId(existingAppleID, db: app.db(.psql))
@@ -53,7 +51,7 @@ final class ConsentRevokedJobTest: XCTestCase {
 
     let modifiedSiwa = try XCTUnwrap(modifiedUser.siwa)
 
-    XCTAssertEqual(modifiedUser.status, .deactivated)
     XCTAssertEqual(modifiedSiwa.encryptedAppleRefreshToken, nil)
+    XCTAssertEqual(modifiedUser.status, .deactivated)
   }
 }
