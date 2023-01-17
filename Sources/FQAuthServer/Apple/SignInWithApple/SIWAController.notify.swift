@@ -31,23 +31,11 @@ extension SIWAController {
 
   func handle(consentRevoked: SIWAServerNotification.Event.ConsentRevoked, request: Request) -> EventLoopFuture<HTTPStatus> {
 
-    SIWAModel
-      .findBy(appleUserId: consentRevoked.sub.value, db: request.db(.psql))
-      .flatMap { maybeModel in
-        do {
-          if let model = maybeModel {
-            return request.queue
-              .dispatch(
-                ConsentRevokedJob.self,
-                try model.requireID()
-              ).map { HTTPStatus.ok }
-          } else {
-            return request.eventLoop.future(.notFound)
-          }
-        } catch {
-          return request.eventLoop.makeFailedFuture(error)
-        }
-      }
+    request.queue
+      .dispatch(
+        ConsentRevokedJob.self,
+        consentRevoked.sub.value
+      ).map { HTTPStatus.ok }
   }
   
   struct NotifyBody: Content {

@@ -30,7 +30,7 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
         appleRefreshToken: "fakeToken"))
     ).wait()
 
-    let siwaModel = try SIWAModel.findBy(appleUserId: "820417.faa325acbc78e1be1668ba852d492d8a.0219", db: app.db(.psql)).wait()!
+    let _ = try SIWAModel.findBy(appleUserId: "820417.faa325acbc78e1be1668ba852d492d8a.0219", db: app.db(.psql)).wait()!
 
     let notification = SIWAServerNotification(
       iss: IssuerClaim(value: "https://appleid.apple.com"),
@@ -52,9 +52,9 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
 
       let nextJobId = try XCTUnwrap(app.queues.queue.pop().wait())
       let nextJob = try app.queues.queue.get(nextJobId).wait()
-      let payload: UUID = try JSONDecoder().decode(ConsentRevokedJob.Payload.self, from: ByteBuffer(bytes: nextJob.payload))
+      let payload: String = try JSONDecoder().decode(String.self, from: ByteBuffer(bytes: nextJob.payload))
       XCTAssertEqual(nextJob.jobName, "ConsentRevokedJob")
-      XCTAssertEqual(payload, try siwaModel.requireID())
+      XCTAssertEqual(payload, "820417.faa325acbc78e1be1668ba852d492d8a.0219")
     }
   }
 }

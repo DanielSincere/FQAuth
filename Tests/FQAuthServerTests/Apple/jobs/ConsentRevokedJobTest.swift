@@ -41,8 +41,9 @@ final class ConsentRevokedJobTest: XCTestCase {
 
   func testJobDeactivatesUser() throws {
 
-    try ConsentRevokedJob.deactivateUser(with: try existingSIWAModel.requireID(),
-                             db: app.db(.psql))
+    try ConsentRevokedJob.deactivateUser(with: existingAppleID,
+                                         logger: Logger(label: String(describing: self)),
+                                         db: app.db(.psql))
       .wait()
 
     let modifiedUser = try XCTUnwrap(UserModel

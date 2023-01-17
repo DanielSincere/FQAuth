@@ -4,11 +4,12 @@ import FluentPostgresDriver
 
 struct ConsentRevokedJob: Job {
 
-  typealias Payload = SIWAModel.IDValue
+  typealias Payload = String
 
-  func dequeue(_ context: QueueContext, _ payload: SIWAModel.IDValue) -> EventLoopFuture<Void> {
+  func dequeue(_ context: QueueContext, _ payload: String) -> EventLoopFuture<Void> {
 
     return Self.deactivateUser(with: payload,
+                               logger: context.logger,
                                db: context.application.db(.psql))
   }
 
@@ -18,17 +19,18 @@ struct ConsentRevokedJob: Job {
     return context.eventLoop.future()
   }
 
-  static func deactivateUser(with siwaID: SIWAModel.IDValue,
+  static func deactivateUser(with appleUserID: String,
+                             logger: Logger,
                              db: Database) -> EventLoopFuture<Void> {
-
     SIWAModel
       .query(on: db)
-      .filter(\SIWAModel.$id, .equal, siwaID)
+      .filter(\SIWAModel.$appleUserId, .equal, appleUserID)
       .with(\.$user)
       .first()
       .flatMap { maybeSiwa in
         guard let siwa = maybeSiwa else {
-          return db.eventLoop.makeFailedFuture(SIWAMissingError())
+          logger.critical("Apple sent us \(appleUserID) but we don't have it ConsentRevokedJob")
+          return db.eventLoop.future()
         }
         siwa.encryptedAppleRefreshToken = nil
         siwa.user.status = .deactivated
@@ -36,6 +38,4 @@ struct ConsentRevokedJob: Job {
           .transform(to: ())
       }
   }
-
-  struct SIWAMissingError: Error { }
 }
