@@ -13,12 +13,6 @@ struct ConsentRevokedJob: Job {
                                db: context.application.db(.psql))
   }
 
-  func error(_ context: QueueContext, _ error: Error, _ payload: SIWAModel.IDValue) -> EventLoopFuture<Void> {
-
-    context.logger.critical("got an error while run ConsentRevokedJob: \(error)")
-    return context.eventLoop.future()
-  }
-
   static func deactivateUser(with appleUserID: String,
                              logger: Logger,
                              db: Database) -> EventLoopFuture<Void> {
