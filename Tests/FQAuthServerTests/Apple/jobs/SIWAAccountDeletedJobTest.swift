@@ -40,13 +40,11 @@ final class SIWAAccountDeletedJobTest: XCTestCase {
 
     let updatedUser = try XCTUnwrap(UserModel.find(self.existingUserID, on: app.db(.psql)).wait())
 
-    
     XCTAssertEqual(updatedUser.status, .deactivated)
-    XCTAssertNil(updatedUser.$siwa)
-
 
     let updatedSIWAModel = try SIWAModel.find(existingSIWAModel.id, on: app.db(.psql)).wait()
-
     XCTAssertNil(updatedSIWAModel)
+
+    XCTAssertNil(try SIWAModel.findBy(appleUserId: existingAppleID, db: app.db(.psql)).wait())
   }
 }
