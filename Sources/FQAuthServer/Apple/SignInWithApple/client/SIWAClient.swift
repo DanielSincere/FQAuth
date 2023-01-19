@@ -48,7 +48,7 @@ public struct LiveSIWAClient: SIWAClient {
     do {
       let payload = SIWAClientSecret(clientId: try EnvVars.appleAppId.loadOrThrow(),
                                      teamId: try EnvVars.appleTeamId.loadOrThrow())
-      let string = try signers.sign(payload, kid: .appleServicesKey)
+      let string = try signers.sign(payload, kid: .appleKey)
       return eventLoop.makeSucceededFuture(string)
     } catch {
       logger.critical("Cannot sign request to Apple: \(error.localizedDescription)")

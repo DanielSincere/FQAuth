@@ -5,8 +5,8 @@ enum EnvVars: String, CaseIterable {
   // generate with `swish generate-jwt-key`
   case authPrivateKey = "AUTH_PRIVATE_KEY"
 
-  case appleServicesKey = "APPLE_SERVICES_KEY"
-  case appleServicesKeyId = "APPLE_SERVICES_KEY_ID"
+  case appleKey = "APPLE_KEY"
+  case appleKeyId = "APPLE_KEY_ID"
   case appleTeamId = "APPLE_TEAM_ID"
   case appleAppId = "APPLE_APP_ID"
 
