@@ -12,4 +12,9 @@ public struct FQAuthSessionToken: Content, Authenticatable, JWTPayload {
   public func verify(using signer: JWTKit.JWTSigner) throws {
     try expiration.verifyNotExpired()
   }
+
+  public init(userID: UUID, expiration: ExpirationClaim) {
+    self.userID = userID
+    self.expiration = expiration
+  }
 }
