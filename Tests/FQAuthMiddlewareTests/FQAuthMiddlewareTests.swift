@@ -18,10 +18,9 @@ final class FQAuthMiddlewareTests: XCTestCase {
                         kid: .authPrivateKey,
                         isDefault: true)
 
-    app.routes.group(FQAuthAuthenticator(),
-                     FQAuthSessionToken.guardMiddleware(throwing: Abort(.unauthorized))) { secure in
+    app.routes.group(FQAuthMiddleware()) { secure in
       secure.get("hello") { req -> String in
-        let token = try req.auth.require(FQAuthSessionToken.self)
+        let token = req.fqSessionToken!
         return token.userID.uuidString
       }
     }

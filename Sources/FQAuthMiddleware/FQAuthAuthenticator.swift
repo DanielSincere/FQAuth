@@ -1,8 +1,8 @@
 import Vapor
 
-struct FQAuthAuthenticator: BearerAuthenticator {
+public struct FQAuthAuthenticator: BearerAuthenticator {
 
-  func authenticate(
+  public func authenticate(
     bearer: BearerAuthorization,
     for request: Request
   ) -> EventLoopFuture<Void> {
