@@ -7,7 +7,7 @@ final class FQAuthMiddlewareTests: XCTestCase {
 
   let privateKey = Data(base64Encoded: "LS0tLS1CRUdJTiBFQyBQQVJBTUVURVJTLS0tLS0KQmdVcmdRUUFJdz09Ci0tLS0tRU5EIEVDIFBBUkFNRVRFUlMtLS0tLQotLS0tLUJFR0lOIEVDIFBSSVZBVEUgS0VZLS0tLS0KTUlIY0FnRUJCRUlCTnZBWXJLYk9CR29KSE1kKzBUNjdlUWdWWXdhVXlVUDIxdDlrdURFa1lQLzI0NndVMEwyYwpqSmFNdUI3dHZvSXZkWHZFZnNHdkRpZyswbFM1OXRtUW5HdWdCd1lGSzRFRUFDT2hnWWtEZ1lZQUJBQ1d4d0xBCkRsVFk5alZvNXYvVmNCZkpIZzZjUXdWUHlvZXcwWkxtMWVvY01PUm9FZFZucEZVZ20xVWZSVkdFRXZrbHRpV0cKOU5mZFVoL25QajNRWWx5V3VBRGdlS0NBMDBZVHhZNzNKd1RUTUlvczlmRXFOblh6TjBJUXhWVUFmYjFpKzd2SApvVURJRTlXNk1zbG9mQ3F3ZVFmeXJxa0c5VXU3VWtJNWgyS1M4RmU2VFE9PQotLS0tLUVORCBFQyBQUklWQVRFIEtFWS0tLS0tCg==")!
 
-  var userID: UUID = .init()
+  var userID: UUID = UUID(uuidString: "1CB5E4AD-C9DC-4635-BC27-0AE1DA9637BD")!
   var authorizedToken: String!
   var app: Application!
 
@@ -20,9 +20,9 @@ final class FQAuthMiddlewareTests: XCTestCase {
 
     app.routes.group(FQAuthAuthenticator(),
                      FQAuthSessionToken.guardMiddleware(throwing: Abort(.unauthorized))) { secure in
-      secure.get("hello") { req in
-        
-        return "hello"
+      secure.get("hello") { req -> String in
+        let token = try req.auth.require(FQAuthSessionToken.self)
+        return token.userID.uuidString
       }
     }
 
@@ -62,7 +62,7 @@ final class FQAuthMiddlewareTests: XCTestCase {
     let headers = HTTPHeaders([("Authorization", "Bearer \(authorizedToken!)")])
     try app.test(.GET, "hello", headers: headers) { response in
       XCTAssertEqual(response.status, .ok)
-      XCTAssertEqual(String(buffer: response.body), #"hello"#)
+      XCTAssertEqual(String(buffer: response.body), #"1CB5E4AD-C9DC-4635-BC27-0AE1DA9637BD"#)
     }
   }
 }
