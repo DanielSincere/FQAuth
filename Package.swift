@@ -51,5 +51,9 @@ let package = Package(
       .product(name: "XCTVapor", package: "vapor"),
       "FQAuthServer",
     ]),
+    .testTarget(name: "FQAuthMiddlewareTests", dependencies: [
+      .product(name: "XCTVapor", package: "vapor"),
+      "FQAuthMiddleware",
+    ]),
   ]
 )
