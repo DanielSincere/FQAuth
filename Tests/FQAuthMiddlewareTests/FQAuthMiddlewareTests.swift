@@ -18,9 +18,10 @@ final class FQAuthMiddlewareTests: XCTestCase {
                         kid: .authPrivateKey,
                         isDefault: true)
 
-
-    app.routes.group(FQAuthMiddlewareAuthenticator(), FQAuthMiddleware()) { secure in
+    app.routes.group(FQAuthAuthenticator(),
+                     FQAuthSessionToken.guardMiddleware(throwing: Abort(.unauthorized))) { secure in
       secure.get("hello") { req in
+        
         return "hello"
       }
     }
