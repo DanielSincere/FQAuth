@@ -8,7 +8,7 @@ extension JWKIdentifier {
 }
 
 extension JWTSigners {
-  func useAuthPrivate() {
+  public func useAuthPrivate() {
     self.use(.es512(key: .authPrivateKey),
              kid: .authPrivateKey,
              isDefault: true)
