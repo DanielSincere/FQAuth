@@ -21,12 +21,15 @@ final class FQAuthMiddlewareTests: XCTestCase {
     app.routes.group(FQAuthMiddleware()) { secure in
       secure.get("hello") { req -> String in
         let token = req.fqSessionToken!
-        return token.userID.uuidString
+        return token.userID?.uuidString ?? "not a uuid"
       }
     }
 
     let token = FQAuthSessionToken(userID: userID,
-                                   expiration: ExpirationClaim(value: Date(timeIntervalSinceNow: 600)))
+                                   deviceName: "Xample",
+                                   expiration: ExpirationClaim(value: Date(timeIntervalSinceNow: 600)),
+                                   iss: IssuerClaim("com.example")
+    )
     authorizedToken = try app.jwt.signers.sign(token, kid: .authPrivateKey)
   }
 

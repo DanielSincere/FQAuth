@@ -10,7 +10,7 @@ final class UserController {
     
     let token = try req.auth.require(FQAuthSessionToken.self)
     
-    guard token.userID == userID else {
+    guard  token.userID == userID else {
       throw Abort(.forbidden)
     }
     

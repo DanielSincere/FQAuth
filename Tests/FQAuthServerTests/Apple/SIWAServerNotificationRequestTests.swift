@@ -102,6 +102,8 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
     let notifyBody = SIWAController.NotifyBody(payload: jwt)
     let notificationBodyJson = try JSONEncoder().encode(notifyBody)
 
+
+    _ = try app.jwt.signers.verify(jwt, as: SIWAServerNotification.self)
     try app.test(.POST, "/api/siwa/notify",
                  headers: HTTPHeaders([("content-type", "application/json")]),
                  body: ByteBuffer(data: notificationBodyJson)) { response in
@@ -118,7 +120,7 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
   private func buildNotification(for event: String) throws -> SIWAServerNotification {
     SIWAServerNotification(
       iss: IssuerClaim(value: "https://appleid.apple.com"),
-      aud: AudienceClaim(stringLiteral: "com.fullqueuedeveloper.FQAuth"),
+      aud: AudienceClaim(stringLiteral: try EnvVars.appleAppId.loadOrThrow()),
       iat: IssuedAtClaim(value: Date()),
       jti: IDClaim(value: "abede67890"),
       events: try .init(string: event))
