@@ -1,29 +1,13 @@
 import JWT
 import Vapor
+import FQAuthMiddleware
 
-struct AuthJWT: JWTPayload {
-
-  let sub: SubjectClaim // user id
-  let exp: ExpirationClaim
-  let iat: IssuedAtClaim
-  let iss: IssuerClaim
-  let deviceName: String
-}
-
-extension AuthJWT {
-  func verify(using signer: JWTSigner) throws {
-    try exp.verifyNotExpired()
-
-    guard iss.value == AuthConstant.selfIssuer else {
-      throw JWTError.claimVerificationFailure(name: "iss", reason: "mismatch")
-    }
-  }
-
+extension FQAuthSessionToken {
   init(userId: UUID, deviceName: String, now: Date = Date()) {
-    self.sub = .init(value: userId.uuidString)
-    self.iat = .init(value: now)
-    self.exp = .init(value: now.addingTimeInterval(AuthConstant.accessTokenLifetime))
-    self.deviceName = deviceName
-    self.iss = .init(value: AuthConstant.selfIssuer)
+
+    self.init(userID: userId,
+              deviceName: deviceName,
+              expiration: .init(value: now.addingTimeInterval(AuthConstant.accessTokenLifetime)),
+              iss: .init(value: AuthConstant.selfIssuer))
   }
 }

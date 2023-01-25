@@ -4,11 +4,11 @@ import Foundation
 
 public struct FQAuthSessionToken: Content, Authenticatable, JWTPayload {
 
-  public let deviceName: String
-  public let iss: IssuerClaim
-  public let sub: SubjectClaim
-  public var exp: ExpirationClaim
+  public let sub: SubjectClaim // user id
+  public let exp: ExpirationClaim
   public let iat: IssuedAtClaim
+  public let iss: IssuerClaim
+  public let deviceName: String
   
   public static let expirationTime: TimeInterval = 60 * 60 * 2
   

@@ -1,4 +1,5 @@
 import Vapor
+import FQAuthMiddleware
 
 struct AuthHelper {
   let request: Request
@@ -12,7 +13,7 @@ struct AuthHelper {
                              token: refreshToken)
     .create(on: request.db)
     .flatMapThrowing { _ in
-      let accessJWT = AuthJWT(userId: userId, deviceName: deviceName)
+      let accessJWT = FQAuthSessionToken(userId: userId, deviceName: deviceName)
 
       let accessToken = try request.jwt.sign(accessJWT, kid: .authPrivateKey)
 
