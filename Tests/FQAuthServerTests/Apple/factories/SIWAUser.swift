@@ -2,7 +2,6 @@
 
 extension SIWASignUpRepo {
 
-
   @discardableResult
   func createTestUser(
     appleUserId: String = "820417.faa325acbc78e1be1668ba852d492d8a.0219",

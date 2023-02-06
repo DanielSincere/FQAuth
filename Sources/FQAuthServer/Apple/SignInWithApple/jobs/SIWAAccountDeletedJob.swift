@@ -14,8 +14,7 @@ struct SIWAAccountDeletedJob: Job {
   static func deleteSIWAAccount(appleUserID: String,
                                 logger: Logger,
                                 db: Database) -> EventLoopFuture<Void> {
-
-    return UserModel
+    UserModel
       .findByAppleUserId(appleUserID, db: db)
       .flatMap { maybeUser in
 
@@ -25,8 +24,8 @@ struct SIWAAccountDeletedJob: Job {
 
         user.status = .deactivated
         return user.save(on: db)
-
-      }.flatMapAlways { _ in
+      }
+      .flatMapAlways { _ in
         SIWAModel
           .findBy(appleUserId: appleUserID, db: db)
           .flatMap { maybeSiwa in

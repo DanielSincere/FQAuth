@@ -65,6 +65,20 @@ final class SIWAModel: Model {
     self.encryptedAppleRefreshToken = DBSeal().seal(string: string)
   }
 
+  static func findBy(appleUserId: String, db: Database) -> EventLoopFuture<SIWAModel?> {
+    SIWAModel
+      .query(on: db)
+      .filter(\.$appleUserId, .equal, appleUserId)
+      .first()
+  }
+
+  static func findBy(userId: UserModel.IDValue, db: Database) -> EventLoopFuture<SIWAModel?> {
+    SIWAModel
+      .query(on: db)
+      .filter(\.$user.$id, .equal, userId)
+      .first()
+  }
+
   func shouldAttemptRefresh(now: Date = Date()) -> Bool {
     switch attemptedRefreshResult {
 
@@ -78,12 +92,5 @@ final class SIWAModel: Model {
 
       return Date(timeInterval: .oneDay, since: attemptedRefreshAt) < now
     }
-  }
-  
-  static func findBy(appleUserId: String, db: Database) -> EventLoopFuture<SIWAModel?> {
-    SIWAModel
-      .query(on: db)
-      .filter(\.$appleUserId, .equal, appleUserId)
-      .first()
   }
 }
