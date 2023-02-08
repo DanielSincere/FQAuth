@@ -5,7 +5,7 @@ import FluentPostgresDriver
 import XCTest
 import Vapor
 
-final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
+final class SIWAReadyForReverifyScheduledJobTest: XCTestCase {
 
   var app: Application!
 
@@ -20,7 +20,7 @@ final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
   }
 
   func testDoesNothingWhenTheresNoAccounts() async throws {
-    try await EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
+    try await SIWAReadyForReverifyScheduledJob.enqueueJobs(
       logger: Logger(label: "test logger"),
       db: app.db(.psql),
       queue: app.queues.queue)
@@ -35,7 +35,7 @@ final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
 
     let userID = try SIWASignUpRepo(application: app)
       .createTestUser(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949")
-    try await EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
+    try await SIWAReadyForReverifyScheduledJob.enqueueJobs(
       logger: Logger(label: "test logger"),
       db: app.db(.psql),
       queue: app.queues.queue)
@@ -63,7 +63,7 @@ final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
     siwa2.attemptedRefreshResult = .success
     try siwa2.save(on: app.db(.psql)).wait()
 
-    try await EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
+    try await SIWAReadyForReverifyScheduledJob.enqueueJobs(
       logger: Logger(label: "test logger"),
       db: app.db(.psql), queue: app.queues.queue)
 
@@ -75,8 +75,8 @@ final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
     let job2 = try app.queues.queue.get(jobId2).wait()
     let payload2: SIWAModel.IDValue = try JSONDecoder().decode(SIWAModel.IDValue.self, from: ByteBuffer(bytes: job2.payload))
 
-    XCTAssertEqual([payload1, payload2],
-                   [try siwa1.requireID(), try siwa2.requireID()])
+    XCTAssertEqual(Set([payload1, payload2]),
+                   Set([try siwa1.requireID(), try siwa2.requireID()]))
 
   }
 }

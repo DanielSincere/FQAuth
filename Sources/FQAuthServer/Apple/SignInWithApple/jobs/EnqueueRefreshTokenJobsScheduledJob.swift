@@ -3,15 +3,15 @@ import QueuesRedisDriver
 import Queues
 import FluentPostgresDriver
 
-struct EnqueueRefreshTokenJobsScheduledJob: AsyncScheduledJob {
+struct SIWAReadyForReverifyScheduledJob: AsyncScheduledJob {
   func run(context: Queues.QueueContext) async throws {
-    try await Self.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
+    try await Self.enqueueJobs(
       logger: context.logger,
       db: context.application.db(.psql),
       queue: context.queue)
   }
 
-  static func enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(logger: Logger, db: Database, queue: Queue) async throws {
+  static func enqueueJobs(logger: Logger, db: Database, queue: Queue) async throws {
 
     let repo = SIWAReadyForReverifyRepo(logger: logger,
                                         eventLoop: db.eventLoop,
