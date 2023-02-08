@@ -22,7 +22,7 @@ struct RefreshTokenJob: AsyncJob {
                                     logger: Logger,
                                     db: Database,
                                     client: SIWAClient,
-                                    signers: JWTSigners) async throws {
+                                    signers: JWTVerifying) async throws {
 
     guard let siwa = try await SIWAModel.findBy(id: siwaID, db: db).get() else {
       logger.debug("couldn't find a SIWAModel with id")
@@ -42,7 +42,7 @@ struct RefreshTokenJob: AsyncJob {
     switch tokenResult {
     case .decoded(let success):
       do {
-        let _: AppleIdentityToken = try signers.verify(success.id_token)
+        let _: AppleIdentityToken = try signers.verify(success.id_token, as: AppleIdentityToken.self)
       } catch {
         await Self.deauthorizeUser(siwa: siwa)
         return

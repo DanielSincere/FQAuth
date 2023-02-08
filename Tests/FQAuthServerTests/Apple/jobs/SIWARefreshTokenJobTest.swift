@@ -2,6 +2,7 @@ import Foundation
 @testable import FQAuthServer
 import XCTest
 import Vapor
+import JWTKit
 
 final class SIWARefreshTokenJobTest: XCTestCase {
 
@@ -36,12 +37,14 @@ final class SIWARefreshTokenJobTest: XCTestCase {
                                     id_token: "eyJra...96sZg",
                                     token_type: "Bearer")))
 
+    let signers = FakeJWTSigners(stub: AppleIdentityTokenFixtures.a.decoded)
+
     try await RefreshTokenJob.refreshTokenWithApple(
       siwaID: try siwa.requireID(),
       logger: Logger(label: "test"),
       db: app.db(.psql),
       client: client,
-      signers: app.jwt.signers
+      signers: signers
     )
 
     let maybeReloadedModel = try await SIWAModel.findBy(
