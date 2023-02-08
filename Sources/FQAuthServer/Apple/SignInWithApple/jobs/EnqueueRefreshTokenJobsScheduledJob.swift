@@ -13,10 +13,9 @@ struct EnqueueRefreshTokenJobsScheduledJob: AsyncScheduledJob {
 
   static func enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(logger: Logger, db: Database, queue: Queue) async throws {
 
-
-    // instantiate repo
-
-    let repo = SIWAReadyForReverifyRepo(logger: logger, eventLoop: db.eventLoop, database: db as! SQLDatabase)
+    let repo = SIWAReadyForReverifyRepo(logger: logger,
+                                        eventLoop: db.eventLoop,
+                                        database: db as! SQLDatabase)
 
     let siwaModels = try await repo.fetch()
     for siwaModel in siwaModels {
