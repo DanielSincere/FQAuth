@@ -79,6 +79,13 @@ final class SIWAModel: Model {
       .first()
   }
 
+  static func findBy(id: SIWAModel.IDValue, db: Database) -> EventLoopFuture<SIWAModel?> {
+    SIWAModel
+      .query(on: db)
+      .filter(\.$id, .equal, id)
+      .first()
+  }
+
   func shouldAttemptRefresh(now: Date = Date()) -> Bool {
     switch attemptedRefreshResult {
 

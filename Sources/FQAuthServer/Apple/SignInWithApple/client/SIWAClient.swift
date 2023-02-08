@@ -3,7 +3,7 @@ import JWTKit
 
 public protocol SIWAClient {
   func `for`(_ request: Request) -> SIWAClient
-  func validateRefreshToken(token: String) -> EventLoopFuture<AppleAuthTokenResult>
+  func validateRefreshToken(token: String) -> EventLoopFuture<AppleAuthTokenRefreshResult>
   func generateRefreshToken(code: String) -> EventLoopFuture<AppleTokenResponse>
 }
 
@@ -56,7 +56,7 @@ public struct LiveSIWAClient: SIWAClient {
     }
   }
   
-  public func validateRefreshToken(token: String) -> EventLoopFuture<AppleAuthTokenResult> {
+  public func validateRefreshToken(token: String) -> EventLoopFuture<AppleAuthTokenRefreshResult> {
     self.clientSecret
       .flatMap { clientSecret in
         let body = AppleAuthTokenBody(client_id: self.clientId,
