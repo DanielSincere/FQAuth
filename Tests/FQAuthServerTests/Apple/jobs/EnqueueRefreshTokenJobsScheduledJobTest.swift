@@ -7,7 +7,6 @@ import Vapor
 
 final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
 
-
   var app: Application!
 
   override func setUpWithError() throws {
@@ -23,7 +22,8 @@ final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
   func testDoesNothingWhenTheresNoAccounts() throws {
     try EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
       logger: Logger(label: "test logger"),
-      db: app.db(.psql))
+      db: app.db(.psql),
+      queue: app.queues.queue)
     .wait()
 
     let nextJob = try app.queues.queue.pop().wait()
@@ -37,7 +37,8 @@ final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
       .createTestUser(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949")
     try EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
       logger: Logger(label: "test logger"),
-      db: app.db(.psql))
+      db: app.db(.psql),
+      queue: app.queues.queue)
     .wait()
 
     let nextJob = try app.queues.queue.pop().wait()
@@ -49,15 +50,22 @@ final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
     let userID = try SIWASignUpRepo(application: app)
       .createTestUser(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949")
 
-    let siwa1 = try SIWAModel.findBy(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949", db: app.db(.psql)).wait()
+    let siwa1 = try XCTUnwrap(SIWAModel.findBy(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949", db: app.db(.psql)).wait())
+    siwa1.attemptedRefreshResult = .failure
+    try siwa1.save(on: app.db(.psql)).wait()
 
 
     let userID2 = try SIWASignUpRepo(application: app)
       .createTestUser(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1999")
 
+    let siwa2 = try XCTUnwrap(SIWAModel.findBy(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1999", db: app.db(.psql)).wait())
+
+    siwa2.attemptedRefreshResult = .success
+    try siwa2.save(on: app.db(.psql)).wait()
+
     try EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
       logger: Logger(label: "test logger"),
-      db: app.db(.psql))
+      db: app.db(.psql), queue: app.queues.queue)
     .wait()
 
     let nextJob = try XCTUnwrap(app.queues.queue.pop().wait())
