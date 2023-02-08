@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "FQAuth",
   platforms: [
-      .macOS(.v11),
+      .macOS(.v12),
   ],
   products: [
     .executable(name: "FQAuthServer", targets: ["FQAuthServer"]),

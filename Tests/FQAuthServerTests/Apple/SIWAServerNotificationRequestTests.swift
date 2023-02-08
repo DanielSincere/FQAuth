@@ -14,6 +14,7 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
     self.app = Application(.testing)
     try app.configure()
     try app.resetDatabase()
+    try app.resetQueue()
 
     try SIWASignUpRepo(application: app)
       .createTestUser(appleUserId: appleUserId)

@@ -25,109 +25,101 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     app.shutdown()
   }
 
-  func testShouldNotAttemptRefreshWhenNewUser() throws {
-    var results = [SIWAModel]()
+  func testShouldNotAttemptRefreshWhenNewUser() async throws {
     let repo = SIWAReadyForReverifyRepo(application: self.app)
-    try repo.fetch { results.append($0) }.wait()
+    let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 0)
   }
 
-  func testShouldNotAttemptRefreshWhenNewUserIsJustUnderOneDayOld() throws {
+  func testShouldNotAttemptRefreshWhenNewUserIsJustUnderOneDayOld() async throws {
     siwaModel.createdAt = Date(timeIntervalSinceNow: -86400 + 60)
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    var results = [SIWAModel]()
     let repo = SIWAReadyForReverifyRepo(application: self.app)
-    try repo.fetch { results.append($0) }.wait()
+    let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 0)
   }
 
-  func testShouldAttemptRefreshWhenNewUserIsOverOneDayOld() throws {
+  func testShouldAttemptRefreshWhenNewUserIsOverOneDayOld() async throws {
     siwaModel.createdAt = Date(timeIntervalSinceNow: -86400 - 60 )
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    var results = [SIWAModel]()
     let repo = SIWAReadyForReverifyRepo(application: self.app)
-    try repo.fetch { results.append($0) }.wait()
+    let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
     XCTAssertTrue(try XCTUnwrap(results.first).shouldAttemptRefresh())
   }
 
-  func testShouldAttemptWhenSuccessAndAttemptedRefreshIsEmpty() throws {
+  func testShouldAttemptWhenSuccessAndAttemptedRefreshIsEmpty() async throws {
     siwaModel.attemptedRefreshAt = nil
     siwaModel.attemptedRefreshResult = .success
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    var results = [SIWAModel]()
     let repo = SIWAReadyForReverifyRepo(application: self.app)
-    try repo.fetch { results.append($0) }.wait()
+    let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
     XCTAssertTrue(try XCTUnwrap(results.first).shouldAttemptRefresh())
   }
 
-  func testShouldAttemptWhenFailureAndAttemptedRefreshIsEmpty() throws {
+  func testShouldAttemptWhenFailureAndAttemptedRefreshIsEmpty() async throws {
     siwaModel.attemptedRefreshAt = nil
     siwaModel.attemptedRefreshResult = .failure
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    var results = [SIWAModel]()
+
     let repo = SIWAReadyForReverifyRepo(application: self.app)
-    try repo.fetch { results.append($0) }.wait()
+    let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
     XCTAssertTrue(try XCTUnwrap(results.first).shouldAttemptRefresh())
   }
 
-  func testShouldAttemptWhenFailureAndLatestRefreshWasOverADayAgo() throws {
+  func testShouldAttemptWhenFailureAndLatestRefreshWasOverADayAgo() async throws {
     siwaModel.attemptedRefreshAt = Date(timeIntervalSinceNow: -86400 - 60)
     siwaModel.attemptedRefreshResult = .failure
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    var results = [SIWAModel]()
     let repo = SIWAReadyForReverifyRepo(application: self.app)
-    try repo.fetch { results.append($0) }.wait()
+    let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
     XCTAssertTrue(try XCTUnwrap(results.first).shouldAttemptRefresh())
   }
 
-  func testShouldAttemptWhenSuccessAndLatestRefreshWasOverADayAgo() throws {
+  func testShouldAttemptWhenSuccessAndLatestRefreshWasOverADayAgo() async throws {
     siwaModel.attemptedRefreshAt = Date(timeIntervalSinceNow: -86400 - 60)
     siwaModel.attemptedRefreshResult = .success
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    var results = [SIWAModel]()
     let repo = SIWAReadyForReverifyRepo(application: self.app)
-    try repo.fetch { results.append($0) }.wait()
+    let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
     XCTAssertTrue(try XCTUnwrap(results.first).shouldAttemptRefresh())
   }
 
-  func testShouldNotAttemptWhenSuccessAndLatestRefreshWasUnderDayAgo() throws {
+  func testShouldNotAttemptWhenSuccessAndLatestRefreshWasUnderDayAgo() async throws {
     siwaModel.attemptedRefreshAt = Date(timeIntervalSinceNow: -86400 + 60)
     siwaModel.attemptedRefreshResult = .success
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    var results = [SIWAModel]()
     let repo = SIWAReadyForReverifyRepo(application: self.app)
-    try repo.fetch { results.append($0) }.wait()
+    let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 0)
   }
 
-  func testShouldNotAttemptWhenFailureAndLatestRefreshWasUnderDayAgo() throws {
+  func testShouldNotAttemptWhenFailureAndLatestRefreshWasUnderDayAgo() async throws {
     siwaModel.attemptedRefreshAt = Date(timeIntervalSinceNow: -86400 + 60)
     siwaModel.attemptedRefreshResult = .failure
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    var results = [SIWAModel]()
     let repo = SIWAReadyForReverifyRepo(application: self.app)
-    try repo.fetch { results.append($0) }.wait()
+    let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 0)
   }

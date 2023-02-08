@@ -46,15 +46,17 @@ struct SIWAReadyForReverifyRepo {
   )
   """
 
-  func fetch(callback: @escaping (SIWAModel) async throws ->Void) async throws -> Void {
-    return try await database.execute(sql: SQLRaw(sql)) { row in
+  func fetch() async throws -> [SIWAModel] {
+    var results: [SIWAModel] = []
+    try await database.execute(sql: SQLRaw(sql)) { row in
       do {
         let model = try row.decode(model: SIWAModel.self)
-        await callback(model)
+        results.append(model)
       } catch {
         database.logger.critical("couldn't decode SIWAModel")
       }
     }.get()
+    return results
   }
 }
 

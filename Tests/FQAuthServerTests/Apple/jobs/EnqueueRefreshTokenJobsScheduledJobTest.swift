@@ -19,33 +19,33 @@ final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
     app.shutdown()
   }
 
-  func testDoesNothingWhenTheresNoAccounts() throws {
-    try EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
+  func testDoesNothingWhenTheresNoAccounts() async throws {
+    try await EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
       logger: Logger(label: "test logger"),
       db: app.db(.psql),
       queue: app.queues.queue)
-    .wait()
+
 
     let nextJob = try app.queues.queue.pop().wait()
     XCTAssertNil(nextJob)
   }
 
-  func testDoesNothingWhenTheresNoAccountsThatNeedRefreshing() throws {
+  func testDoesNothingWhenTheresNoAccountsThatNeedRefreshing() async throws {
 
 
     let userID = try SIWASignUpRepo(application: app)
       .createTestUser(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949")
-    try EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
+    try await EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
       logger: Logger(label: "test logger"),
       db: app.db(.psql),
       queue: app.queues.queue)
-    .wait()
+
 
     let nextJob = try app.queues.queue.pop().wait()
     XCTAssertNil(nextJob)
   }
 
-  func testEnqueusJobsForAccountsThatNeedRefreshing() throws {
+  func testEnqueusJobsForAccountsThatNeedRefreshing() async throws {
 
     let userID = try SIWASignUpRepo(application: app)
       .createTestUser(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949")
@@ -63,10 +63,10 @@ final class EnqueueRefreshTokenJobsScheduledJobTest: XCTestCase {
     siwa2.attemptedRefreshResult = .success
     try siwa2.save(on: app.db(.psql)).wait()
 
-    try EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
+    try await EnqueueRefreshTokenJobsScheduledJob.enqueueRefreshTokenJobsForAccountsThatNeedRefreshing(
       logger: Logger(label: "test logger"),
       db: app.db(.psql), queue: app.queues.queue)
-    .wait()
+
 
     let nextJob = try XCTUnwrap(app.queues.queue.pop().wait())
 
