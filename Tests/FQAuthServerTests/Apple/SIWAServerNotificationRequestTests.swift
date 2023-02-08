@@ -34,8 +34,8 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
       }
       """)
 
-    try postNotification(notification, callback: { (jobData, payload: String) in
-      XCTAssertEqual(jobData.jobName, "ConsentRevokedJob")
+    try postNotification(notification, callback: { (jobName, payload: String) in
+      XCTAssertEqual(jobName, "ConsentRevokedJob")
       XCTAssertEqual(payload, appleUserId)
     })
   }
@@ -49,8 +49,8 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
       }
       """)
 
-    try postNotification(notification) { (jobData, payload: String) in
-      XCTAssertEqual(jobData.jobName, "SIWAAccountDeletedJob")
+    try postNotification(notification) { (jobName, payload: String) in
+      XCTAssertEqual(jobName, "SIWAAccountDeletedJob")
       XCTAssertEqual(payload, appleUserId)
     }
   }
@@ -66,10 +66,10 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
       }
       """)
 
-    try postNotification(notification) { (jobData: JobData,
+    try postNotification(notification) { (jobName,
                                           payload: EmailEnabledJob.Payload) in
 
-      XCTAssertEqual(jobData.jobName, "EmailEnabledJob")
+      XCTAssertEqual(jobName, "EmailEnabledJob")
       XCTAssertEqual(payload.appleUserID, appleUserId)
       XCTAssertEqual(payload.newEmail, "new@example.nyc")
     }
@@ -86,10 +86,10 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
       }
       """)
 
-    try postNotification(notification) { (jobData: JobData,
+    try postNotification(notification) { (jobName: String,
                                           payload: EmailDisabledJob.Payload) in
 
-      XCTAssertEqual(jobData.jobName, "EmailDisabledJob")
+      XCTAssertEqual(jobName, "EmailDisabledJob")
       XCTAssertEqual(payload.appleUserID, appleUserId)
       XCTAssertEqual(payload.email, "disabled@example.nyc")
     }
@@ -98,7 +98,7 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
   private func postNotification<T: Decodable>(_ notification: SIWAServerNotification,
                                               file: StaticString = #filePath,
                                               line: UInt = #line,
-                                              callback: (JobData, T) throws -> ()) throws {
+                                              callback: (String, T) throws -> ()) throws {
     let jwt: String = try app.jwt.signers.sign(notification)
     let notifyBody = SIWAController.NotifyBody(payload: jwt)
     let notificationBodyJson = try JSONEncoder().encode(notifyBody)
@@ -111,10 +111,8 @@ final class SIWAServerNotificationRequestTests: XCTestCase {
 
       XCTAssertEqual(response.status, .ok, file: file, line: line)
 
-      let nextJobId = try XCTUnwrap(app.queues.queue.pop().wait())
-      let nextJob = try app.queues.queue.get(nextJobId).wait()
-      let payload: T = try JSONDecoder().decode(T.self, from: ByteBuffer(bytes: nextJob.payload))
-      try callback(nextJob, payload)
+      let (jobName, payload) = try app.queues.queue.nextPayload(as: T.self)
+      try callback(jobName, payload)
     }
   }
 

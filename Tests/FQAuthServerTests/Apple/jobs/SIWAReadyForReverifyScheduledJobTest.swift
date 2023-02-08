@@ -65,18 +65,19 @@ final class SIWAReadyForReverifyScheduledJobTest: XCTestCase {
 
     try await SIWAReadyForReverifyScheduledJob.enqueueJobs(
       logger: Logger(label: "test logger"),
-      db: app.db(.psql), queue: app.queues.queue)
+      db: app.db(.psql),
+      queue: app.queues.queue)
 
-    let jobId1 = try XCTUnwrap(app.queues.queue.pop().wait())
-    let job1 = try app.queues.queue.get(jobId1).wait()
-    let payload1: SIWAModel.IDValue = try JSONDecoder().decode(SIWAModel.IDValue.self, from: ByteBuffer(bytes: job1.payload))
+    let (name1, payload1) = try app.queues.queue
+      .nextPayload(as: SIWAModel.IDValue.self)
+    let (name2, payload2) = try app.queues.queue
+      .nextPayload(as: SIWAModel.IDValue.self)
 
-    let jobId2 = try XCTUnwrap(app.queues.queue.pop().wait())
-    let job2 = try app.queues.queue.get(jobId2).wait()
-    let payload2: SIWAModel.IDValue = try JSONDecoder().decode(SIWAModel.IDValue.self, from: ByteBuffer(bytes: job2.payload))
 
     XCTAssertEqual(Set([payload1, payload2]),
                    Set([try siwa1.requireID(), try siwa2.requireID()]))
 
+    XCTAssertEqual(name1, "RefreshTokenJob")
+    XCTAssertEqual(name2, "RefreshTokenJob")
   }
 }
