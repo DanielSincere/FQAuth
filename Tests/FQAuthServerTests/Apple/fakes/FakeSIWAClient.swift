@@ -8,8 +8,8 @@ struct FakeSIWAClient: SIWAClient {
   
   struct StubMissing: Error { }
   
-  var validateRefreshTokenStub: AppleAuthTokenResult?
-  func validateRefreshToken(token: String) -> NIOCore.EventLoopFuture<FQAuthServer.AppleAuthTokenRefreshResult> {
+  var validateRefreshTokenStub: AppleResponse<AppleTokenRefreshResponse>?
+  func validateRefreshToken(token: String) -> NIOCore.EventLoopFuture<AppleResponse<AppleTokenRefreshResponse>> {
     if let stub = validateRefreshTokenStub {
       return eventLoop.makeSucceededFuture(stub)
     } else {
