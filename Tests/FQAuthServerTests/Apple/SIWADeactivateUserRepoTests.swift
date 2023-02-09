@@ -13,13 +13,26 @@ final class SIWADeactivateUserRepoTests: XCTestCase {
   func testDeactivate() async throws {
 
     try await SIWADeactivateUserRepo(application: app)
-      .deactivate(siwaID: try existingSiwa.requireID())
+      .deactivate(siwaID: try existingSiwa.requireID(), andRecordRefreshTokenFailure: false)
 
     let (user, siwa) = try await self.load(userID: existingUserID,
                                            siwaID: try existingSiwa.requireID())
 
     XCTAssertEqual(user.status, .deactivated)
     XCTAssertNil(siwa.encryptedAppleRefreshToken)
+  }
+
+  func testDeactivateAndRecordRefreshTokenFailure() async throws {
+
+    try await SIWADeactivateUserRepo(application: app)
+      .deactivate(siwaID: try existingSiwa.requireID(), andRecordRefreshTokenFailure: true)
+
+    let (user, siwa) = try await self.load(userID: existingUserID,
+                                           siwaID: try existingSiwa.requireID())
+
+    XCTAssertEqual(user.status, .deactivated)
+    XCTAssertNil(siwa.encryptedAppleRefreshToken)
+    XCTAssertEqual(siwa.attemptedRefreshResult, .failure)
   }
 
   func load(userID: UserModel.IDValue, siwaID: SIWAModel.IDValue) async throws -> (UserModel, SIWAModel) {

@@ -18,7 +18,6 @@ final class SIWARefreshTokenJobTest: XCTestCase {
         id_token: "eyJra...96sZg",
         token_type: "Bearer")))
 
-    let reloadedSiwa = try XCTUnwrap(siwa)
     let attemptedRefreshAt = try XCTUnwrap(siwa.attemptedRefreshAt)
     XCTAssertNearlyNow(attemptedRefreshAt)
     XCTAssertEqual(siwa.attemptedRefreshResult, .success)
@@ -29,7 +28,7 @@ final class SIWARefreshTokenJobTest: XCTestCase {
   func testHitsAppleClientAndOnFailureUpdatesLastRefreshedAndDeactivates() async throws {
 
     let (user, siwa) = try await self.refreshWithApple(
-      stubResponse: .error(.init(error: "grant_type")))
+      stubResponse: .error(AppleErrorResponse(error: "invalid_grant")))
     let attemptedRefreshAt = try XCTUnwrap(siwa.attemptedRefreshAt)
     XCTAssertNearlyNow(attemptedRefreshAt)
     XCTAssertEqual(siwa.attemptedRefreshResult, .failure)

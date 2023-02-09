@@ -43,42 +43,42 @@ struct RefreshTokenJob: AsyncJob {
     case .decoded(let success):
       do {
         let _: AppleIdentityToken = try signers.verify(success.id_token, as: AppleIdentityToken.self)
+        await Self.recordSuccess(siwa: siwa, db: db)
       } catch {
         logger.error("\(error.localizedDescription)")
 
-        siwa.attemptedRefreshResult = .failure
-        await Self.save(siwa: siwa, db: db)
+        await Self.recordFailure(siwa: siwa, db: db)
         return
       }
 
-      siwa.attemptedRefreshResult = .success
-      await Self.save(siwa: siwa, db: db)
-
     case .error(let error):
 
-      siwa.attemptedRefreshResult = .failure
       switch error.errorCode {
       case .invalid_grant:
-        await Self.deauthorizeUser(siwa: siwa, db: db)
+        try await SIWADeactivateUserRepo(database: db as! SQLDatabase)
+          .deactivate(siwaID: siwaID, andRecordRefreshTokenFailure: true)
+
       case .invalid_client, .invalid_request, .invalid_scope, .unauthorized_client, .unsupported_grant_type, .none:
-        siwa.attemptedRefreshResult = .failure
-        await Self.save(siwa: siwa, db: db)
+        await Self.recordFailure(siwa: siwa, db: db)
       }
     }
   }
 
-  static func save(siwa: SIWAModel, db: Database) async {
+  static func recordFailure(siwa: SIWAModel, db: Database) async {
     do {
+      siwa.attemptedRefreshResult = .failure
       try await siwa.save(on: db)
     } catch {
       db.logger.error("Couldn't save siwa: \(error.localizedDescription)")
     }
   }
 
-  static func deauthorizeUser(siwa: SIWAModel, db: Database) async {
-    siwa.encryptedAppleRefreshToken = nil
-    siwa.user.status = .deactivated
-
-    await Self.save(siwa: siwa, db: db)
+  static func recordSuccess(siwa: SIWAModel, db: Database) async {
+    do {
+      siwa.attemptedRefreshResult = .success
+      try await siwa.save(on: db)
+    } catch {
+      db.logger.error("Couldn't save siwa: \(error.localizedDescription)")
+    }
   }
 }

@@ -15,9 +15,21 @@ struct SIWADeactivateUserRepo {
     self.database = database
   }
 
-  func deactivate(siwaID: SIWAModel.IDValue) async throws {
-    let sql =
-    """
+  func deactivate(siwaID: SIWAModel.IDValue, andRecordRefreshTokenFailure: Bool) async throws {
+
+    let sql = andRecordRefreshTokenFailure ? """
+    WITH user_id AS (
+      UPDATE siwa
+      SET
+        encrypted_apple_refresh_token = NULL,
+        attempted_refresh_result = 'failure'
+      WHERE id = $1
+      RETURNING user_id
+    )
+    UPDATE "user"
+    SET status = 'deactivated'
+    WHERE id = (SELECT user_id FROM user_id)
+    """ : """
     WITH user_id AS (
       UPDATE siwa
       SET encrypted_apple_refresh_token = NULL
