@@ -47,7 +47,7 @@ struct RefreshTokenJob: AsyncJob {
         logger.error("\(error.localizedDescription)")
 
         siwa.attemptedRefreshResult = .failure
-
+        await Self.save(siwa: siwa, db: db)
         return
       }
 

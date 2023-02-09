@@ -50,7 +50,12 @@ final class SIWARefreshTokenJobTest: XCTestCase {
 
   func testWhenAppleReturnsAnUnverifiableToken_thenMarkTheFailureButDontDeactivate() async throws {
     let (user, siwa) = try await self.refreshWithApple(
-      stubResponse: /* also stub out JWT verifying */.error(.init(error: "other_error")))
+      stubResponse: .decoded(AppleTokenRefreshResponse(
+        access_token: "beg510...67Or9",
+        expires_in: 3600,
+        id_token: "eyJra...96sZg",
+        token_type: "Bearer")),
+      stubJWTVerification: .failure)
 
     let attemptedRefreshAt = try XCTUnwrap(siwa.attemptedRefreshAt)
     XCTAssertNearlyNow(attemptedRefreshAt)
@@ -72,7 +77,9 @@ final class SIWARefreshTokenJobTest: XCTestCase {
     app.shutdown()
   }
 
-  private func refreshWithApple(stubResponse: AppleResponse<AppleTokenRefreshResponse>) async throws -> (UserModel, SIWAModel) {
+  private func refreshWithApple(
+    stubResponse: AppleResponse<AppleTokenRefreshResponse>,
+    stubJWTVerification: FakeJWTSigners.Stub = .success) async throws -> (UserModel, SIWAModel) {
     let maybeModel = try await SIWAModel.findBy(appleUserId: existingAppleID,
                                                 db: app.db(.psql)).get()
     let siwa = try XCTUnwrap(maybeModel)
@@ -80,7 +87,7 @@ final class SIWARefreshTokenJobTest: XCTestCase {
     let client = FakeSIWAClient(eventLoop: app.eventLoopGroup.next(),
                                 validateRefreshTokenStub: stubResponse)
 
-    let signers = FakeJWTSigners(stub: AppleIdentityTokenFixtures.fakeSample.decoded)
+    let signers = FakeJWTSigners(stub: stubJWTVerification)
 
     try await RefreshTokenJob.refreshTokenWithApple(
       siwaID: try siwa.requireID(),
