@@ -29,13 +29,13 @@ struct RefreshTokenJob: AsyncJob {
       return
     }
 
-    siwa.attemptedRefreshAt = now
-    try await siwa.save(on: db)
-
     guard let refreshToken = siwa.unsealedAppleRefreshToken() else {
       logger.debug("no refresh token for a SIWAModel with id")
       return
     }
+
+    siwa.attemptedRefreshAt = now
+    try await siwa.save(on: db)
 
     let tokenResult = try await client.validateRefreshToken(token: refreshToken).get()
 

@@ -27,22 +27,26 @@ struct SIWAReadyForReverifyRepo {
     self.database = database
   }
 
-
-
   let sql = """
   (
-    SELECT * FROM siwa
+    SELECT siwa.* FROM siwa, "user"
     WHERE siwa.attempted_refresh_result = 'initial'
     AND siwa.created_at < NOW() - INTERVAL '24 HOURS'
+    AND siwa.encrypted_apple_refresh_token IS NOT NULL
+    AND "user".id = siwa.user_id
+    AND "user".status = 'active'
   ) UNION (
-    SELECT * FROM siwa
+    SELECT siwa.* FROM siwa, "user"
     WHERE (
          siwa.attempted_refresh_result = 'failure'
       OR siwa.attempted_refresh_result = 'success'
     ) AND (
          siwa.attempted_refresh_at < NOW() - INTERVAL '24 HOURS'
       OR siwa.attempted_refresh_at IS NULL
-    )
+    ) AND
+         siwa.encrypted_apple_refresh_token IS NOT NULL
+      AND "user".id = siwa.user_id
+      AND "user".status = 'active'
   )
   """
 

@@ -10,23 +10,53 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
   var userID: UserModel.IDValue!
   var siwaModel: SIWAModel!
 
+  let appleUserId = "002024.1951936c61fa47debb2b076e6896ccc1.1949"
+
+  var repo: SIWAReadyForReverifyRepo!
+
   override func setUpWithError() throws {
     self.app = Application(.testing)
     try app.configure()
     try app.resetDatabase()
 
     self.userID = try SIWASignUpRepo(application: app)
-      .createTestUser(appleUserId: "002024.1951936c61fa47debb2b076e6896ccc1.1949")
+      .createTestUser(appleUserId: appleUserId)
 
     self.siwaModel = try XCTUnwrap(SIWAModel.findBy(userId: userID, db: app.db(.psql)).wait())
+
+    self.repo = SIWAReadyForReverifyRepo(application: self.app)
   }
 
   override func tearDownWithError() throws {
     app.shutdown()
   }
 
+  func testShouldNotAttemptRefreshWhenUserIsAlreadyDeactivated() async throws {
+    let user = try XCTUnwrap(UserModel.findByAppleUserId(appleUserId, db: app.db(.psql)).wait())
+    user.status = .deactivated
+    try user.save(on: app.db(.psql)).wait()
+
+    siwaModel.attemptedRefreshResult = .success
+    siwaModel.attemptedRefreshAt = Date(timeIntervalSinceNow: -86400 - 60)
+    try siwaModel.save(on: app.db(.psql)).wait()
+
+    let results = try await repo.fetch()
+
+    XCTAssertEqual(results.count, 0)
+  }
+
+  func testShouldNotAttemptRefreshWhenSIWAHasNoRefreshToken() async throws {
+    siwaModel.encryptedAppleRefreshToken = nil
+    siwaModel.attemptedRefreshResult = .success
+    siwaModel.attemptedRefreshAt = Date(timeIntervalSinceNow: -86400 - 60)
+    try siwaModel.save(on: app.db(.psql)).wait()
+
+    let results = try await repo.fetch()
+
+    XCTAssertEqual(results.count, 0)
+  }
+
   func testShouldNotAttemptRefreshWhenNewUser() async throws {
-    let repo = SIWAReadyForReverifyRepo(application: self.app)
     let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 0)
@@ -36,7 +66,6 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     siwaModel.createdAt = Date(timeIntervalSinceNow: -86400 + 60)
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    let repo = SIWAReadyForReverifyRepo(application: self.app)
     let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 0)
@@ -46,7 +75,6 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     siwaModel.createdAt = Date(timeIntervalSinceNow: -86400 - 60 )
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    let repo = SIWAReadyForReverifyRepo(application: self.app)
     let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
@@ -58,7 +86,6 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     siwaModel.attemptedRefreshResult = .success
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    let repo = SIWAReadyForReverifyRepo(application: self.app)
     let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
@@ -70,8 +97,6 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     siwaModel.attemptedRefreshResult = .failure
     try siwaModel.save(on: app.db(.psql)).wait()
 
-
-    let repo = SIWAReadyForReverifyRepo(application: self.app)
     let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
@@ -83,7 +108,6 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     siwaModel.attemptedRefreshResult = .failure
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    let repo = SIWAReadyForReverifyRepo(application: self.app)
     let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
@@ -95,7 +119,6 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     siwaModel.attemptedRefreshResult = .success
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    let repo = SIWAReadyForReverifyRepo(application: self.app)
     let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 1)
@@ -107,7 +130,6 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     siwaModel.attemptedRefreshResult = .success
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    let repo = SIWAReadyForReverifyRepo(application: self.app)
     let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 0)
@@ -118,7 +140,6 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     siwaModel.attemptedRefreshResult = .failure
     try siwaModel.save(on: app.db(.psql)).wait()
 
-    let repo = SIWAReadyForReverifyRepo(application: self.app)
     let results = try await repo.fetch()
 
     XCTAssertEqual(results.count, 0)
