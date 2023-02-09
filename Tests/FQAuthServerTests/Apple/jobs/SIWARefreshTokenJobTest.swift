@@ -10,6 +10,44 @@ final class SIWARefreshTokenJobTest: XCTestCase {
   var existingUserID: UserModel.IDValue!
   let existingAppleID: String = "002024.1951936c61fa47debb2b076e6896ccc1.1949"
 
+  func testHitsAppleClientAndOnSuccessUpdatesLastRefreshedTimestamp() async throws {
+    let (user, siwa) = try await self.refreshWithApple(
+      stubResponse: .decoded(AppleTokenRefreshResponse(
+        access_token: "beg510...67Or9",
+        expires_in: 3600,
+        id_token: "eyJra...96sZg",
+        token_type: "Bearer")))
+
+    let reloadedSiwa = try XCTUnwrap(siwa)
+    let attemptedRefreshAt = try XCTUnwrap(siwa.attemptedRefreshAt)
+    XCTAssertNearlyNow(attemptedRefreshAt)
+    XCTAssertEqual(siwa.attemptedRefreshResult, .success)
+    XCTAssertNotNil(siwa.encryptedAppleRefreshToken)
+    XCTAssertEqual(user.status, .active)
+  }
+
+  func testHitsAppleClientAndOnFailureUpdatesLastRefreshedAndDeactivates() async throws {
+
+    let (user, siwa) = try await self.refreshWithApple(
+      stubResponse: .error(.init(error: "grant_type")))
+    let attemptedRefreshAt = try XCTUnwrap(siwa.attemptedRefreshAt)
+    XCTAssertNearlyNow(attemptedRefreshAt)
+    XCTAssertEqual(siwa.attemptedRefreshResult, .failure)
+    XCTAssertNil(siwa.encryptedAppleRefreshToken)
+    XCTAssertEqual(user.status, .deactivated)
+  }
+
+  func testOtherKindsOfErrorsDontDeauthorizeUser() async throws {
+    let (user, siwa) = try await self.refreshWithApple(
+      stubResponse: .error(.init(error: "other_error")))
+
+    let attemptedRefreshAt = try XCTUnwrap(siwa.attemptedRefreshAt)
+    XCTAssertNearlyNow(attemptedRefreshAt)
+    XCTAssertEqual(siwa.attemptedRefreshResult, .failure)
+    XCTAssertNotNil(siwa.encryptedAppleRefreshToken)
+    XCTAssertEqual(user.status, .active)
+  }
+
   override func setUpWithError() throws {
     self.app = Application(.testing)
     try app.configure()
@@ -23,21 +61,15 @@ final class SIWARefreshTokenJobTest: XCTestCase {
     app.shutdown()
   }
 
-  func testHitsAppleClientAndOnSuccessUpdatesLastRefreshedTimestamp() async throws {
-
+  private func refreshWithApple(stubResponse: AppleResponse<AppleTokenRefreshResponse>) async throws -> (UserModel, SIWAModel) {
     let maybeModel = try await SIWAModel.findBy(appleUserId: existingAppleID,
                                                 db: app.db(.psql)).get()
     let siwa = try XCTUnwrap(maybeModel)
 
     let client = FakeSIWAClient(eventLoop: app.eventLoopGroup.next(),
-                                validateRefreshTokenStub: .decoded(
-                                  AppleTokenRefreshResponse(
-                                    access_token: "beg510...67Or9",
-                                    expires_in: 3600,
-                                    id_token: "eyJra...96sZg",
-                                    token_type: "Bearer")))
+                                validateRefreshTokenStub: stubResponse)
 
-    let signers = FakeJWTSigners(stub: AppleIdentityTokenFixtures.a.decoded)
+    let signers = FakeJWTSigners(stub: AppleIdentityTokenFixtures.fakeSample.decoded)
 
     try await RefreshTokenJob.refreshTokenWithApple(
       siwaID: try siwa.requireID(),
@@ -53,8 +85,14 @@ final class SIWARefreshTokenJobTest: XCTestCase {
       .get()
 
     let reloadedSiwa = try XCTUnwrap(maybeReloadedModel)
-    let attemptedRefreshAt = try XCTUnwrap(reloadedSiwa.attemptedRefreshAt)
-    XCTAssertNearlyNow(attemptedRefreshAt)
-    XCTAssertEqual(reloadedSiwa.attemptedRefreshResult, .success)
+
+    let maybeReloadedUser = try await UserModel.findBy(
+      id: siwa.$user.id,
+      db: app.db(.psql))
+      .get()
+
+    let reloadedUser = try XCTUnwrap(maybeReloadedUser)
+
+    return (reloadedUser, reloadedSiwa)
   }
 }

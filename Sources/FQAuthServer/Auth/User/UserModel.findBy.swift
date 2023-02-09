@@ -20,4 +20,11 @@ extension UserModel {
       .with(\UserModel.$siwa)
       .first()
   }
+
+  static func findBy(id: UserModel.IDValue, db: Database) -> EventLoopFuture<UserModel?> {
+    UserModel
+      .query(on: db)
+      .filter(\.$id, .equal, id)
+      .first()
+  }
 }

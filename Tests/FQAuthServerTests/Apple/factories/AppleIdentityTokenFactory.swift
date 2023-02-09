@@ -3,9 +3,13 @@ import JWTKit
 
 enum AppleIdentityTokenFixtures: String {
 
-  case a = """
+  case fakeSample = """
   {
-
+    "iss": "com.apple",
+    "sub": "1234",
+    "aud": "com.fullqueuedeveloper.SampleApp",
+    "iat": 1675970158,
+    "exp": 1675971158
   }
   """
 

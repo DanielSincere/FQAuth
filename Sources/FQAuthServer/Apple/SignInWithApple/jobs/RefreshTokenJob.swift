@@ -44,24 +44,35 @@ struct RefreshTokenJob: AsyncJob {
       do {
         let _: AppleIdentityToken = try signers.verify(success.id_token, as: AppleIdentityToken.self)
       } catch {
-        await Self.deauthorizeUser(siwa: siwa)
+        logger.error("\(error.localizedDescription)")
+        
+        siwa.attemptedRefreshResult = .failure
+        await Self.deauthorizeUser(siwa: siwa, db: db)
         return
       }
 
       siwa.attemptedRefreshResult = .success
-      do {
-        try await siwa.save(on: db)
-      } catch {
-        logger.error("\(error.localizedDescription)")
-      }
+      await Self.save(siwa: siwa, db: db)
 
     case .error(let error):
       logger.error("\(error.localizedDescription)")
-      await Self.deauthorizeUser(siwa: siwa)
+      siwa.attemptedRefreshResult = .failure
+      await Self.deauthorizeUser(siwa: siwa, db: db)
     }
   }
 
-  static func deauthorizeUser(siwa: SIWAModel) async {
+  static func save(siwa: SIWAModel, db: Database) async {
+    do {
+      try await siwa.save(on: db)
+    } catch {
+      db.logger.error("Couldn't save siwa: \(error.localizedDescription)")
+    }
+  }
 
+  static func deauthorizeUser(siwa: SIWAModel, db: Database) async {
+    siwa.encryptedAppleRefreshToken = nil
+//    siwa.user.status = .deactivated
+
+    await Self.save(siwa: siwa, db: db)
   }
 }
