@@ -77,7 +77,7 @@ struct RefreshTokenJob: AsyncJob {
 
   static func deauthorizeUser(siwa: SIWAModel, db: Database) async {
     siwa.encryptedAppleRefreshToken = nil
-//    siwa.user.status = .deactivated
+    siwa.user.status = .deactivated
 
     await Self.save(siwa: siwa, db: db)
   }

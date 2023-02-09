@@ -4,10 +4,30 @@ import SQLKit
 
 struct SIWADeactivateUserRepo {
 
-  func deactivate(siwa: SIWAModel) async throws {
-    siwa.encryptedAppleRefreshToken = nil
-    siwa.user.status = .deactivated
+  let database: SQLDatabase
 
-//    await Self.save(siwa: siwa, db: db)
+  init(application: Application) {
+    let db = application.db(.psql)
+    self.database = db as! SQLDatabase
+  }
+
+  init(database: SQLDatabase) {
+    self.database = database
+  }
+
+  func deactivate(siwaID: SIWAModel.IDValue) async throws {
+    let sql =
+    """
+    WITH user_id AS (
+      UPDATE siwa
+      SET encrypted_apple_refresh_token = NULL
+      WHERE id = $1
+      RETURNING user_id
+    )
+    UPDATE "user"
+    SET status = 'deactivated'
+    WHERE id = (SELECT user_id FROM user_id)
+    """
+    try await self.database.execute(sql: SQLRaw(sql, [siwaID])) { _ in }
   }
 }
