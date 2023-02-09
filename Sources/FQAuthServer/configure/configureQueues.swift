@@ -9,5 +9,9 @@ extension Application {
     }
 
     self.queues.use(.redis(redisConfig))
+
+    self.queues.schedule(SIWAReadyForReverifyScheduledJob())
+      .daily()
+      .at(9, 9)
   }
 }

@@ -42,7 +42,6 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     XCTAssertEqual(results.count, 0)
   }
 
-
   func testShouldNotRefreshWhenUserIsAlreadyDeactivatedAndSIWAisInitial() async throws {
     let user = try XCTUnwrap(UserModel.findByAppleUserId(appleUserId, db: app.db(.psql)).wait())
     user.status = .deactivated
