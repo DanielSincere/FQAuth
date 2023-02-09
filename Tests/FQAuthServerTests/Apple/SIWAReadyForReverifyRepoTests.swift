@@ -31,6 +31,32 @@ final class SIWAReadyForReverifyRepoTests: XCTestCase {
     app.shutdown()
   }
 
+  func testShouldNotRefreshWhenSIWAisInitialAndEncryptedAppleRefreshTokenIsNil() async throws {
+    siwaModel.encryptedAppleRefreshToken = nil
+    siwaModel.attemptedRefreshResult = .initial
+    siwaModel.attemptedRefreshAt = Date(timeIntervalSinceNow: -86400 - 60)
+    try siwaModel.save(on: app.db(.psql)).wait()
+
+    let results = try await repo.fetch()
+
+    XCTAssertEqual(results.count, 0)
+  }
+
+
+  func testShouldNotRefreshWhenUserIsAlreadyDeactivatedAndSIWAisInitial() async throws {
+    let user = try XCTUnwrap(UserModel.findByAppleUserId(appleUserId, db: app.db(.psql)).wait())
+    user.status = .deactivated
+    try user.save(on: app.db(.psql)).wait()
+
+    siwaModel.attemptedRefreshResult = .initial
+    siwaModel.attemptedRefreshAt = nil
+    try siwaModel.save(on: app.db(.psql)).wait()
+
+    let results = try await repo.fetch()
+
+    XCTAssertEqual(results.count, 0)
+  }
+
   func testShouldNotAttemptRefreshWhenUserIsAlreadyDeactivated() async throws {
     let user = try XCTUnwrap(UserModel.findByAppleUserId(appleUserId, db: app.db(.psql)).wait())
     user.status = .deactivated
