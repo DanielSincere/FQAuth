@@ -45,9 +45,9 @@ struct RefreshTokenJob: AsyncJob {
         let _: AppleIdentityToken = try signers.verify(success.id_token, as: AppleIdentityToken.self)
       } catch {
         logger.error("\(error.localizedDescription)")
-        
+
         siwa.attemptedRefreshResult = .failure
-        await Self.deauthorizeUser(siwa: siwa, db: db)
+
         return
       }
 
@@ -55,9 +55,15 @@ struct RefreshTokenJob: AsyncJob {
       await Self.save(siwa: siwa, db: db)
 
     case .error(let error):
-      logger.error("\(error.localizedDescription)")
+
       siwa.attemptedRefreshResult = .failure
-      await Self.deauthorizeUser(siwa: siwa, db: db)
+      switch error.errorCode {
+      case .invalid_grant:
+        await Self.deauthorizeUser(siwa: siwa, db: db)
+      case .invalid_client, .invalid_request, .invalid_scope, .unauthorized_client, .unsupported_grant_type, .none:
+        siwa.attemptedRefreshResult = .failure
+        await Self.save(siwa: siwa, db: db)
+      }
     }
   }
 

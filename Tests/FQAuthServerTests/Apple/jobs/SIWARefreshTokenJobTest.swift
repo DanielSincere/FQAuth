@@ -48,6 +48,17 @@ final class SIWARefreshTokenJobTest: XCTestCase {
     XCTAssertEqual(user.status, .active)
   }
 
+  func testWhenAppleReturnsAnUnverifiableToken_thenMarkTheFailureButDontDeactivate() async throws {
+    let (user, siwa) = try await self.refreshWithApple(
+      stubResponse: /* also stub out JWT verifying */.error(.init(error: "other_error")))
+
+    let attemptedRefreshAt = try XCTUnwrap(siwa.attemptedRefreshAt)
+    XCTAssertNearlyNow(attemptedRefreshAt)
+    XCTAssertEqual(siwa.attemptedRefreshResult, .failure)
+    XCTAssertNotNil(siwa.encryptedAppleRefreshToken)
+    XCTAssertEqual(user.status, .active)
+  }
+
   override func setUpWithError() throws {
     self.app = Application(.testing)
     try app.configure()
