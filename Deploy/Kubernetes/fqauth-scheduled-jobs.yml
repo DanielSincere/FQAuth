@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fqauth-scheduled-jobs-deployment
+  labels:
+    app: fqauth-scheduled-jobs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fqauth-scheduled-jobs
+  template:
+    metadata:
+      labels:
+        app: fqauth-scheduled-jobs
+    spec:
+      containers:
+        - name: fqauth-scheduled-jobs
+          image: ghcr.io/fullqueuedeveloper/fqauth:0.1.0
+          command: "/app/FQAuthServer queues --scheduled --env production"
+          env:
+            - name: FQAUTH_POSTGRES_URL
+              value: "postgres://example.com:5432"
+            - name: FQAUTH_REDIS_URL
+              value: "redis://example.com:6379"
