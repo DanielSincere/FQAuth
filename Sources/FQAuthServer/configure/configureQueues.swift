@@ -3,12 +3,18 @@ import Queues
 
 extension Application {
 
-  func configureQueues() {
+  func configureQueues() throws {
     guard let redisConfig = self.redis.configuration else {
       fatalError("Configure Redis before configuring Queues")
     }
 
     self.queues.use(.redis(redisConfig))
+
+    self.queues.add(ConsentRevokedJob())
+    self.queues.add(EmailEnabledJob())
+    self.queues.add(EmailEnabledJob())
+    self.queues.add(SIWAAccountDeletedJob())
+    self.queues.add(RefreshTokenJob())
 
     self.queues.schedule(SIWAReadyForReverifyScheduledJob())
       .daily()
@@ -17,5 +23,13 @@ extension Application {
     self.queues.schedule(CleanupExpiredRefreshTokenScheduledJob())
       .daily()
       .at(18, 18)
+
+    if Environment.get("RUN_SCHEDULED_JOBS_IN_MAIN_PROCESS") == "YES" {
+      try self.queues.startScheduledJobs()
+    }
+
+    if Environment.get("RUN_JOBS_IN_MAIN_PROCESS") == "YES" {
+      try self.queues.startInProcessJobs()
+    }
   }
 }

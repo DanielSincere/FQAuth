@@ -5,6 +5,9 @@ build:
 run:
   web:
     image: web
+    env:
+      RUN_SCHEDULED_JOBS_IN_MAIN_PROCESS=YES
+      RUN_JOBS_IN_MAIN_PROCESS=NO
     command:
       - "/app/FQAuthServer serve --env production --hostname 0.0.0.0 -p $PORT"
   worker:

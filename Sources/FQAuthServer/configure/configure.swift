@@ -8,7 +8,7 @@ extension Application {
     try self.configurePostgres()
     try self.configureMigrations()
     try self.configureRedis()
-    self.configureQueues()
+    try self.configureQueues()
     try self.configureRoutes()
 
     try self.configureSigning()
