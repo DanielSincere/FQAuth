@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1080"
+   height="1080"
+   viewBox="0 0 285.74999 285.75"
+   version="1.1"
+   id="svg816"
+   sodipodi:docname="architecture.svg"
+   inkscape:version="1.2 (dc2aeda, 2022-05-15)"
+   inkscape:export-filename="architecture.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview818"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="0.42298039"
+     inkscape:cx="-78.017801"
+     inkscape:cy="593.40813"
+     inkscape:window-width="1390"
+     inkscape:window-height="1052"
+     inkscape:window-x="500"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs813">
+    <rect
+       x="34.684783"
+       y="812.92461"
+       width="464.70033"
+       height="120.77575"
+       id="rect9378" />
+    <rect
+       x="47.691577"
+       y="754.39403"
+       width="145.24253"
+       height="91.047556"
+       id="rect9366" />
+    <marker
+       style="overflow:visible"
+       id="Arrow5"
+       refX="4"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow5"
+       markerWidth="35.887"
+       markerHeight="40.28827461"
+       viewBox="0 0 5.8874262 6.6094758"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.5pt"
+         d="m 3,0 c -1.5,0.5 -3.5,1.5 -4.5,2.5 0,0 0,-2 1,-2.5 -1,-0.5 -1,-2.5 -1,-2.5 1,1 3,2 4.5,2.5 z"
+         id="path8893" />
+    </marker>
+    <rect
+       x="719.75032"
+       y="548.17347"
+       width="129.40965"
+       height="132.31773"
+       id="rect1837" />
+    <rect
+       x="410.03957"
+       y="567.07601"
+       width="174.48493"
+       height="91.604586"
+       id="rect1108" />
+    <rect
+       x="61.069725"
+       y="446.39059"
+       width="117.77732"
+       height="46.529312"
+       id="rect1098" />
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Background">
+    <rect
+       style="fill:#eef6f4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect10173"
+       width="285.75"
+       height="285.75"
+       x="0"
+       y="4.4408921e-16"
+       ry="5.0012956" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Cloud Layer">
+    <ellipse
+       style="fill:#363051;fill-opacity:0.155263;fill-rule:evenodd;stroke:none;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="path2107"
+       cx="217.8698"
+       cy="147.40289"
+       rx="149.48224"
+       ry="177.90004" />
+    <g
+       id="g3653"
+       transform="translate(-14.75736,92.233502)"
+       style="fill:#3ad8b9;fill-opacity:1">
+      <rect
+         style="fill:#3ad8b9;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+         id="rect2632"
+         width="32.807541"
+         height="17.558966"
+         x="81.787811"
+         y="42.511189"
+         ry="5.0012956" />
+      <text
+         xml:space="preserve"
+         style="font-weight:bold;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';fill:#204c43;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+         x="84.56028"
+         y="51.290653"
+         id="text2688"><tspan
+           sodipodi:role="line"
+           id="tspan2686"
+           style="fill:#204c43;fill-opacity:1;stroke-width:1.05833"
+           x="84.56028"
+           y="51.290653">Ingress</tspan></text>
+    </g>
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#363051;fill-rule:evenodd;stroke-width:6.87885;stroke-linejoin:bevel;paint-order:markers fill stroke"
+       id="rect989"
+       width="30.272238"
+       height="70.837044"
+       x="6.3995228"
+       y="6.9564281"
+       ry="7.8707819" />
+    <rect
+       style="fill:#e4e1ef;fill-opacity:1;fill-rule:evenodd;stroke:#7f7485;stroke-width:0.529167;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect989-3"
+       width="15.767141"
+       height="36.895115"
+       x="20.281546"
+       y="39.844017"
+       ry="4.0994568" />
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text1096"
+       style="font-weight:bold;font-size:24px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';white-space:pre;shape-inside:url(#rect1098);display:inline;fill:#363051;fill-rule:evenodd;stroke-width:16.5203;stroke-linejoin:bevel;paint-order:markers fill stroke" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';fill:#363051;fill-rule:evenodd;stroke-width:4.371;stroke-linejoin:bevel;paint-order:markers fill stroke"
+       x="45.095581"
+       y="18.091183"
+       id="text1104"><tspan
+         sodipodi:role="line"
+         id="tspan1102"
+         x="45.095581"
+         y="18.091183"
+         style="stroke-width:4.371">User's</tspan><tspan
+         sodipodi:role="line"
+         x="45.095581"
+         y="26.028683"
+         style="stroke-width:4.371"
+         id="tspan2903">phone</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text1106"
+       style="font-weight:bold;font-size:24px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';white-space:pre;shape-inside:url(#rect1108);display:inline;fill:#363051;fill-rule:evenodd;stroke-width:16.5203;stroke-linejoin:bevel;paint-order:markers fill stroke" />
+    <g
+       id="g3822"
+       transform="translate(0.67053967,71.339853)">
+      <ellipse
+         style="fill:#363051;fill-rule:evenodd;stroke-width:4.371;stroke-linejoin:bevel;paint-order:markers fill stroke"
+         id="path1094"
+         cx="138.66263"
+         cy="119.90365"
+         rx="21.928757"
+         ry="18.851036" />
+      <text
+         xml:space="preserve"
+         style="font-weight:bold;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';fill:#363051;fill-rule:evenodd;stroke-width:4.371;stroke-linejoin:bevel;paint-order:markers fill stroke"
+         x="126.96227"
+         y="154.59277"
+         id="text1114"><tspan
+           sodipodi:role="line"
+           id="tspan1112"
+           x="126.96227"
+           y="154.59277"
+           style="stroke-width:4.371">FQAuth</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text1835"
+       style="font-weight:bold;font-size:24px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';white-space:pre;shape-inside:url(#rect1837);display:inline;fill:#8172c7;fill-opacity:1;fill-rule:evenodd;stroke:#1acac8;stroke-width:4;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke" />
+    <g
+       id="g3665"
+       inkscape:label="Database"
+       transform="translate(14.283913,136.0077)">
+      <g
+         id="g2105"
+         transform="translate(27.873944,-2.7724681)">
+        <ellipse
+           style="fill:#8172c7;fill-opacity:1;fill-rule:evenodd;stroke:#1acac8;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+           id="path1166-9"
+           cx="211.20854"
+           cy="127.72539"
+           rx="31.161915"
+           ry="11.156735" />
+        <ellipse
+           style="fill:#8172c7;fill-opacity:1;fill-rule:evenodd;stroke:#1acac8;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+           id="path1166-9-6"
+           cx="211.30154"
+           cy="115.41451"
+           rx="31.161915"
+           ry="11.156735" />
+        <ellipse
+           style="fill:#8172c7;fill-opacity:1;fill-rule:evenodd;stroke:#1acac8;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+           id="path1166-9-2"
+           cx="211.97798"
+           cy="104.64249"
+           rx="31.161915"
+           ry="11.156735" />
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-weight:bold;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';fill:#363051;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+         x="214.2626"
+         y="148.49161"
+         id="text1843"><tspan
+           sodipodi:role="line"
+           id="tspan1841"
+           style="fill:#363051;fill-opacity:1;stroke:none;stroke-width:1.05833"
+           x="214.2626"
+           y="148.49161">Auth Database</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';fill:#363051;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       x="37.890396"
+       y="67.463394"
+       id="text2899"><tspan
+         sodipodi:role="line"
+         id="tspan2897"
+         style="stroke-width:1.05833"></tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow5)"
+       d="M 36.671761,67.109066 78.06159,134.74469"
+       id="path3914"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect989"
+       inkscape:connection-end="#g3653" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 92.175015,152.30366 28.672645,28.79956"
+       id="path4978"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3653"
+       inkscape:connection-end="#g3822" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 93.309785,134.74469 171.8416,64.929059"
+       id="path4980"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3653"
+       inkscape:connection-end="#g3822-3" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 152.70749,206.18211 71.51067,34.81647"
+       id="path5720"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3822"
+       inkscape:connection-end="#g3665" />
+    <g
+       id="g9748"
+       transform="translate(14.873585,-102.5812)">
+      <g
+         id="g3822-3"
+         transform="translate(8.4516022,20.751064)">
+        <ellipse
+           style="fill:#363051;fill-rule:evenodd;stroke-width:7.44092;stroke-linejoin:bevel;paint-order:markers fill stroke"
+           id="path1094-3"
+           cx="172.41463"
+           cy="108.65475"
+           rx="39.129658"
+           ry="30.615026"
+           transform="matrix(0.9978285,0.06586566,-0.07959397,0.99682737,0,0)" />
+        <text
+           xml:space="preserve"
+           style="font-weight:bold;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';fill:#363051;fill-rule:evenodd;stroke-width:4.371;stroke-linejoin:bevel;paint-order:markers fill stroke"
+           x="205.26434"
+           y="110.48334"
+           id="text1114-9"><tspan
+             sodipodi:role="line"
+             id="tspan1112-9"
+             x="205.26434"
+             y="110.48334"
+             style="stroke-width:4.371">Another </tspan><tspan
+             sodipodi:role="line"
+             x="205.26434"
+             y="118.42084"
+             style="stroke-width:4.371"
+             id="tspan3861">micro</tspan><tspan
+             sodipodi:role="line"
+             x="205.26434"
+             y="126.35834"
+             style="stroke-width:4.371"
+             id="tspan3863">service</tspan></text>
+      </g>
+      <g
+         id="g8455"
+         transform="translate(10.024514,-10.680271)">
+        <ellipse
+           style="fill:#e4e1ef;fill-opacity:1;fill-rule:evenodd;stroke:#7f7485;stroke-width:1.31117;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+           id="path6511"
+           cx="172.92938"
+           cy="132.49316"
+           rx="19.66152"
+           ry="13.065539" />
+        <text
+           xml:space="preserve"
+           style="font-weight:bold;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';fill:#694be1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+           x="160.10786"
+           y="129.8703"
+           id="text7607"><tspan
+             sodipodi:role="line"
+             id="tspan7605"
+             style="fill:#694be1;fill-opacity:1;stroke-width:1.05833"
+             x="160.10786"
+             y="129.8703">FQAuth</tspan><tspan
+             sodipodi:role="line"
+             style="fill:#694be1;fill-opacity:1;stroke-width:1.05833"
+             x="160.10786"
+             y="137.8078"
+             id="tspan8449">library</tspan></text>
+      </g>
+    </g>
+    <g
+       id="g9763"
+       transform="translate(63.268303,-114.53337)">
+      <g
+         id="g3822-3-9"
+         transform="translate(-43.033294,97.90831)">
+        <ellipse
+           style="fill:#363051;fill-rule:evenodd;stroke-width:7.14619;stroke-linejoin:bevel;paint-order:markers fill stroke"
+           id="path1094-3-9"
+           cx="167.68767"
+           cy="140.11139"
+           rx="39.422443"
+           ry="28.028051" />
+        <text
+           xml:space="preserve"
+           style="font-weight:bold;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';fill:#363051;fill-rule:evenodd;stroke-width:4.371;stroke-linejoin:bevel;paint-order:markers fill stroke"
+           x="213.45554"
+           y="127.6096"
+           id="text1114-9-2"><tspan
+             sodipodi:role="line"
+             id="tspan1112-9-6"
+             x="213.45554"
+             y="127.6096"
+             style="stroke-width:4.371">A different </tspan><tspan
+             sodipodi:role="line"
+             x="213.45554"
+             y="135.54709"
+             style="stroke-width:4.371"
+             id="tspan3863-8">micro</tspan><tspan
+             sodipodi:role="line"
+             x="213.45554"
+             y="143.48459"
+             style="stroke-width:4.371"
+             id="tspan10462">service</tspan></text>
+      </g>
+      <g
+         id="g8455-1"
+         transform="translate(-29.792486,90.703675)">
+        <ellipse
+           style="fill:#e4e1ef;fill-opacity:1;fill-rule:evenodd;stroke:#7f7485;stroke-width:1.31117;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+           id="path6511-8"
+           cx="169.97791"
+           cy="135.44464"
+           rx="19.66152"
+           ry="13.065539" />
+        <text
+           xml:space="preserve"
+           style="font-weight:bold;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';fill:#694be1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+           x="157.15639"
+           y="131.34604"
+           id="text7607-7"><tspan
+             sodipodi:role="line"
+             id="tspan7605-4"
+             style="fill:#694be1;fill-opacity:1;stroke-width:1.05833"
+             x="157.15639"
+             y="131.34604">FQAuth</tspan><tspan
+             sodipodi:role="line"
+             style="fill:#694be1;fill-opacity:1;stroke-width:1.05833"
+             x="157.15639"
+             y="139.28354"
+             id="tspan8449-0">library</tspan></text>
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-7.4563245,59.61202)"
+       id="text9376"
+       style="font-weight:bold;font-size:24px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';white-space:pre;shape-inside:url(#rect9378);display:inline;fill:#363051;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"><tspan
+         x="34.685547"
+         y="834.35861"
+         id="tspan11401">Sign in with Apple</tspan></text>
+    <ellipse
+       style="fill:#694be1;fill-opacity:1;fill-rule:evenodd;stroke:#7f7485;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="path8566"
+       cx="13.511552"
+       cy="238.38426"
+       rx="30.398863"
+       ry="28.391394" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 42.383829,229.50063 81.331601,-25.0247"
+       id="path9765"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#path8566"
+       inkscape:connection-end="#g3822" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 20.085703,77.793472 14.672961,210.01381"
+       id="path9767"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect989"
+       inkscape:connection-end="#path8566" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.7px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#363051;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.05833;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       x="105.51513"
+       y="281.12772"
+       id="text10320"><tspan
+         sodipodi:role="line"
+         id="tspan10318"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.7px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#363051;fill-opacity:1;stroke-width:1.05833"
+         x="105.51513"
+         y="281.12772">Our Cloud</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 99.837992,140.996 51.067618,-7.87063"
+       id="path10460"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3653"
+       inkscape:connection-end="#g9763" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#363051;fill-opacity:1;fill-rule:evenodd;stroke:#7f7485;stroke-width:0.529167;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       x="28.776852"
+       y="50.175026"
+       id="text11092"><tspan
+         sodipodi:role="line"
+         id="tspan11090"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#363051;fill-opacity:1;stroke:none;stroke-width:0.529167"
+         x="28.776852"
+         y="50.175026">FQAuth </tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#363051;fill-opacity:1;stroke:none;stroke-width:0.529167"
+         x="28.776852"
+         y="58.112526"
+         id="tspan11094">iOS </tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.35px;font-family:MonoLisa;-inkscape-font-specification:'MonoLisa, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#363051;fill-opacity:1;stroke:none;stroke-width:0.529167"
+         x="28.776852"
+         y="66.050026"
+         id="tspan11146">library</tspan></text>
+  </g>
+</svg>

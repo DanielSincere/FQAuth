@@ -40,4 +40,17 @@ A huge thank you to the following for keeping the dream alive! 💜🗽
 
 
 ## License:
-MIT or equivalent
+MIT or equivalen
+
+## Local development
+
+These are suggestions. Of course it is completely customizable to your taste.
+
+1. Copy `.env.sample` to `.env.dev` and `.env.testing`
+
+2. Access your postgres instance: `psql -U postgres`
+
+3. Created the test db: `create database fqauth_test;`
+
+4. Created the development db: `create database fqauth_dev;`
+
