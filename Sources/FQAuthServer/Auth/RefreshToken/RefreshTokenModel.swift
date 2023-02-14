@@ -27,7 +27,12 @@ final class RefreshTokenModel: Model {
 
   init() { }
 
-  init(id: UUID? = nil, userId: UserModel.IDValue, deviceName: String, token: String, createdAt: Date = Date(), expiresAt: Date? = nil) {
+  init(id: UUID? = nil,
+       userId: UserModel.IDValue,
+       deviceName: String,
+       token: String = [UInt8].random(count: 512 / 8).hex,
+       createdAt: Date = Date(),
+       expiresAt: Date? = nil) {
     self.id = id
     self.$user.id = userId
     self.deviceName = deviceName

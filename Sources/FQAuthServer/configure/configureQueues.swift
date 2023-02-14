@@ -13,5 +13,9 @@ extension Application {
     self.queues.schedule(SIWAReadyForReverifyScheduledJob())
       .daily()
       .at(9, 9)
+
+    self.queues.schedule(CleanupExpiredRefreshTokenScheduledJob())
+      .daily()
+      .at(18, 18)
   }
 }
