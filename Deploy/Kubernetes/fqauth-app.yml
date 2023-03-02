@@ -33,7 +33,9 @@ spec:
           command: "/app/FQAuthServer serve --env production --hostname 0.0.0.0 -p 80"
           env:
             - name: FQAUTH_POSTGRES_URL
-              value: "postgres://example.com:5432"
+              valueFrom:
+                secretKeyRef: fqauth.postgres
+
             - name: FQAUTH_REDIS_URL
               value: "redis://example.com:6379"
           livenessProbe:

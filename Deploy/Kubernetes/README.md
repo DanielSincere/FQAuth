@@ -10,6 +10,6 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
 
 ## Install
 
-1. Gather URLs for Redis and Postgres
-2. `kubectl apply -Rf Deploy/Kubernetes/
+1. Gather URLs for Redis and Postgres, store them in secrets
+2. `kubectl apply -f Deploy/Kubernetes/fqauth-migrate.yml
 3. Set up ingress resources in your cluster.

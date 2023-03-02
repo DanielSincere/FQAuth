@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fqauth-migrate-job
+  labels:
+    app: fqauth-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: fqauth-migrate-job
+        image: docker pull ghcr.io/fullqueuedeveloper/fqauth:sha-34e626c90eb367e7e0adb4e62087b4004b1d8324
+        command: ["/app/FQAuthServer", "migrate", "-y", "--env", "production"]
+        env:
+          - name: FQAUTH_POSTGRES_URL
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.postgres
+                key: FQAUTH_POSTGRES_URL
+      restartPolicy: Never
