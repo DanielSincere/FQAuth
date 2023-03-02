@@ -5,6 +5,7 @@ on:
     branches: "**"
     pull_request:
     tags:
+      - "**"
 
 jobs:
   build-docker:
