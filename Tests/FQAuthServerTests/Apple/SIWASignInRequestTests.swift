@@ -21,6 +21,7 @@ final class SIWASignInRequestTests: XCTestCase {
                                              firstName: "First",
                                              lastName: "Last",
                                              deviceName: "iPhone",
+                                             roles: [],
                                              method: .siwa(appleUserId: existingAppleID,
                                                            appleRefreshToken: "AppleRefreshToken"))
     

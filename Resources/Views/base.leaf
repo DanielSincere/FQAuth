@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
+  <title>#import("base_title")</title>
+
+  #import("base_head")
+</head>
+<body>
+
+  <main class="container">
+    #import("base_body")
+  </main>
+  
+</body>
+</html>

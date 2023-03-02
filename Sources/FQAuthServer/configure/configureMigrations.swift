@@ -9,6 +9,7 @@ extension Application {
                           CreateUserMigration(),
                           CreateSiwaMigration(),
                           CreateRefreshTokenMigration(),
+                          AddRolesToUserMigration(),
                           to: .psql)
   }
 }

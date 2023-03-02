@@ -25,8 +25,16 @@ final class FQAuthMiddlewareTests: XCTestCase {
       }
     }
 
+    app.routes.group(FQAuthMiddleware(requiredRole: "admin")) { secure in
+      secure.get("admin-only") { req -> String in
+        let token = req.fqSessionToken!
+        return token.userID?.uuidString ?? "not a uuid"
+      }
+    }
+
     let token = FQAuthSessionToken(userID: userID,
                                    deviceName: "Xample",
+                                   roles: [],
                                    expiration: ExpirationClaim(value: Date(timeIntervalSinceNow: 600)),
                                    iss: IssuerClaim("com.example")
     )
@@ -63,6 +71,31 @@ final class FQAuthMiddlewareTests: XCTestCase {
   func testAuthorized() throws {
     let headers = HTTPHeaders([("Authorization", "Bearer \(authorizedToken!)")])
     try app.test(.GET, "hello", headers: headers) { response in
+      XCTAssertEqual(response.status, .ok)
+      XCTAssertEqual(String(buffer: response.body), #"1CB5E4AD-C9DC-4635-BC27-0AE1DA9637BD"#)
+    }
+  }
+
+  func testRejectsUsersWithoutRequiredRole() throws {
+    let headers = HTTPHeaders([("Authorization", "Bearer \(authorizedToken!)")])
+    try app.test(.GET, "admin-only", headers: headers) { response in
+      XCTAssertEqual(response.status, .unauthorized)
+      XCTAssertEqual(String(buffer: response.body), #"{"error":true,"reason":"Unauthorized"}"#)
+    }
+  }
+
+  func testAcceptsUsersWithRequiredRole() throws {
+
+    let token = FQAuthSessionToken(userID: userID,
+                                   deviceName: "Xample",
+                                   roles: ["admin"],
+                                   expiration: ExpirationClaim(value: Date(timeIntervalSinceNow: 600)),
+                                   iss: IssuerClaim("com.example")
+    )
+    let adminToken = try app.jwt.signers.sign(token, kid: .authPrivateKey)
+
+    let headers = HTTPHeaders([("Authorization", "Bearer \(adminToken)")])
+    try app.test(.GET, "admin-only", headers: headers) { response in
       XCTAssertEqual(response.status, .ok)
       XCTAssertEqual(String(buffer: response.body), #"1CB5E4AD-C9DC-4635-BC27-0AE1DA9637BD"#)
     }

@@ -1,33 +1,22 @@
 import Fluent
 import FluentPostgresDriver
 import Foundation
+import Vapor
 
 final class UserModel: Model {
   static let schema = "user"
 
-  @ID(key: .id)
-  var id: UUID?
+  @ID(key: .id) var id: UUID?
 
-  @Field(key: "first_name")
-  var firstName: String?
+  @Field(key: "first_name") var firstName: String?
+  @Field(key: "last_name") var lastName: String?
+  @Field(key: "created_at") var createdAt: Date
+  @Field(key: "updated_at") var updatedAt: Date
+  @Enum(key: "registration_method") var registrationMethod: RegistrationMethod
+  @Enum(key: "status") var status: Status
+  @OptionalChild(for: \.$user) var siwa: SIWAModel?
 
-  @Field(key: "last_name")
-  var lastName: String?
-
-  @Field(key: "created_at")
-  var createdAt: Date
-
-  @Field(key: "updated_at")
-  var updatedAt: Date
-
-  @Enum(key: "registration_method")
-  var registrationMethod: RegistrationMethod
-
-  @Enum(key: "status")
-  var status: Status
-
-  @OptionalChild(for: \.$user)
-  var siwa: SIWAModel?
+  @Field(key: "roles") var roles: [String]
 
   init() { }
 
@@ -36,13 +25,14 @@ final class UserModel: Model {
     createdAt: Date = Date(),
     firstName: String,
     lastName: String,
-    registrationMethod: RegistrationMethod
-  ) {
+    registrationMethod: RegistrationMethod,
+    roles: [String] = []) {
     self.id = id
     self.createdAt = createdAt
     self.firstName = firstName
     self.lastName = lastName
     self.registrationMethod = registrationMethod
+    self.roles = roles
   }
 
   enum RegistrationMethod: String, Codable, CaseIterable {

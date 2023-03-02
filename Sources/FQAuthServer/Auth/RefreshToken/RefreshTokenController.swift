@@ -20,7 +20,8 @@ final class RefreshTokenController {
                     .login(userId: try userModel.requireID(),
                            firstName: userModel.firstName,
                            lastName: userModel.lastName,
-                           deviceName: refreshTokenRequestBody.newDeviceName)
+                           deviceName: refreshTokenRequestBody.newDeviceName,
+                           roles: userModel.roles)
                 } catch {
                   return req.eventLoop.makeFailedFuture(Abort(.internalServerError))
                 }

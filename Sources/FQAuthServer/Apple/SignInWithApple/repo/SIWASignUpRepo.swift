@@ -9,6 +9,7 @@ struct SIWASignUpRepo {
     let firstName: String
     let lastName: String
     let deviceName: String
+    let roles: [String]
     let method: Method
   }
   
@@ -49,21 +50,23 @@ struct SIWASignUpRepo {
 
     switch params.method {
     case .siwa(appleUserId: let appleUserId, appleRefreshToken: let appleRefreshToken):
-      
+
       let sqlTemplate = """
         WITH new_user as (
-          INSERT INTO "user" (first_name, last_name, registration_method)
-          VALUES ($1, $2, $3::user_registration_method)
+          INSERT INTO "user" (first_name, last_name, registration_method, roles)
+          VALUES ($1, $2, $3::user_registration_method, $4::text[])
           RETURNING id AS user_id
         )
         INSERT INTO "siwa" (email, apple_user_id, encrypted_apple_refresh_token, user_id)
-        VALUES ($4,$5,$6,(SELECT user_id FROM new_user))
+        VALUES ($5,$6,$7,(SELECT user_id FROM new_user))
         RETURNING user_id AS user_id;
         """
-      let binds: [String] =  [
+      
+      let binds: [Encodable] =  [
         params.firstName,
         params.lastName,
         params.method.id.rawValue,
+        params.roles,
         params.email,
         appleUserId,
         DBSeal().seal(string: appleRefreshToken)

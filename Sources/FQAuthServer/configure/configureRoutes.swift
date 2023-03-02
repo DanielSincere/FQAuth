@@ -1,5 +1,6 @@
 import Vapor
 import JWT
+import FQAuthMiddleware
 
 extension Application {
 
@@ -13,5 +14,9 @@ extension Application {
     try apiRoutes.register(collection: SIWAController())
     try apiRoutes.register(collection: RefreshTokenController())
     try apiRoutes.register(collection: UserController())
+
+    try self.register(collection: LoginController())
+
+    try self.register(collection: AdminWebController())
   }
 }

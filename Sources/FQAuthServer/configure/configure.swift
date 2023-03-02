@@ -1,6 +1,5 @@
 import Vapor
-import JWT
-import PostgresNIO
+import Leaf
 
 extension Application {
 
@@ -16,5 +15,7 @@ extension Application {
     self.configureCommands()
     
     self.configureServices()
+
+    self.views.use(.leaf)
   }
 }

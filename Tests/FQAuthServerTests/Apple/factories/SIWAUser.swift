@@ -13,6 +13,7 @@ extension SIWASignUpRepo {
      firstName: "First",
      lastName: "Last",
      deviceName: "My Test iPhone",
+     roles: ["test", "sample"],
      method: .siwa(
        appleUserId: appleUserId,
        appleRefreshToken: "fakeToken"))

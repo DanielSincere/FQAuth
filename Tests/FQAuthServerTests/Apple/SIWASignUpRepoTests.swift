@@ -30,6 +30,7 @@ final class SIWASignUpRepoTests: XCTestCase {
                                        firstName: "First",
                                        lastName: "Last",
                                        deviceName: "device",
+                                       roles: ["test", "sample"],
                                        method: .siwa(appleUserId: "AppleUserId",
                                                      appleRefreshToken: "AppleRefresh")
                                       )).wait()
@@ -41,6 +42,8 @@ final class SIWASignUpRepoTests: XCTestCase {
     XCTAssertEqual(user.lastName, "Last")
     XCTAssertEqual(user.registrationMethod, .siwa)
     XCTAssertEqual(user.status, .active)
+    XCTAssertTrue(user.roles.contains("test"))
+    XCTAssertTrue(user.roles.contains("sample"))
     XCTAssertNearlyNow(user.createdAt)
     XCTAssertNearlyNow(user.updatedAt)
     

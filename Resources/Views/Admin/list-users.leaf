@@ -1,0 +1,32 @@
+#extend("base"):
+#export("base_title"): List users #endexport
+#export("base_body"):
+
+<h1>Users</h1>
+
+<details open>
+  <summary>Users</summary>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Registration method</th>
+      </tr>
+    </thead>
+    <tbody>
+      #for(user in users):
+        <tr>
+          <th scope="row">1</th>
+          <td>#(user.firstName)</td>
+          <td>#(user.lastName)</td>
+          <td>#(user.registrationMethod)</td>
+        </tr>
+      #endfor
+    </tbody>
+  </table>
+</details>
+
+#endexport
+#endextend

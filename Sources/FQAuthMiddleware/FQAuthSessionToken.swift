@@ -9,6 +9,7 @@ public struct FQAuthSessionToken: Content, Authenticatable, JWTPayload {
   public let iat: IssuedAtClaim
   public let iss: IssuerClaim
   public let deviceName: String
+  public let roles: [String]
   
   public static let expirationTime: TimeInterval = 60 * 60 * 2
   
@@ -26,6 +27,7 @@ public struct FQAuthSessionToken: Content, Authenticatable, JWTPayload {
 
   public init(userID: UUID,
               deviceName: String,
+              roles: [String],
               expiration: ExpirationClaim,
               iat: IssuedAtClaim = IssuedAtClaim(value: Date()),
               iss: IssuerClaim) {
@@ -34,6 +36,7 @@ public struct FQAuthSessionToken: Content, Authenticatable, JWTPayload {
     self.iat = iat
     self.iss = iss
     self.deviceName = deviceName
+    self.roles = roles
   }
 
   public enum Errors: Error {

@@ -23,6 +23,7 @@ let package = Package(
     .package(url: "https://github.com/vapor/queues-redis-driver.git", from: "1.0.0"),
     .package(url: "https://github.com/FullQueueDeveloper/Sh.git", from: "1.0.2"),
 
+    .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0"),
   ],
   targets: [
     .executableTarget(name: "FQAuthServer", dependencies: [
@@ -37,6 +38,8 @@ let package = Package(
       .product(name: "QueuesRedisDriver", package: "queues-redis-driver"),
       
       .target(name: "FQAuthMiddleware"),
+
+      .product(name: "Leaf", package: "leaf"),
       
       "Sh",
     ],

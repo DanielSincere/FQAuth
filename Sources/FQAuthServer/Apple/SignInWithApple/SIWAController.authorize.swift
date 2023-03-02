@@ -70,7 +70,8 @@ extension SIWAController {
         .login(userId: userId,
                firstName: userModel.firstName,
                lastName: userModel.lastName,
-               deviceName: authorizeBody.deviceName)
+               deviceName: authorizeBody.deviceName,
+               roles: userModel.roles)
     }
   }
   
@@ -95,6 +96,7 @@ extension SIWAController {
                         firstName: firstName,
                         lastName: lastName,
                         deviceName: authorizeBody.deviceName,
+                        roles: [],
                         method: .siwa(
                           appleUserId: appleIdentityToken.subject.value,
                           appleRefreshToken: appleTokenResponse.refresh_token)
@@ -104,7 +106,8 @@ extension SIWAController {
               .login(userId: userId,
                      firstName: firstName,
                      lastName: lastName,
-                     deviceName: authorizeBody.deviceName)
+                     deviceName: authorizeBody.deviceName,
+                     roles: [])
           }
       }
   }
