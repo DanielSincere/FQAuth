@@ -1,24 +1,22 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fqauth-scheduled-queues-deployment
+  name: fqauth-queues-deployment
   labels:
-    app: fqauth-scheduled-queues
+    app: fqauth-queues
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: fqauth-scheduled-queues
+      app: fqauth-queues
   template:
     metadata:
       labels:
-        app: fqauth-scheduled-queues
+        app: fqauth-queues
     spec:
       containers:
-        - name: fqauth-scheduled-jobs
-          image: ghcr.io/fullqueuedeveloper/fqauth-scheduled-queues:0.2.0
-          command: "/app/FQAuthServer queues --scheduled --env production"
+        - name: fqauth-queues
+          image: ghcr.io/fullqueuedeveloper/fqauth-queues:0.2.1
           env:
           - name: DATABASE_URL
             valueFrom:
