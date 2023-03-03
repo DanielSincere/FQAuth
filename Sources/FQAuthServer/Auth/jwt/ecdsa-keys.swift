@@ -7,8 +7,8 @@ extension ECDSAKey {
     ECDSAKey.load(fromEnvVar: .authPrivateKey)
   }
 
-  static var appleDeveloperKey: ECDSAKey {
-    ECDSAKey.load(fromEnvVar: .appleDeveloperKey)
+  static var appleServicesKey: ECDSAKey {
+    ECDSAKey.load(fromEnvVar: .appleServicesKey)
   }
 
   private static func load(fromEnvVar envVar: EnvVars) -> ECDSAKey {

@@ -21,8 +21,8 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
 3. Gather the other environment variables as discussed in `Sources/FQAuthServer/EnvVars.swift`:
 
   1. APPLE_APP_ID
-  2. APPLE_DEVELOPER_KEY
-  3. APPLE_DEVELOPER_KEY_ID
+  2. APPLE_SERVICES_KEY
+  3. APPLE_SERVICES_KEY_ID
   4. APPLE_TEAM_ID
   5. AUTH_PRIVATE_KEY
   6. DB_SYMMETRIC_KEY

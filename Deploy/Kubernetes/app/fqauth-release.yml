@@ -25,16 +25,16 @@ spec:
               secretKeyRef:
                 name: fqauth.secrets
                 key: AUTH_PRIVATE_KEY
-          - name: APPLE_DEVELOPER_KEY
+          - name: APPLE_SERVICES_KEY
             valueFrom:
               secretKeyRef:
                 name: fqauth.secrets
-                key: APPLE_DEVELOPER_KEY
-          - name: APPLE_DEVELOPER_KEY_ID
+                key: APPLE_SERVICES_KEY
+          - name: APPLE_SERVICES_KEY_ID
             valueFrom:
               secretKeyRef:
                 name: fqauth.secrets
-                key: APPLE_DEVELOPER_KEY_ID
+                key: APPLE_SERVICES_KEY_ID
           - name: APPLE_TEAM_ID
             valueFrom:
               secretKeyRef:

@@ -6,8 +6,8 @@ enum EnvVars: String, CaseIterable {
   case authPrivateKey = "AUTH_PRIVATE_KEY"
 
   /// from https://developer.apple.com/account/resources/authkeys/list
-  case appleDeveloperKey = "APPLE_DEVELOPER_KEY"
-  case appleDeveloperKeyId = "APPLE_DEVELOPER_KEY_ID"
+  case appleServicesKey = "APPLE_SERVICES_KEY"
+  case appleServicesKeyId = "APPLE_SERVICES_KEY_ID"
 
   /// App Store Connect Team ID
   case appleTeamId = "APPLE_TEAM_ID"

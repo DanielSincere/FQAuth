@@ -25,7 +25,7 @@ final class SIWAClientTests: XCTestCase {
     XCTAssertEqual(firstAudience, "https://appleid.apple.com")
     XCTAssertEqual(clientSecret.sub.value, try EnvVars.appleAppId.loadOrThrow())
     
-    try clientSecret.verify(using: try app.jwt.signers.require(kid: .appleDeveloperKey))
+    try clientSecret.verify(using: try app.jwt.signers.require(kid: .appleServicesKey))
   }
   
   func testRequestSentToApple() throws {
