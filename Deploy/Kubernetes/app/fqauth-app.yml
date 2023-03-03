@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: fqauth-app
-          image: ghcr.io/fullqueuedeveloper/fqauth:0.2.1
+          image: ghcr.io/fullqueuedeveloper/fqauth:0.2.2
           livenessProbe:
             httpGet:
               path: /healthy

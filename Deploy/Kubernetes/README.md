@@ -18,7 +18,7 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
     kubectl apply -f Deploy/Kubernetes/redis/fqauth-redis.yml
 
 
-3. Gather the other environment variables as discussed in `Sources/FQAuthServer/EnvVars.swift`:
+3. Gather the other environment variables as discussed in `Sources/FQAuthServer/EnvVars.swift`, and store them in secrets/fqauth-secrets.
 
   1. APPLE_APP_ID
   2. APPLE_SERVICES_KEY
@@ -29,9 +29,9 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
   7. DATABASE_URL
   8. REDIS_URL
 
-4. Run the database migrations
+4. Sent them up to your cluster
 
-    kubectl apply -f Deploy/Kubernetes/release/fqauth-migrate.yml
+    kubectl apply -f Deploy/Kubernetes/secrets/fqauth-secrets
 
 5. Deploy the App
 

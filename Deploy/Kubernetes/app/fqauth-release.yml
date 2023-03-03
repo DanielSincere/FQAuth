@@ -1,16 +1,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: fqauth-release-0-2-1
+  name: fqauth-release-0-2-2
   labels:
-    app: fqauth-release-0-2-1
+    app: fqauth-release-0-2-2
 spec:
   template:
     spec:
       restartPolicy: Never
       containers:
       - name: fqauth-release
-        image: ghcr.io/fullqueuedeveloper/fqauth-release:0.2.1
+        image: ghcr.io/fullqueuedeveloper/fqauth-release:0.2.2
         env:
           - name: DATABASE_URL
             valueFrom:
