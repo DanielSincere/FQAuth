@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fqauth-service
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: fqauth-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fqauth-app-deployment
+  labels:
+    app: fqauth-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fqauth-app
+  template:
+    metadata:
+      labels:
+        app: fqauth-app
+    spec:
+      containers:
+        - name: fqauth-app
+          image: ghcr.io/fullqueuedeveloper/fqauth:0.2.0
+          livenessProbe:
+            httpGet:
+              path: /healthy
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 20
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: FQAUTH_POSTGRES_URL
+          - name: REDIS_URL
+            value: "redis://fqauth-redis:6379"
+          - name: AUTH_PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: AUTH_PRIVATE_KEY
+          - name: APPLE_DEVELOPER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: APPLE_DEVELOPER_KEY
+          - name: APPLE_DEVELOPER_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: APPLE_DEVELOPER_KEY_ID
+          - name: APPLE_TEAM_ID
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: APPLE_TEAM_ID
+          - name: APPLE_APP_ID
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: APPLE_APP_ID
+          - name: DB_SYMMETRIC_KEY
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: DB_SYMMETRIC_KEY

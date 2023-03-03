@@ -5,11 +5,38 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
 ## Pre reqs
 
 1. A Kubernetes cluster
-2. A Redis instance, accessible from the cluster
-3. A Postgres instance, accessible from the cluster
+2. A Postgres instance, accessible from the cluster
 
 ## Install
 
-1. Gather URLs for Redis and Postgres
-2. `kubectl apply -Rf Deploy/Kubernetes/
-3. Set up ingress resources in your cluster.
+1. Ensure your user has access to the `public` schema. If your user doesn't have access, login to your database as your root user and grant access. For example,
+
+    GRANT ALL ON SCHEMA public TO fqauth;
+
+2. Deploy the in-cluster redis instance. (Out-of-cluster is fine, too, just update the environment variable to reflect this.)
+
+    kubectl apply -f Deploy/Kubernetes/redis/fqauth-redis.yml
+
+
+3. Gather the other environment variables as discussed in `Sources/FQAuthServer/EnvVars.swift`:
+
+  1. APPLE_APP_ID
+  2. APPLE_DEVELOPER_KEY
+  3. APPLE_DEVELOPER_KEY_ID
+  4. APPLE_TEAM_ID
+  5. AUTH_PRIVATE_KEY
+  6. DB_SYMMETRIC_KEY
+  7. DATABASE_URL
+  8. REDIS_URL
+
+4. Run the database migrations
+
+    kubectl apply -f Deploy/Kubernetes/release/fqauth-migrate.yml
+
+5. Deploy the App
+
+    kubectl apply -Rf Deploy/Kubernetes/app/
+
+6. Set up ingress resources in your cluster and Load balancer
+
+

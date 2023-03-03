@@ -2,18 +2,23 @@ import Vapor
 
 enum EnvVars: String, CaseIterable {
 
-  // generate with `swish generate-jwt-key`
+  /// generate with `swish generate-jwt-key`
   case authPrivateKey = "AUTH_PRIVATE_KEY"
 
-  // from https://developer.apple.com/account/resources/authkeys/list
+  /// from https://developer.apple.com/account/resources/authkeys/list
   case appleDeveloperKey = "APPLE_DEVELOPER_KEY"
   case appleDeveloperKeyId = "APPLE_DEVELOPER_KEY_ID"
+
+  /// App Store Connect Team ID
   case appleTeamId = "APPLE_TEAM_ID"
+
+  /// App Store Connect App Bundle ID
   case appleAppId = "APPLE_APP_ID"
 
-  // generate with `swish generate-db-key`
+  /// generate with `swish generate-db-key`
   case dbSymmetricKey = "DB_SYMMETRIC_KEY"
 
+  /// from your hosting provider
   case postgresUrl = "DATABASE_URL"
   case redisUrl = "REDIS_URL"
 

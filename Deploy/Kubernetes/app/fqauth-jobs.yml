@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fqauth-queues-deployment
+  labels:
+    app: fqauth-queues
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fqauth-queues
+  template:
+    metadata:
+      labels:
+        app: fqauth-queues
+    spec:
+      containers:
+        - name: fqauth-queues
+          image: ghcr.io/fullqueuedeveloper/fqauth-queues:0.2.0
+          command: "/app/FQAuthServer queues --env production"
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: FQAUTH_POSTGRES_URL
+          - name: REDIS_URL
+            value: "redis://fqauth-redis:6379"
+          - name: AUTH_PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: AUTH_PRIVATE_KEY
+          - name: APPLE_DEVELOPER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: APPLE_DEVELOPER_KEY
+          - name: APPLE_DEVELOPER_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: APPLE_DEVELOPER_KEY_ID
+          - name: APPLE_TEAM_ID
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: APPLE_TEAM_ID
+          - name: APPLE_APP_ID
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: APPLE_APP_ID
+          - name: DB_SYMMETRIC_KEY
+            valueFrom:
+              secretKeyRef:
+                name: fqauth.secrets
+                key: DB_SYMMETRIC_KEY
