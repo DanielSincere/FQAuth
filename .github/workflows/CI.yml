@@ -128,7 +128,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       redis:
-        image: redis:latests
+        image: redis:latest
         ports:
           - 6379:6379
       postgres:
@@ -168,7 +168,6 @@ jobs:
     runs-on: macos-12
     steps:
     - run: |
-        brew services start redis
         brew services start postgresql
         echo "Check PostgreSQL service is running"
         i=10
@@ -196,14 +195,14 @@ jobs:
       with:
         swift-version: "5.7"
     - run: swift --version
+    - uses: shogo82148/actions-setup-redis@v1
     - uses: actions/checkout@v2
     - run: swift run FQAuthServer migrate -y --env test
-    - uses: shogo82148/actions-setup-redis@v1
     - run: swift test
     env:
       DATABASE_URL: "postgresql://myuser:mypassword@localhost/mydatabase"
       DB_SYMMETRIC_KEY: "9/Vk5Rlzctc5tyX0SCmIJaRzEg+QgwWjlTzD0LMPqNY="
-      REDIS_URL: "redis://localhost"
+      REDIS_URL: "redis://127.0.0.1:6379"
       APPLE_SERVICES_KEY: "LS0tLS1CRUdJTiBFQyBQQVJBTUVURVJTLS0tLS0KQmdVcmdRUUFJdz09Ci0tLS0tRU5EIEVDIFBBUkFNRVRFUlMtLS0tLQotLS0tLUJFR0lOIEVDIFBSSVZBVEUgS0VZLS0tLS0KTUlIY0FnRUJCRUlCdXRBYnNFUjY1bVFnby9iKzJYcTVsaDZQTDhuRTJSRjZ0WjFDdWNmdW5UaWtyNDFwL3JhZwpYaXd6MTJVOWxoY211Y2wrWDh5MkVacUowQ0FXS0VhTHluYWdCd1lGSzRFRUFDT2hnWWtEZ1lZQUJBQm92SWc2CkNRREdkcjMxNlR6bEJXRG56SHIvWDVoSnVzbnpSY0E2WUpUS1RVMll2bXdCaHVGUFBiNit1MUttaUdkTnQ2N1EKTU16RjMxYjY0L0gwS3prQ1BnRVZicklMVkthNDlUbTdNQU1WT3dsUUxaVHBIck8xMVk2bVd5eERydEFCSXNDTApqNnBRMFhGNlZiNWNOT3RWL1BpMC9lcTIxY3UwV3h5aDNHODY2TlQ0T1E9PQotLS0tLUVORCBFQyBQUklWQVRFIEtFWS0tLS0tCg=="
       APPLE_SERVICES_KEY_ID: "com.fullqueuedeveloper.FQAuthServer.AppleServicesKeyID"
       APPLE_TEAM_ID: "FQDV1234"

@@ -1,5 +1,5 @@
 # FQAuth Deployment
 
-FQAuth is deployed as 1 web service, 1 worker service, 1 Redis node, and 1 Postgres database.
+FQAuth is deployed as 1 web service, 1 queues service, 1 scheduled queues service, 1 Redis instance, and 1 Postgres database.
 
-Heroku is ready, and DigitalOcean is a work in progress (wip)
+

@@ -40,3 +40,6 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
 6. Set up ingress resources in your cluster and Load balancer
 
 
+7. After you login the first time, you may manually add the admin role to your user in the database, as that's not supported yet in the UI.
+
+    UPDATE `USER` SET roles = '{"admin"}'::text[]

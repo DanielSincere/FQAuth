@@ -12,7 +12,7 @@ extension Application {
 
     self.queues.add(ConsentRevokedJob())
     self.queues.add(EmailEnabledJob())
-    self.queues.add(EmailEnabledJob())
+    self.queues.add(EmailDisabledJob())
     self.queues.add(SIWAAccountDeletedJob())
     self.queues.add(RefreshTokenJob())
 

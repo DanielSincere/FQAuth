@@ -3,6 +3,20 @@
 ## Goals
 From a user perspective, you could deploy this microservice to a heroku freetier replacement while your main app runs on different provider. Or include in your kubernetes deployment behind your load balancer. Ease of deployment for newcomers to DevOps is a priority.
 
+## Infrastructure required
+
+- Postgres
+- Redis
+
+## Deploying
+
+Deploy guides are available in the repo.
+- [Heroku](Deploy/Heroku/README.md)
+- [Kubernetes](Deploy/Kubernetes/README.md)
+- [Helm](Deploy/Kubernetes/README.md)
+- [Fly.io](Deploy/Fly.io/README.md)
+
+
 ## How
 I stream my contributions, which would include code, codereviews, writing tickets, and diagrams. My twitch username is [FullQueueDeveloper](https://twitch.tv/FullQueueDeveloper) & link is in my profile
 
@@ -26,9 +40,6 @@ Future maybes handle in app purchases as well? Since mostlikely, we would want t
 - Android client SDK (optional)
 - JS SDK (optional)
 
-## Infrastructure:
-- Postgres
-- Redis (maybe)
 
 ## Sponsors
 
@@ -39,18 +50,24 @@ A huge thank you to the following for keeping the dream alive! 💜🗽
 1. [0xLeif](https://github.com/0xLeif)
 
 
-## License:
-MIT or equivalen
+## License
+MIT
 
 ## Local development
 
 These are suggestions. Of course it is completely customizable to your taste.
 
-1. Copy `.env.sample` to `.env.dev` and `.env.testing`
+1. Copy `.env.sample` to `.env`, and `.env.testing.sample` to `.env.testing`
 
-2. Access your postgres instance: `psql -U postgres`
+2. Create local development and test databases
 
-3. Created the test db: `create database fqauth_test;`
+    swift run FQAuthServer local-db create
 
-4. Created the development db: `create database fqauth_dev;`
+3. Run migrations
+
+    swift run FQAuthServer migrate -y
+
+4. Run the tests
+
+    swift test
 
