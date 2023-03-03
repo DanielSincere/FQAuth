@@ -53,7 +53,8 @@ final class FQAuthMiddlewareTests: XCTestCase {
   func testEmptyHeader() throws {
     try app.test(.GET, "hello") { response in
       XCTAssertEqual(response.status, .unauthorized)
-      XCTAssertEqual(String(buffer: response.body), #"{"error":true,"reason":"Unauthorized"}"#)
+      let error = try response.content.decode(VaporError.self)
+      XCTAssertEqual(error.reason, #"Unauthorized"#)
     }
   }
 
@@ -64,8 +65,14 @@ final class FQAuthMiddlewareTests: XCTestCase {
     let headers = HTTPHeaders([("Authorization", "Bearer \(unauthorizedToken)")])
     try app.test(.GET, "hello", headers: headers) { response in
       XCTAssertEqual(response.status, .unauthorized)
-      XCTAssertEqual(String(buffer: response.body), #"{"error":true,"reason":"signature verification failed"}"#)
+      let error = try response.content.decode(VaporError.self)
+      XCTAssertEqual(error.reason, #"signature verification failed"#)
     }
+  }
+
+  struct VaporError: Content, Codable, Equatable {
+    let error: Bool
+    let reason: String
   }
 
   func testAuthorized() throws {
@@ -80,7 +87,8 @@ final class FQAuthMiddlewareTests: XCTestCase {
     let headers = HTTPHeaders([("Authorization", "Bearer \(authorizedToken!)")])
     try app.test(.GET, "admin-only", headers: headers) { response in
       XCTAssertEqual(response.status, .unauthorized)
-      XCTAssertEqual(String(buffer: response.body), #"{"error":true,"reason":"Unauthorized"}"#)
+      let error = try response.content.decode(VaporError.self)
+      XCTAssertEqual(error.reason, #"Unauthorized"#)
     }
   }
 

@@ -127,6 +127,10 @@ jobs:
     name: Test on Ubuntu
     runs-on: ubuntu-latest
     services:
+      redis:
+        image: redis:latests
+        ports:
+          - 6379:6379
       postgres:
         image: postgres:latest
         env:
@@ -164,6 +168,7 @@ jobs:
     runs-on: macos-12
     steps:
     - run: |
+        brew services start redis
         brew services start postgresql
         echo "Check PostgreSQL service is running"
         i=10
