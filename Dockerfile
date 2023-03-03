@@ -13,9 +13,8 @@ FROM index.docker.io/library/swift:5.7-jammy-slim as production
 RUN useradd --user-group --create-home --system --skel /dev/null --home-dir /app vapor
 RUN apt-get update && apt-get install -y curl
 WORKDIR /app
-COPY --from=builder --chown=vapor:vapor /output/* /app/
+COPY --from=builder /output/* /app/
 COPY --from=builder /usr/lib/swift/ /usr/lib/swift/
-USER vapor:vapor
 
 FROM production as web
 ENV PORT 80
