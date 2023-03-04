@@ -1,1 +1,1 @@
-FROM ghcr.io/fullqueuedeveloper/fqauth:0.2.1
+FROM ghcr.io/fullqueuedeveloper/fqauth:0.2.3

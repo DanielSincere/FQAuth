@@ -1,51 +1,51 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: fqauth-release-0-2-2
+  name: fqauth-release-0-2-3
   labels:
-    app: fqauth-release-0-2-2
+    app: fqauth-release-0-2-3
 spec:
   template:
     spec:
       restartPolicy: Never
       containers:
-      - name: fqauth-release
-        image: ghcr.io/fullqueuedeveloper/fqauth-release:0.2.2
-        env:
-          - name: DATABASE_URL
-            valueFrom:
-              secretKeyRef:
-                name: fqauth.secrets
-                key: FQAUTH_POSTGRES_URL
-          - name: REDIS_URL
-            value: "redis://fqauth-redis:6379"
-          - name: AUTH_PRIVATE_KEY
-            valueFrom:
-              secretKeyRef:
-                name: fqauth.secrets
-                key: AUTH_PRIVATE_KEY
-          - name: APPLE_SERVICES_KEY
-            valueFrom:
-              secretKeyRef:
-                name: fqauth.secrets
-                key: APPLE_SERVICES_KEY
-          - name: APPLE_SERVICES_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: fqauth.secrets
-                key: APPLE_SERVICES_KEY_ID
-          - name: APPLE_TEAM_ID
-            valueFrom:
-              secretKeyRef:
-                name: fqauth.secrets
-                key: APPLE_TEAM_ID
-          - name: APPLE_APP_ID
-            valueFrom:
-              secretKeyRef:
-                name: fqauth.secrets
-                key: APPLE_APP_ID
-          - name: DB_SYMMETRIC_KEY
-            valueFrom:
-              secretKeyRef:
-                name: fqauth.secrets
-                key: DB_SYMMETRIC_KEY
+        - name: fqauth-release
+          image: ghcr.io/fullqueuedeveloper/fqauth-release:0.2.3
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: fqauth.secrets
+                  key: FQAUTH_POSTGRES_URL
+            - name: REDIS_URL
+              value: "redis://fqauth-redis:6379"
+            - name: AUTH_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fqauth.secrets
+                  key: AUTH_PRIVATE_KEY
+            - name: APPLE_SERVICES_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fqauth.secrets
+                  key: APPLE_SERVICES_KEY
+            - name: APPLE_SERVICES_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fqauth.secrets
+                  key: APPLE_SERVICES_KEY_ID
+            - name: APPLE_TEAM_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fqauth.secrets
+                  key: APPLE_TEAM_ID
+            - name: APPLE_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fqauth.secrets
+                  key: APPLE_APP_ID
+            - name: DB_SYMMETRIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fqauth.secrets
+                  key: DB_SYMMETRIC_KEY
