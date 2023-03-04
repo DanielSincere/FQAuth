@@ -24,11 +24,11 @@ extension Application {
       .daily()
       .at(18, 18)
 
-    if Environment.get("RUN_SCHEDULED_JOBS_IN_MAIN_PROCESS") == "YES" {
+    if Environment.get("RUN_SCHEDULED_QUEUES_IN_MAIN_PROCESS") == "YES" {
       try self.queues.startScheduledJobs()
     }
 
-    if Environment.get("RUN_JOBS_IN_MAIN_PROCESS") == "YES" {
+    if Environment.get("RUN_QUEUES_IN_MAIN_PROCESS") == "YES" {
       try self.queues.startInProcessJobs()
     }
   }

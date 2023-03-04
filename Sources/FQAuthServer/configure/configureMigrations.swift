@@ -11,5 +11,9 @@ extension Application {
                           CreateRefreshTokenMigration(),
                           AddRolesToUserMigration(),
                           to: .psql)
+    
+    if Environment.get("RUN_AUTO_MIGRATE") == "YES" {
+      try self.autoMigrate().wait()
+    }
   }
 }
