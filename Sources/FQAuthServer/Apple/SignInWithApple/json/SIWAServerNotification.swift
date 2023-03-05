@@ -9,7 +9,7 @@ public struct SIWAServerNotification: JWTPayload {
   public let events: AppleStringWrapped<Event>
 
   public func verify(using signer: JWTSigner) throws {
-    let appleAppId = try EnvVars.appleAppId.loadOrThrow()
+    let appleAppId = try EnvVars.appleAppId.load()
     try aud.verifyIntendedAudience(includes: appleAppId)
 
     guard iss.value == "https://appleid.apple.com" else {

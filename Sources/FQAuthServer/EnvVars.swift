@@ -30,7 +30,7 @@ enum EnvVars: String, CaseIterable {
     return string
   }
 
-  func loadOrThrow() throws -> String {
+  func load() throws -> String {
     guard let string = Environment.get(self.rawValue) else {
       throw EnvVarMissingError(name: self.rawValue)
     }
@@ -38,19 +38,27 @@ enum EnvVars: String, CaseIterable {
     return string
   }
 
-  struct EnvVarMissingError: Error {
+  struct EnvVarMissingError: LocalizedError {
     let name: String
+    
+    var errorDescription: String? {
+      "Expected `\(name)` to be present in the environment but it was not"
+    }
   }
 
-  struct EnvVarsMissingError: Error {
+  struct EnvVarsMissingError: LocalizedError {
     let names: [String]
+    
+    var errorDescription: String? {
+      return "Expected \(names.map { "`\($0)`"}.joined(separator: ", ")) to be present in the environment but it was not"
+    }
   }
 
   static func ensureAllPresent() throws {
     let names: [String] = Self.allCases
       .compactMap { envVar in
         do {
-          _ = try envVar.loadOrThrow()
+          _ = try envVar.load()
           return nil
         } catch {
           return envVar.rawValue

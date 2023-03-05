@@ -3,7 +3,7 @@ import Vapor
 final class LoginController {
 
   func login(req: Request) async throws -> View {
-    let login = LoginView(appleidSigninClientId: try EnvVars.appleTeamId.loadOrThrow(),
+    let login = LoginView(appleidSigninClientId: try EnvVars.appleTeamId.load(),
                           appleidSigninScope: "code id_token name email",
                           appleidSigninRedirectUri: "https://redirectUri",
                           appleidSigninState: "stat",

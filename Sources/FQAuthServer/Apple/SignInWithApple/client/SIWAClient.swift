@@ -46,8 +46,8 @@ public struct LiveSIWAClient: SIWAClient {
 
   var clientSecret: EventLoopFuture<String> {
     do {
-      let payload = SIWAClientSecret(clientId: try EnvVars.appleAppId.loadOrThrow(),
-                                     teamId: try EnvVars.appleTeamId.loadOrThrow())
+      let payload = SIWAClientSecret(clientId: try EnvVars.appleAppId.load(),
+                                     teamId: try EnvVars.appleTeamId.load())
       let string = try signers.sign(payload, kid: .appleServicesKey)
       return eventLoop.makeSucceededFuture(string)
     } catch {

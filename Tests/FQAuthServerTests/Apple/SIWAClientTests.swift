@@ -15,15 +15,15 @@ final class SIWAClientTests: XCTestCase {
   }
   
   func testClientSecret() throws {
-    let clientSecret = SIWAClientSecret(clientId: try EnvVars.appleAppId.loadOrThrow(), teamId: try EnvVars.appleTeamId.loadOrThrow())
-    XCTAssertEqual(clientSecret.iss.value, try EnvVars.appleTeamId.loadOrThrow())
+    let clientSecret = SIWAClientSecret(clientId: try EnvVars.appleAppId.load(), teamId: try EnvVars.appleTeamId.load())
+    XCTAssertEqual(clientSecret.iss.value, try EnvVars.appleTeamId.load())
     XCTAssertEqual(clientSecret.iat.value.timeIntervalSinceReferenceDate, Date().timeIntervalSinceReferenceDate, accuracy: 10)
     XCTAssertEqual(clientSecret.exp.value.timeIntervalSinceReferenceDate, Date(timeIntervalSinceNow: .oneDay).timeIntervalSinceReferenceDate, accuracy: 10)
     XCTAssertEqual(clientSecret.aud.value.count, 1)
     
     let firstAudience = try XCTUnwrap(clientSecret.aud.value.first)
     XCTAssertEqual(firstAudience, "https://appleid.apple.com")
-    XCTAssertEqual(clientSecret.sub.value, try EnvVars.appleAppId.loadOrThrow())
+    XCTAssertEqual(clientSecret.sub.value, try EnvVars.appleAppId.load())
     
     try clientSecret.verify(using: try app.jwt.signers.require(kid: .appleServicesKey))
   }
@@ -43,20 +43,20 @@ final class SIWAClientTests: XCTestCase {
     let urlEncodedFormString = try XCTUnwrap(request.body?.string)
     let body = try URLEncodedFormDecoder().decode(AppleAuthTokenBody.self, from: urlEncodedFormString)
     XCTAssertEqual(body.grant_type, "authorization_code")
-    XCTAssertEqual(body.client_id, try EnvVars.appleAppId.loadOrThrow())
+    XCTAssertEqual(body.client_id, try EnvVars.appleAppId.load())
     XCTAssertEqual(body.code, "code123")
     XCTAssertNil(body.redirect_uri)
     XCTAssertNil(body.refresh_token)
     
     let clientSecret = try app.jwt.signers.verify(body.client_secret, as: SIWAClientSecret.self)
-    XCTAssertEqual(clientSecret.iss.value, try EnvVars.appleTeamId.loadOrThrow())
+    XCTAssertEqual(clientSecret.iss.value, try EnvVars.appleTeamId.load())
     XCTAssertEqual(clientSecret.iat.value.timeIntervalSinceReferenceDate, Date().timeIntervalSinceReferenceDate, accuracy: 10)
     XCTAssertEqual(clientSecret.exp.value.timeIntervalSinceReferenceDate, Date(timeIntervalSinceNow: .oneDay).timeIntervalSinceReferenceDate, accuracy: 10)
     XCTAssertEqual(clientSecret.aud.value.count, 1)
     
     let firstAudience = try XCTUnwrap(clientSecret.aud.value.first)
     XCTAssertEqual(firstAudience, "https://appleid.apple.com")
-    XCTAssertEqual(clientSecret.sub.value, try EnvVars.appleAppId.loadOrThrow())
+    XCTAssertEqual(clientSecret.sub.value, try EnvVars.appleAppId.load())
   }
   
   class FakeClient: Client {

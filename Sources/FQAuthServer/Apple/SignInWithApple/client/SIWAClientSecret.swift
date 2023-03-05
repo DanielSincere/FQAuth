@@ -29,11 +29,11 @@ struct SIWAClientSecret: JWTPayload {
     try self.exp.verifyNotExpired()
     try self.aud.verifyIntendedAudience(includes: "https://appleid.apple.com")
     
-    guard try EnvVars.appleTeamId.loadOrThrow() == self.iss.value else {
+    guard try EnvVars.appleTeamId.load() == self.iss.value else {
       throw Errors.issuerMismatch(actual: self.iss.value)
     }
     
-    guard try EnvVars.appleAppId.loadOrThrow() == self.sub.value else {
+    guard try EnvVars.appleAppId.load() == self.sub.value else {
       throw Errors.subjectMismatch(actual: self.sub.value)
     }
   }
