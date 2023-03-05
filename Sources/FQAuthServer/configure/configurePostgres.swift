@@ -9,7 +9,7 @@ extension Application {
 
 extension PostgresConfiguration {
   static func `for`(_ environment: Environment) throws -> PostgresConfiguration {
-    let urlString = try EnvVars.postgresUrl.loadOrThrow()
+    let urlString = try EnvVars.postgresUrl.load()
     guard let url = URL(string: urlString) else {
       struct NotAnURLError: Error {
         let string: String

@@ -55,6 +55,15 @@
       }
     },
     {
+      "identity" : "fqauthmiddleware",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/FullQueueDeveloper/FQAuthMiddleware.git",
+      "state" : {
+        "revision" : "711b2e9680271375a27a5b0dc93b80bdb522d858",
+        "version" : "0.1.2"
+      }
+    },
+    {
       "identity" : "jwt",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/jwt.git",

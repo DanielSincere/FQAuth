@@ -5,7 +5,7 @@ import Redis
 extension Application {
   func configureRedis() throws {
 
-    let urlString = try EnvVars.redisUrl.loadOrThrow()
+    let urlString = try EnvVars.redisUrl.load()
     guard let url = URL(string: urlString) else {
       struct NotAnURLError: Error {
         let string: String

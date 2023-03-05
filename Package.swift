@@ -9,9 +9,11 @@ let package = Package(
   ],
   products: [
     .executable(name: "FQAuthServer", targets: ["FQAuthServer"]),
-    .library(name: "FQAuthMiddleware", targets: ["FQAuthMiddleware"]),
   ],
   dependencies: [
+    
+    .package(url: "https://github.com/FullQueueDeveloper/FQAuthMiddleware.git", from: "0.1.2"),
+    
     .package(url: "https://github.com/vapor/vapor.git", from: "4.65.1"),
     .package(url: "https://github.com/vapor/jwt.git", from: "4.2.1"),
 
@@ -37,7 +39,7 @@ let package = Package(
       .product(name: "Redis", package: "redis"),
       .product(name: "QueuesRedisDriver", package: "queues-redis-driver"),
       
-      .target(name: "FQAuthMiddleware"),
+      .product(name: "FQAuthMiddleware", package: "FQAuthMiddleware"),
 
       .product(name: "Leaf", package: "leaf"),
       
@@ -46,17 +48,9 @@ let package = Package(
     swiftSettings: [
         .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
     ]),
-    .target(name: "FQAuthMiddleware", dependencies: [
-      .product(name: "Vapor", package: "vapor"),
-      .product(name: "JWT", package: "jwt"),
-    ]),
     .testTarget(name: "FQAuthServerTests", dependencies: [
       .product(name: "XCTVapor", package: "vapor"),
       "FQAuthServer",
-    ]),
-    .testTarget(name: "FQAuthMiddlewareTests", dependencies: [
-      .product(name: "XCTVapor", package: "vapor"),
-      "FQAuthMiddleware",
     ]),
   ]
 )

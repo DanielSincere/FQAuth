@@ -9,7 +9,7 @@ extension Application {
     self.jwt.signers.useAppleServicesKey()
     
     try self.useAppleJWKS()
-    self.jwt.apple.applicationIdentifier = try EnvVars.appleAppId.loadOrThrow()
+    self.jwt.apple.applicationIdentifier = try EnvVars.appleAppId.load()
   }
   
   func useAppleJWKS() throws {
