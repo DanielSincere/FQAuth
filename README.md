@@ -69,7 +69,7 @@ These are suggestions. Of course it is completely customizable to your taste.
 
 2. Create local development and test databases
 
-   swift run FQAuthServer local-db create
+   swish local-postgres create
 
 3. Run migrations
 
