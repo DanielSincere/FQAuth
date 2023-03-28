@@ -14,8 +14,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/FullQueueDeveloper/Sh.git",
       "state" : {
-        "revision" : "ada27a2ec8f1b1d42b0b677985c8a30c67aa1143",
-        "version" : "1.0.1"
+        "revision" : "a40bba19d8085761e051fa1f0d5937259fa2e17a",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "shlocalpostgres",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/FullQueueDeveloper/ShLocalPostgres.git",
+      "state" : {
+        "revision" : "3222495877a033e1cbad9348fe9bd31e2c43e1a1",
+        "version" : "0.1.0"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser.git",
+      "state" : {
+        "revision" : "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
+        "version" : "1.2.2"
       }
     }
   ],
