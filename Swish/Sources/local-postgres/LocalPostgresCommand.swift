@@ -1,4 +1,3 @@
-import ShLocalPostgres
 import ArgumentParser
 
 @main
