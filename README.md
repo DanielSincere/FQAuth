@@ -1,22 +1,17 @@
 # FQAuth
 
+FQAuth sets up for you everything you need in your app and on the server to enable Sign in with Apple in your app. Apple has done a lot of nice stuff for us here. But there's still a lot to handle as an indie dev. FQAuth handles for you or gives you a great open-source starting point to modify.
+
 ## Goals
 
-From a user perspective, you could deploy this microservice to a heroku freetier replacement while your main app runs on different provider. Or include in your kubernetes deployment behind your load balancer. Ease of deployment for newcomers to DevOps is a priority.
+From an indie dev perspective, you could deploy this micro-service to a free-tier of hosting, while your main app runs on different provider. Or include in your Kubernetes deployment behind your load balancer. Ease of deployment for newcomers to DevOps is a priority.
 
 ## Infrastructure required
 
 - Postgres
 - Redis
+- Ability to run Docker images
 
-## Deploying
-
-Deploy guides are available in the repo.
-
-- [Heroku](Deploy/Heroku/README.md)
-- [Kubernetes](Deploy/Kubernetes/README.md)
-- [Helm](Deploy/Kubernetes/README.md)
-- [Fly.io](Deploy/Fly.io/README.md)
 
 ## How
 
@@ -78,3 +73,17 @@ These are suggestions. Of course it is completely customizable to your taste.
 4. Run the tests
 
    swift test
+
+
+## Deploying & setting up a new app with FQAuth
+
+1. Create bundle ID on https://developer.apple.com/account > "Certificates, Identifiers & Profiles" > "Identifiers" <img src="./Documentation/01-BundleIDCreation.png" width="300" />
+2. Create a new app on https://appstoreconnect.apple.com/apps, selecting the bundle ID from step 1. Add "Sign in with Apple" capability. <img src="./Documentation/02-AppCreation.ing" width="300" />
+3. Create a services key under https://developer.apple.com/account > "Certificates, Identifiers & Profiles" > "Keys". Be sure to enable "Sign in with Apple" by checking the checkbox next to it. Download the key store it in a safe place. <img src="./Documentation/03-ServiceKeyCreation.ing" width="300" />
+
+4. Create an account on a hosting provider of your choice. Continue following directions in one the deployment-specific READMEs.
+
+- [Heroku](./Deploy/Heroku/README.md)
+- [Kubernetes](./Deploy/Kubernetes/README.md)
+- [Helm](./Deploy/Helm/README.md)
+- [Fly.io](./Deploy/Fly.io/README.md)
