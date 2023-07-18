@@ -31,7 +31,7 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
 
 4. Send the secrets up to your cluster
 
-    kubectl apply -f Deploy/Kubernetes/secrets/fqauth-secrets
+    kubectl apply -f Deploy/Kubernetes/secrets/fqauth-secrets.yml
 
 5. Deploy the App
 

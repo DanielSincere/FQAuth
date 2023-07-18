@@ -16,9 +16,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: fqauth.secrets
-                  key: FQAUTH_POSTGRES_URL
+                  key: DATABASE_URL
             - name: REDIS_URL
-              value: "redis://fqauth-redis:6379"
+              valueFrom:
+                secretKeyRef:
+                  name: fqauth.secrets
+                  key: REDIS_URL
             - name: AUTH_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:

@@ -45,9 +45,9 @@ spec:
                   key: DATABASE_URL
             - name: REDIS_URL
               valueFrom:
-              secretKeyRef:
-                name: fqauth.secrets
-                key: REDIS_URL
+                secretKeyRef:
+                  name: fqauth.secrets
+                  key: REDIS_URL
             - name: AUTH_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
