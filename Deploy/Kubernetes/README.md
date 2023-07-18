@@ -13,12 +13,7 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
 
     GRANT ALL ON SCHEMA public TO fqauth;
 
-2. Deploy the in-cluster redis instance. (Out-of-cluster is fine, too, just update the environment variable to reflect this.)
-
-    kubectl apply -f Deploy/Kubernetes/redis/fqauth-redis.yml
-
-
-3. Gather the other environment variables as discussed in `Sources/FQAuthServer/EnvVars.swift`, and store them base64'd in secrets/fqauth-secrets.
+2. Gather the other environment variables as discussed in `Sources/FQAuthServer/EnvVars.swift`, and store them in the secrets file. Rename 1-fqauth-secrets.sample.yml to 1-fqauth-secrets.yml.
 
   1. APPLE_APP_ID
   2. APPLE_SERVICES_KEY
@@ -29,17 +24,12 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
   7. DATABASE_URL
   8. REDIS_URL
 
-4. Send the secrets up to your cluster
+3. Deploy the App
 
-    kubectl apply -f Deploy/Kubernetes/secrets/fqauth-secrets.yml
+    kubectl apply -Rf Deploy/Kubernetes/
 
-5. Deploy the App
+4. Set up ingress resources in your cluster and load balancer
 
-    kubectl apply -Rf Deploy/Kubernetes/app/
-
-6. Set up ingress resources in your cluster and load balancer
-
-
-7. After you login the first time, you may manually add the admin role to your user in the database, as that's not supported yet in the UI.
+5. After you login the first time, you may manually add the admin role to your user in the database, as that's not supported yet in the UI.
 
     UPDATE `USER` SET roles = '{"admin"}'::text[]

@@ -1,23 +1,17 @@
----
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: fqauth-scheduled-queues-deployment
+  name: fqauth-release-0-2-3
+  namespace: fqauth
   labels:
-    app: fqauth-scheduled-queues
+    app: fqauth-release-0-2-3
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: fqauth-scheduled-queues
   template:
-    metadata:
-      labels:
-        app: fqauth-scheduled-queues
     spec:
+      restartPolicy: Never
       containers:
-        - name: fqauth-scheduled-queues
-          image: ghcr.io/fullqueuedeveloper/fqauth-scheduled-queues:0.2.3
+        - name: fqauth-release
+          image: ghcr.io/fullqueuedeveloper/fqauth-release:0.2.3
           env:
             - name: DATABASE_URL
               valueFrom:

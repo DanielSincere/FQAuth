@@ -1,16 +1,29 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: fqauth-release-0-2-3
+  name: fqauth-app-deployment
+  namespace: fqauth
   labels:
-    app: fqauth-release-0-2-3
+    app: fqauth-app
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fqauth-app
   template:
+    metadata:
+      labels:
+        app: fqauth-app
     spec:
-      restartPolicy: Never
       containers:
-        - name: fqauth-release
-          image: ghcr.io/fullqueuedeveloper/fqauth-release:0.2.3
+        - name: fqauth-app
+          image: ghcr.io/fullqueuedeveloper/fqauth:0.2.3
+          livenessProbe:
+            httpGet:
+              path: /healthy
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 20
           env:
             - name: DATABASE_URL
               valueFrom:
