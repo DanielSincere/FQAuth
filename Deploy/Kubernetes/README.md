@@ -9,7 +9,7 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
 
 ## Install
 
-1. Create a user in the database for FQAuth. Ensure this user has access to the `public` schema. If your user doesn't have access, login to your database as your root user and grant access. For example,
+1. Create a user in the database for FQAuth. Ensure this user has access to the `public` schema. If your user doesn't have access, login to your fqauth database as your root user and grant access. For example,
 
     GRANT ALL ON SCHEMA public TO fqauth;
 
