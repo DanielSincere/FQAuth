@@ -2,7 +2,7 @@ import Vapor
 
 enum EnvVars: String, CaseIterable {
 
-  /// generate with `swish generate-jwt-key`
+  /// generate with `spx generate-jwt-key`
   case authPrivateKey = "AUTH_PRIVATE_KEY"
 
   /// from https://developer.apple.com/account/resources/authkeys/list
@@ -15,7 +15,7 @@ enum EnvVars: String, CaseIterable {
   /// App Store Connect App Bundle ID
   case appleAppId = "APPLE_APP_ID"
 
-  /// generate with `swish generate-db-key`
+  /// generate with `spx generate-db-key`
   case dbSymmetricKey = "DB_SYMMETRIC_KEY"
 
   /// from your hosting provider
@@ -40,7 +40,7 @@ enum EnvVars: String, CaseIterable {
 
   struct EnvVarMissingError: LocalizedError {
     let name: String
-    
+
     var errorDescription: String? {
       "Expected `\(name)` to be present in the environment but it was not"
     }
@@ -48,7 +48,7 @@ enum EnvVars: String, CaseIterable {
 
   struct EnvVarsMissingError: LocalizedError {
     let names: [String]
-    
+
     var errorDescription: String? {
       return "Expected \(names.map { "`\($0)`"}.joined(separator: ", ")) to be present in the environment but it was not"
     }
