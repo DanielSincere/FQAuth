@@ -112,7 +112,7 @@ jobs:
     steps:
       - uses: swift-actions/setup-swift@v1
         with:
-          swift-version: "5.7"
+          swift-version: "5.9"
       - run: swift --version
       - uses: actions/checkout@v3
       - run: swift build -c release
@@ -151,7 +151,7 @@ jobs:
     steps:
       - uses: swift-actions/setup-swift@v1
         with:
-          swift-version: "5.7"
+          swift-version: "5.9"
       - run: swift --version
       - uses: actions/checkout@v3
       - run: swift run FQAuthServer migrate -y --env test
@@ -187,7 +187,7 @@ jobs:
 
       - uses: swift-actions/setup-swift@v1
         with:
-          swift-version: "5.7"
+          swift-version: "5.9"
       - run: swift --version
       - uses: shogo82148/actions-setup-redis@v1
       - uses: actions/checkout@v3

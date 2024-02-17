@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.9
 
 import PackageDescription
 
@@ -11,9 +11,9 @@ let package = Package(
     .executable(name: "FQAuthServer", targets: ["FQAuthServer"]),
   ],
   dependencies: [
-    
+
     .package(url: "https://github.com/FullQueueDeveloper/FQAuthMiddleware.git", from: "0.1.2"),
-    
+
     .package(url: "https://github.com/vapor/vapor.git", from: "4.65.1"),
     .package(url: "https://github.com/vapor/jwt.git", from: "4.2.1"),
 
@@ -38,11 +38,11 @@ let package = Package(
 
       .product(name: "Redis", package: "redis"),
       .product(name: "QueuesRedisDriver", package: "queues-redis-driver"),
-      
+
       .product(name: "FQAuthMiddleware", package: "FQAuthMiddleware"),
 
       .product(name: "Leaf", package: "leaf"),
-      
+
       "Sh",
     ],
     swiftSettings: [

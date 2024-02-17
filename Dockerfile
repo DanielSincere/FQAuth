@@ -1,4 +1,4 @@
-FROM index.docker.io/library/swift:5.7-jammy as builder
+FROM index.docker.io/library/swift:5.9-jammy as builder
 WORKDIR /src
 COPY ./Package.* ./
 COPY ./Sources ./Sources
