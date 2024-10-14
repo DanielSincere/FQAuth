@@ -16,7 +16,7 @@ Install heroku cli tool from Homebrew
 - `APPLE_SERVICES_KEY`: Base64. Create under `Certificates, Identifiers & Profiles` > `Keys` or find here https://developer.apple.com/account/resources/authkeys/list
 - `APPLE_SERVICES_KEY_ID`: ID of the `APPLE_SERVICES_KEY`
 - `APPLE_TEAM_ID`: your Apple team ID. Looks like `ARST1234`
-- `APPLE_APP_ID`: the bundle ID of your app. Looks like `com.fullqueuedeveloper.SincereAuthSample
+- `APPLE_APP_ID`: the bundle ID of your app. Looks like `com.fullqueuedeveloper.FQAuthSample
 - `DATABASE_URL`: the URL to your Postgres database
 - `REDIS_URL`: the URL to your Redis instance
 - `RUN_SCHEDULED_QUEUES_IN_MAIN_PROCESS` - When limited in number of process, you may run the scheduled queues in-process by setting this variable to `YES`. If you can only run one extra process, prioritize the regular queues variable (the other one).

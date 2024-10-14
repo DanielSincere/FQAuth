@@ -4,7 +4,7 @@ enum AuthConstant {
   static let refreshTokenLifetime: TimeInterval = .oneDay * 90
   static let accessTokenLifetime: TimeInterval = .oneDay * 30
 
-  static let selfIssuer: String = "com.fullqueuedeveloper.SincereAuth"
+  static let selfIssuer: String = "com.fullqueuedeveloper.FQAuth"
 }
 
 extension TimeInterval {
