@@ -1,6 +1,6 @@
-# FQAuth
+# SincereAuth
 
-FQAuth sets up for you everything you need in your app and on the server to enable Sign in with Apple in your app. Apple has done a lot of nice stuff for us here. But there's still a lot to handle as an indie dev. FQAuth handles for you or gives you a great open-source starting point to modify.
+SincereAuth sets up for you everything you need in your app and on the server to enable Sign in with Apple in your app. Apple has done a lot of nice stuff for us here. But there's still a lot to handle as an indie dev. SincereAuth handles for you or gives you a great open-source starting point to modify.
 
 ## Goals
 
@@ -11,7 +11,6 @@ From an indie dev perspective, you could deploy this micro-service to a free-tie
 - Postgres
 - Redis
 - Ability to run Docker images
-
 
 ## How
 
@@ -29,7 +28,7 @@ Other features
 - Google equivalent (if available)
 - unit tests
 - Vapor queues to run cleanup tasks, or ping apple
-  Future maybes handle in app purchases as well? Since mostlikely, we would want the JWT to include the current subscription tiers.
+  Future maybes handle in app purchases as well? Since most likely, we would want the JWT to include the current subscription tiers.
 
 ## Build targets:
 
@@ -42,7 +41,7 @@ Other features
 
 ## Sponsors
 
-If you learn anything or make a few bucks from this repo, please sponsor me on GitHub. https://github.com/sponsors/FullQueueDeveloper/
+If you learn anything or make a few bucks from this repo, please sponsor me on GitHub. https://github.com/sponsors/DanielSincere/
 
 A huge thank you to the following for keeping the dream alive! 💜🗽
 
@@ -64,18 +63,17 @@ These are suggestions. Of course it is completely customizable to your taste.
 
 2. Create local development and test databases
 
-   swish local-postgres create
+   spx local-postgres create
 
 3. Run migrations
 
-   swift run FQAuthServer migrate -y
+   swift run SincereAuthServer migrate -y
 
 4. Run the tests
 
    swift test
 
-
-## Deploying & setting up a new app with FQAuth
+## Deploying & setting up a new app with SincereAuth
 
 1. Create bundle ID on https://developer.apple.com/account > "Certificates, Identifiers & Profiles" > "Identifiers" <img src="./Documentation/01-BundleIDCreation.png" width="300" />
 2. Create a new app on https://appstoreconnect.apple.com/apps, selecting the bundle ID from step 1. Add "Sign in with Apple" capability. <img src="./Documentation/02-AppCreation.ing" width="300" />

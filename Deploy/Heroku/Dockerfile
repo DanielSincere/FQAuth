@@ -1,1 +1,1 @@
-FROM ghcr.io/fullqueuedeveloper/fqauth:0.2.3
+FROM ghcr.io/fullqueuedeveloper/sincereauth:0.2.3
