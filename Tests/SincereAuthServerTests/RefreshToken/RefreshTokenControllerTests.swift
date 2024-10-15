@@ -23,6 +23,7 @@ final class RefreshTokenControllerTests: XCTestCase {
       let decodedResponseBody = try response.content.decode(AuthResponse.self)
       XCTAssertEqual(decodedResponseBody.user.firstName, "First")
       XCTAssertEqual(decodedResponseBody.user.lastName, "Success")
+      XCTAssertEqual(decodedResponseBody.user.id, try user.requireID())
       XCTAssertEqual(response.status, .ok)
     }
   }

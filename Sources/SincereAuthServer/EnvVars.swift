@@ -5,6 +5,9 @@ enum EnvVars: String, CaseIterable {
   /// generate with `spx generate-jwt-key`
   case authPrivateKey = "AUTH_PRIVATE_KEY"
 
+  /// Self issuer ID. What do you want your issuer's name to be?
+  case selfIssuerId = "SELF_ISSUER_ID"
+
   /// from https://developer.apple.com/account/resources/authkeys/list
   case appleServicesKey = "APPLE_SERVICES_KEY"
   case appleServicesKeyId = "APPLE_SERVICES_KEY_ID"

@@ -1,4 +1,5 @@
 @testable import SincereAuthServer
+import SincereAuthMiddleware
 import XCTest
 import Vapor
 import JWTKit
@@ -76,6 +77,14 @@ final class SIWASignInRequestTests: XCTestCase {
       XCTAssertNearlyNow(refreshToken.createdAt)
       XCTAssertNearlyEqual(refreshToken.expiresAt,
                            Date(timeIntervalSinceNow: AuthConstant.refreshTokenLifetime))
+      
+      let authResponse = try response.content.decode(AuthResponse.self)
+      let sessionToken = try app.jwt.signers.verify(authResponse.accessToken, as: SincereAuthSessionToken.self)
+      XCTAssertEqual(sessionToken.iss.value, try EnvVars.selfIssuerId.load())
+      XCTAssertEqual(sessionToken.userID, user.id)
+      XCTAssertEqual(sessionToken.deviceName, "iPhone")
+      XCTAssertNearlyNow(sessionToken.iat.value)
+      XCTAssertEqual(sessionToken.roles, [])
     }
   }
 }

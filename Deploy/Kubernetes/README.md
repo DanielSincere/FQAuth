@@ -23,6 +23,7 @@ Deployment guide for SincereAuth on Digital Ocean Kubernetes
   6. DB_SYMMETRIC_KEY
   7. DATABASE_URL
   8. REDIS_URL
+  9. SELF_ISSUER_ID
 
 3. Deploy the App
 

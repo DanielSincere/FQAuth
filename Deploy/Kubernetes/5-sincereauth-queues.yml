@@ -34,6 +34,11 @@ spec:
                 secretKeyRef:
                   name: sincereauth.secrets
                   key: AUTH_PRIVATE_KEY
+            - name: SELF_ISSUER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: SELF_ISSUER_ID
             - name: APPLE_SERVICES_KEY
               valueFrom:
                 secretKeyRef:

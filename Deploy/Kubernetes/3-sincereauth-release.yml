@@ -23,6 +23,11 @@ spec:
                 secretKeyRef:
                   name: sincereauth.secrets
                   key: REDIS_URL
+            - name: SELF_ISSUER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: SELF_ISSUER_ID
             - name: AUTH_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
