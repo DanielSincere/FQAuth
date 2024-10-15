@@ -78,12 +78,13 @@ final class SIWASignInRequestTests: XCTestCase {
       XCTAssertNearlyEqual(refreshToken.expiresAt,
                            Date(timeIntervalSinceNow: AuthConstant.refreshTokenLifetime))
       
-      let sessionToken = try response.content.decode(SincereAuthSessionToken.self)
+      let authResponse = try response.content.decode(AuthResponse.self)
+      let sessionToken = try app.jwt.signers.verify(authResponse.accessToken, as: SincereAuthSessionToken.self)
       XCTAssertEqual(sessionToken.iss.value, try EnvVars.selfIssuerId.load())
       XCTAssertEqual(sessionToken.userID, user.id)
       XCTAssertEqual(sessionToken.deviceName, "iPhone")
-      XCTAssertEqual(sessionToken.iat.value.timeIntervalSinceNow, Date().timeIntervalSinceNow, accuracy: 500)
-      XCTAssertEqual(sessionToken.roles, [""])
+      XCTAssertNearlyNow(sessionToken.iat.value)
+      XCTAssertEqual(sessionToken.roles, [])
     }
   }
 }
