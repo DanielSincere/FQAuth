@@ -12,6 +12,7 @@
 
 - `AUTH_PRIVATE_KEY`: Base64. Output of `swish generate-jwt-key`
 - `DB_SYMMETRIC_KEY`: output of `swish generate-db-key`
+- `SELF_ISSUER_ID`: Custom name of your issuer. For example: `com.fullqueuedeveloper.MyAppServer`
 - `APPLE_SERVICES_KEY`: Base64. Create under `Certificates, Identifiers & Profiles` > `Keys` or find here https://developer.apple.com/account/resources/authkeys/list
 - `APPLE_SERVICES_KEY_ID`: ID of the `APPLE_SERVICES_KEY`
 - `APPLE_TEAM_ID`: your Apple team ID. Looks like `ARST1234`

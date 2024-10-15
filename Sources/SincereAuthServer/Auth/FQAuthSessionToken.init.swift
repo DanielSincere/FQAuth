@@ -9,6 +9,6 @@ extension SincereAuthSessionToken {
               deviceName: deviceName,
               roles: roles,
               expiration: .init(value: now.addingTimeInterval(AuthConstant.accessTokenLifetime)),
-              iss: .init(value: AuthConstant.selfIssuer))
+              iss: .init(value: EnvVars.selfIssuerId.loadOrFatal()))
   }
 }
