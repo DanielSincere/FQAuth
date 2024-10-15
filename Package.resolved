@@ -174,18 +174,18 @@
     {
       "identity" : "sh",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/FullQueueDeveloper/Sh.git",
+      "location" : "https://github.com/DanielSincere/Sh.git",
       "state" : {
-        "revision" : "fc6bfa4c6562436d1bc681e205ceeca78662d966",
-        "version" : "1.0.2"
+        "revision" : "1c30064de9dceac00aa3fefc70a1431e425e5f28",
+        "version" : "1.3.0"
       }
     },
     {
       "identity" : "sincereauthmiddleware",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SincereLabsNYC/SincereAuthMiddleware.git",
+      "location" : "https://github.com/DanielSincere/SincereAuthMiddleware.git",
       "state" : {
-        "revision" : "648d18dd51fa05a6ef7824f4694e3d817baa3b29",
+        "revision" : "ff84c6faff08fdc0625dc013ea4e7190dd7d74b5",
         "version" : "0.3.0"
       }
     },
