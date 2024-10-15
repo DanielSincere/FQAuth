@@ -162,6 +162,7 @@ jobs:
     runs-on: macos-13
     steps:
       - run: |
+          brew install postgresql
           brew services start postgresql
           echo "Check PostgreSQL service is running"
           i=10
