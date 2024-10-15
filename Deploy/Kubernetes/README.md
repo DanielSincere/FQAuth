@@ -1,6 +1,6 @@
 # Digital Ocean Kubernetes
 
-Deployment guide for FQAuth on Digital Ocean Kubernetes
+Deployment guide for SincereAuth on Digital Ocean Kubernetes
 
 ## Pre reqs
 
@@ -9,11 +9,11 @@ Deployment guide for FQAuth on Digital Ocean Kubernetes
 
 ## Install
 
-1. Create a user in the database for FQAuth. Ensure this user has access to the `public` schema. If your user doesn't have access, login to your fqauth database as your root user and grant access. For example,
+1. Create a user in the database for SincereAuth. Ensure this user has access to the `public` schema. If your user doesn't have access, login to your sincereauth database as your root user and grant access. For example,
 
-    GRANT ALL ON SCHEMA public TO fqauth;
+    GRANT ALL ON SCHEMA public TO sincereauth;
 
-2. Gather the other environment variables as discussed in `Sources/FQAuthServer/EnvVars.swift`, and store them in the secrets file. Rename 1-fqauth-secrets.sample.yml to 1-fqauth-secrets.yml.
+2. Gather the other environment variables as discussed in `Sources/SincereAuthServer/EnvVars.swift`, and store them in the secrets file. Rename 1-sincereauth-secrets.sample.yml to 1-sincereauth-secrets.yml.
 
   1. APPLE_APP_ID
   2. APPLE_SERVICES_KEY

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sincereauth-queues-deployment
+  namespace: sincereauth
+  labels:
+    app: sincereauth-queues
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sincereauth-queues
+  template:
+    metadata:
+      labels:
+        app: sincereauth-queues
+    spec:
+      containers:
+        - name: sincereauth-queues
+          image: ghcr.io/fullqueuedeveloper/sincereauth-queues:0.2.3
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: DATABASE_URL
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: REDIS_URL
+            - name: AUTH_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: AUTH_PRIVATE_KEY
+            - name: APPLE_SERVICES_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: APPLE_SERVICES_KEY
+            - name: APPLE_SERVICES_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: APPLE_SERVICES_KEY_ID
+            - name: APPLE_TEAM_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: APPLE_TEAM_ID
+            - name: APPLE_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: APPLE_APP_ID
+            - name: DB_SYMMETRIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: DB_SYMMETRIC_KEY

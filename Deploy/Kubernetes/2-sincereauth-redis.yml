@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sincereauth-redis
+  namespace: sincereauth
+spec:
+  ports:
+  - name: redis
+    port: 6379
+    targetPort: 6379
+    protocol: TCP
+  selector:
+    app: sincereauth-redis
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: sincereauth-redis
+  namespace: sincereauth
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sincereauth-redis
+    spec:
+      containers:
+        - name: sincereauth-redis
+          image: redis:alpine
+          ports:
+            - containerPort: 6379
+          command:
+            - redis-server
+            - --save ""
+            - --appendonly no

@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sincereauth-app-deployment
+  namespace: sincereauth
+  labels:
+    app: sincereauth-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sincereauth-app
+  template:
+    metadata:
+      labels:
+        app: sincereauth-app
+    spec:
+      containers:
+        - name: sincereauth-app
+          image: ghcr.io/fullqueuedeveloper/sincereauth:0.2.3
+          livenessProbe:
+            httpGet:
+              path: /healthy
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 20
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: DATABASE_URL
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: REDIS_URL
+            - name: AUTH_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: AUTH_PRIVATE_KEY
+            - name: APPLE_SERVICES_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: APPLE_SERVICES_KEY
+            - name: APPLE_SERVICES_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: APPLE_SERVICES_KEY_ID
+            - name: APPLE_TEAM_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: APPLE_TEAM_ID
+            - name: APPLE_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: APPLE_APP_ID
+            - name: DB_SYMMETRIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sincereauth.secrets
+                  key: DB_SYMMETRIC_KEY

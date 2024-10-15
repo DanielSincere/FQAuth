@@ -108,7 +108,7 @@ jobs:
 
   build-mac:
     name: Build on Mac
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: swift-actions/setup-swift@v1
         with:
@@ -154,14 +154,15 @@ jobs:
           swift-version: 5.9
       - run: swift --version
       - uses: actions/checkout@v3
-      - run: swift run FQAuthServer migrate -y --env test
+      - run: swift run SincereAuthServer migrate -y --env test
       - run: swift test
 
   test-mac:
     name: Test on Mac
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - run: |
+          brew install postgresql
           brew services start postgresql
           echo "Check PostgreSQL service is running"
           i=10
@@ -191,7 +192,7 @@ jobs:
       - run: swift --version
       - uses: shogo82148/actions-setup-redis@v1
       - uses: actions/checkout@v3
-      - run: swift run FQAuthServer migrate -y --env test
+      - run: swift run SincereAuthServer migrate -y --env test
       - run: swift test
     env:
       DATABASE_URL: "postgresql://myuser:mypassword@localhost/mydatabase"

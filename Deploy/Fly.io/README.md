@@ -5,9 +5,9 @@
 1. Provision a Postgres database
 2. Provision a Redis instance
 
-## Setup FQAuth
+## Setup SincereAuth
 
-1. Clone the FQAuth repo.
+1. Clone the SincereAuth repo.
 2. Set environment variables using `flyctl secrets set MY_SECRET=value`
 
 - `AUTH_PRIVATE_KEY`: Base64. Output of `swish generate-jwt-key`
